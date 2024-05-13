@@ -35,6 +35,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -47,8 +50,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import hr.ferit.zavrsni.ui.theme.Blue
+import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 import hr.ferit.zavrsni.ui.theme.ZavrsniTheme
+import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +78,18 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("year_screen"){
                             YearScreen(navController = navController)
+                        }
+                        composable("height_screen"){
+                            HeightScreen(navController = navController)
+                        }
+                        composable("weight_screen"){
+                            WeightScreen(navController = navController)
+                        }
+                        composable("activity_screen"){
+                            ActivityScreen(navController = navController)
+                        }
+                        composable("goal_screen"){
+                            GoalScreen(navController = navController)
                         }
                     }
                 }
@@ -310,18 +327,393 @@ fun YearScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = White),
-        verticalArrangement = Arrangement.Center,
+            .background(color = Color.White),
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "How old are you?",
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
-            color = Blue,
+            color = Color.Blue,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(top = 70.dp, bottom = 150.dp)
         )
+
+        Box(
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .fillMaxWidth(0.3f)
+                .height(10.dp)
+                .background(color = Blue)
+        )
+
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        var selectedYear by remember { mutableStateOf(currentYear) }
+
+        val years = (10..80).toList()
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            LazyRow(
+                modifier = Modifier.padding(horizontal = 25.dp)
+            ) {
+                items(years.take(100).count()) { index ->
+                    val year = years[index]
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 40.dp)
+                            .clickable { selectedYear = year },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = year.toString(),
+                            fontSize = 20.sp,
+                            color = if (year == selectedYear) Color.Blue else Color.Black
+                        )
+                    }
+                }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.3f)
+                .padding(vertical = 16.dp)
+                .height(10.dp)
+                .background(color = Blue)
+        )
+
+        Button(
+            onClick = { navController.navigate("height_screen")},
+            colors = ButtonDefaults.buttonColors(containerColor = Blue),
+            modifier = Modifier
+                .padding(top = 130.dp)
+                .height(56.dp)
+                .fillMaxWidth(0.7f)
+                .clip(RoundedCornerShape(8.dp)),
+        ) {
+            Text(
+                text = "Next",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun HeightScreen(navController: NavController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "How tall are you?",
+            fontSize = 30.sp,
+            textAlign = TextAlign.Center,
+            color = Color.Blue,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 70.dp, bottom = 150.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .fillMaxWidth(0.3f)
+                .height(10.dp)
+                .background(color = Blue)
+        )
+
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        var selectedYear by remember { mutableStateOf(currentYear) }
+
+        val years = (150..200).toList()
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            LazyRow(
+                modifier = Modifier.padding(horizontal = 25.dp)
+            ) {
+                items(years.take(100).count()) { index ->
+                    val year = years[index]
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 33.dp)
+                            .clickable { selectedYear = year },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = year.toString(),
+                            fontSize = 20.sp,
+                            color = if (year == selectedYear) Color.Blue else Color.Black
+                        )
+                    }
+                }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.3f)
+                .padding(vertical = 16.dp)
+                .height(10.dp)
+                .background(color = Blue)
+        )
+
+        Button(
+            onClick = {navController.navigate("weight_screen") },
+            colors = ButtonDefaults.buttonColors(containerColor = Blue),
+            modifier = Modifier
+                .padding(top = 130.dp)
+                .height(56.dp)
+                .fillMaxWidth(0.7f)
+                .clip(RoundedCornerShape(8.dp)),
+        ) {
+            Text(
+                text = "Next",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun WeightScreen(navController: NavController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "What is your weight?",
+            fontSize = 30.sp,
+            textAlign = TextAlign.Center,
+            color = Color.Blue,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 70.dp, bottom = 150.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .fillMaxWidth(0.3f)
+                .height(10.dp)
+                .background(color = Blue)
+        )
+
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        var selectedYear by remember { mutableStateOf(currentYear) }
+
+        val years = (50..110).toList()
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            LazyRow(
+                modifier = Modifier.padding(horizontal = 25.dp)
+            ) {
+                items(years.take(100).count()) { index ->
+                    val year = years[index]
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 39.dp)
+                            .clickable { selectedYear = year },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = year.toString(),
+                            fontSize = 20.sp,
+                            color = if (year == selectedYear) Color.Blue else Color.Black
+                        )
+                    }
+                }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.3f)
+                .padding(vertical = 16.dp)
+                .height(10.dp)
+                .background(color = Blue)
+        )
+
+        Button(
+            onClick = { navController.navigate("activity_screen")},
+            colors = ButtonDefaults.buttonColors(containerColor = Blue),
+            modifier = Modifier
+                .padding(top = 130.dp)
+                .height(56.dp)
+                .fillMaxWidth(0.7f)
+                .clip(RoundedCornerShape(8.dp)),
+        ) {
+            Text(
+                text = "Next",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun ActivityScreen(navController: NavController) {
+    var selectedActivity by remember { mutableStateOf("") }
+
+    val activityLevels = listOf(
+        "Sedentary",
+        "Lightly Active",
+        "Moderately Active",
+        "Very Active",
+        "Athlete"
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = White)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "How active are you?",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Blue,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 25.dp)
+        )
+
+        activityLevels.forEach { level ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = { selectedActivity = level })
+                    .padding(8.dp)
+                    .background(
+                        color = if (level == selectedActivity) LightPink else Blue,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .height(56.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = level,
+                    fontSize = 18.sp,
+                    color = if (level == selectedActivity) Blue else LightPink,
+                    fontWeight = FontWeight.Normal
+                )
+            }
+        }
+
+        Button(
+            onClick = { navController.navigate("goal_screen")},
+            colors = ButtonDefaults.buttonColors(containerColor = Blue),
+            modifier = Modifier
+                .padding(top = 60.dp)
+                .height(56.dp)
+                .fillMaxWidth(0.7f)
+                .clip(RoundedCornerShape(8.dp)),
+        ) {
+            Text(
+                text = "Next",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun GoalScreen(navController: NavController) {
+    var selectedActivity by remember { mutableStateOf("") }
+
+    val activityLevels = listOf(
+        "Lose weight",
+        "Build muscle",
+        "Get leaner",
+        "Flexibility",
+        "Improve health"
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = White)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "What is your goal?",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Blue,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 25.dp)
+        )
+
+        activityLevels.forEach { level ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = { selectedActivity = level })
+                    .padding(8.dp)
+                    .background(
+                        color = if (level == selectedActivity) LightPink else Blue,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .height(56.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = level,
+                    fontSize = 18.sp,
+                    color = if (level == selectedActivity) Blue else LightPink,
+                    fontWeight = FontWeight.Normal
+                )
+            }
+        }
+
+        Button(
+            onClick = { navController.navigate("goal_screen")},
+            colors = ButtonDefaults.buttonColors(containerColor = Blue),
+            modifier = Modifier
+                .padding(top = 60.dp)
+                .height(56.dp)
+                .fillMaxWidth(0.7f)
+                .clip(RoundedCornerShape(8.dp)),
+        ) {
+            Text(
+                text = "Next",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
     }
 }
 
