@@ -59,41 +59,46 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
             ZavrsniTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = Blue
                 ) {
-                    NavHost(navController = navController, startDestination = "main_screen") {
-                        composable("main_screen") {
-                            StartScreen(navController = navController)
-                        }
-                        composable("registration_screen") {
-                            RegisterScreen(navController = navController)
-                        }
-                        composable("gender_screen"){
-                            GenderScreen(navController = navController)
-                        }
-                        composable("year_screen"){
-                            YearScreen(navController = navController)
-                        }
-                        composable("height_screen"){
-                            HeightScreen(navController = navController)
-                        }
-                        composable("weight_screen"){
-                            WeightScreen(navController = navController)
-                        }
-                        composable("activity_screen"){
-                            ActivityScreen(navController = navController)
-                        }
-                        composable("goal_screen"){
-                            GoalScreen(navController = navController)
-                        }
-                    }
+                    DisplayNavComponent()
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun DisplayNavComponent(){
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "StartScreen") {
+        composable("StartScreen") {
+            StartScreen(navController = navController)
+        }
+        composable("RegisterScreen") {
+            RegisterScreen(navController = navController)
+        }
+        composable("GenderScreen") {
+            GenderScreen(navController = navController)
+        }
+        composable("YearScreen") {
+            YearScreen(navController = navController)
+        }
+        composable("HeightScreen") {
+            HeightScreen(navController = navController)
+        }
+        composable("WeightScreen") {
+            WeightScreen(navController = navController)
+        }
+        composable("ActivityScreen") {
+            ActivityScreen(navController = navController)
+        }
+        composable("GoalScreen") {
+            GoalScreen(navController = navController)
         }
     }
 }
@@ -126,7 +131,7 @@ fun StartScreen(navController: NavController) {
         Spacer(modifier = Modifier.weight(0.4f))
         IconButton(
             onClick= {
-                navController.navigate("registration_screen")
+                navController.navigate("RegisterScreen")
             })
         {
             Icon(
@@ -140,582 +145,15 @@ fun StartScreen(navController: NavController) {
     }
 }
 
-@Composable
-fun RegisterScreen(navController: NavController) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Create your account",
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center,
-                color = Blue,
-                fontWeight = FontWeight.Bold
-            )
-            TextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Name") },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-            )
-            TextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Email") },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-            )
-            TextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Password") },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-            )
-            TextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Confirm Password") },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-            )
 
-            Button(
-                onClick = { navController.navigate("gender_screen")},
-                colors = ButtonDefaults.buttonColors(containerColor = Blue),
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .height(56.dp)
-                    .fillMaxWidth(0.7f)
-                    .clip(RoundedCornerShape(8.dp)),
-            ) {
-                Text(
-                    text = "Create",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
-        }
-    }
-}
 
-@Composable
-fun GenderScreen(navController: NavController) {
-    var isCircle1Selected by remember { mutableStateOf(false) }
-    var isCircle2Selected by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Tell us about yourself!",
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center,
-            color = Blue,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
 
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(170.dp)
-                    .clickable { isCircle1Selected = !isCircle1Selected }
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = CircleShape
-                    )
-                    .background(if (isCircle1Selected) Blue else White, shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.male_symbol_icon),
-                    contentDescription = "Circle 1",
-                    modifier = Modifier.size(80.dp)
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(170.dp)
-                    .clickable { isCircle2Selected = !isCircle2Selected }
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = CircleShape
-                    )
-                    .background(if (isCircle2Selected) Blue else White, shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.woman_symbol_icon),
-                    contentDescription = "Circle 2",
-                    modifier = Modifier.size(80.dp)
-                )
-            }
-        }
 
-        Button(
-            onClick = {navController.navigate("year_screen") },
-            colors = ButtonDefaults.buttonColors(containerColor = Blue),
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .height(56.dp)
-                .fillMaxWidth(0.7f)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            Text(
-                text = "Next",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
 
-    }
-}
 
-@Composable
-fun YearScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "How old are you?",
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center,
-            color = Color.Blue,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 70.dp, bottom = 150.dp)
-        )
 
-        Box(
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-                .fillMaxWidth(0.3f)
-                .height(10.dp)
-                .background(color = Blue)
-        )
 
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        var selectedYear by remember { mutableStateOf(currentYear) }
-
-        val years = (10..80).toList()
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            LazyRow(
-                modifier = Modifier.padding(horizontal = 25.dp)
-            ) {
-                items(years.take(100).count()) { index ->
-                    val year = years[index]
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 40.dp)
-                            .clickable { selectedYear = year },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = year.toString(),
-                            fontSize = 20.sp,
-                            color = if (year == selectedYear) Color.Blue else Color.Black
-                        )
-                    }
-                }
-            }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(0.3f)
-                .padding(vertical = 16.dp)
-                .height(10.dp)
-                .background(color = Blue)
-        )
-
-        Button(
-            onClick = { navController.navigate("height_screen")},
-            colors = ButtonDefaults.buttonColors(containerColor = Blue),
-            modifier = Modifier
-                .padding(top = 130.dp)
-                .height(56.dp)
-                .fillMaxWidth(0.7f)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            Text(
-                text = "Next",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
-    }
-}
-
-@Composable
-fun HeightScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "How tall are you?",
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center,
-            color = Color.Blue,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 70.dp, bottom = 150.dp)
-        )
-
-        Box(
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-                .fillMaxWidth(0.3f)
-                .height(10.dp)
-                .background(color = Blue)
-        )
-
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        var selectedYear by remember { mutableStateOf(currentYear) }
-
-        val years = (150..200).toList()
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            LazyRow(
-                modifier = Modifier.padding(horizontal = 25.dp)
-            ) {
-                items(years.take(100).count()) { index ->
-                    val year = years[index]
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 33.dp)
-                            .clickable { selectedYear = year },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = year.toString(),
-                            fontSize = 20.sp,
-                            color = if (year == selectedYear) Color.Blue else Color.Black
-                        )
-                    }
-                }
-            }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(0.3f)
-                .padding(vertical = 16.dp)
-                .height(10.dp)
-                .background(color = Blue)
-        )
-
-        Button(
-            onClick = {navController.navigate("weight_screen") },
-            colors = ButtonDefaults.buttonColors(containerColor = Blue),
-            modifier = Modifier
-                .padding(top = 130.dp)
-                .height(56.dp)
-                .fillMaxWidth(0.7f)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            Text(
-                text = "Next",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
-    }
-}
-
-@Composable
-fun WeightScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "What is your weight?",
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center,
-            color = Color.Blue,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 70.dp, bottom = 150.dp)
-        )
-
-        Box(
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-                .fillMaxWidth(0.3f)
-                .height(10.dp)
-                .background(color = Blue)
-        )
-
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        var selectedYear by remember { mutableStateOf(currentYear) }
-
-        val years = (50..110).toList()
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            LazyRow(
-                modifier = Modifier.padding(horizontal = 25.dp)
-            ) {
-                items(years.take(100).count()) { index ->
-                    val year = years[index]
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 39.dp)
-                            .clickable { selectedYear = year },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = year.toString(),
-                            fontSize = 20.sp,
-                            color = if (year == selectedYear) Color.Blue else Color.Black
-                        )
-                    }
-                }
-            }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(0.3f)
-                .padding(vertical = 16.dp)
-                .height(10.dp)
-                .background(color = Blue)
-        )
-
-        Button(
-            onClick = { navController.navigate("activity_screen")},
-            colors = ButtonDefaults.buttonColors(containerColor = Blue),
-            modifier = Modifier
-                .padding(top = 130.dp)
-                .height(56.dp)
-                .fillMaxWidth(0.7f)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            Text(
-                text = "Next",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
-    }
-}
-
-@Composable
-fun ActivityScreen(navController: NavController) {
-    var selectedActivity by remember { mutableStateOf("") }
-
-    val activityLevels = listOf(
-        "Sedentary",
-        "Lightly Active",
-        "Moderately Active",
-        "Very Active",
-        "Athlete"
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = White)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "How active are you?",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Blue,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 25.dp)
-        )
-
-        activityLevels.forEach { level ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = { selectedActivity = level })
-                    .padding(8.dp)
-                    .background(
-                        color = if (level == selectedActivity) LightPink else Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .height(56.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = level,
-                    fontSize = 18.sp,
-                    color = if (level == selectedActivity) Blue else LightPink,
-                    fontWeight = FontWeight.Normal
-                )
-            }
-        }
-
-        Button(
-            onClick = { navController.navigate("goal_screen")},
-            colors = ButtonDefaults.buttonColors(containerColor = Blue),
-            modifier = Modifier
-                .padding(top = 60.dp)
-                .height(56.dp)
-                .fillMaxWidth(0.7f)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            Text(
-                text = "Next",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
-    }
-}
-
-@Composable
-fun GoalScreen(navController: NavController) {
-    var selectedActivity by remember { mutableStateOf("") }
-
-    val activityLevels = listOf(
-        "Lose weight",
-        "Build muscle",
-        "Get leaner",
-        "Flexibility",
-        "Improve health"
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = White)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "What is your goal?",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Blue,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 25.dp)
-        )
-
-        activityLevels.forEach { level ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = { selectedActivity = level })
-                    .padding(8.dp)
-                    .background(
-                        color = if (level == selectedActivity) LightPink else Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .height(56.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = level,
-                    fontSize = 18.sp,
-                    color = if (level == selectedActivity) Blue else LightPink,
-                    fontWeight = FontWeight.Normal
-                )
-            }
-        }
-
-        Button(
-            onClick = { navController.navigate("goal_screen")},
-            colors = ButtonDefaults.buttonColors(containerColor = Blue),
-            modifier = Modifier
-                .padding(top = 60.dp)
-                .height(56.dp)
-                .fillMaxWidth(0.7f)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            Text(
-                text = "Next",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
-    }
-}
 
 
 
