@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import hr.ferit.zavrsni.ui.theme.Blue
+import hr.ferit.zavrsni.ui.theme.White
 import java.util.Calendar
 
 @Composable
@@ -36,7 +37,7 @@ fun YearScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White),
+            .background(color = White),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -44,7 +45,7 @@ fun YearScreen(navController: NavController) {
             text = "How old are you?",
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
-            color = Color.Blue,
+            color = Blue,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(top = 70.dp, bottom = 150.dp)
         )
@@ -82,7 +83,7 @@ fun YearScreen(navController: NavController) {
                         Text(
                             text = year.toString(),
                             fontSize = 20.sp,
-                            color = if (year == selectedYear) Color.Blue else Color.Black
+                            color = if (year == selectedYear) Blue else Color.Black
                         )
                     }
                 }
@@ -108,7 +109,7 @@ fun YearScreen(navController: NavController) {
         ) {
             Text(
                 text = "Next",
-                color = Color.White,
+                color = White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )

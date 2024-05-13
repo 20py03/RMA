@@ -25,13 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import hr.ferit.zavrsni.ui.theme.Blue
+import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
 fun RegisterScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(White),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -110,7 +111,7 @@ fun RegisterScreen(navController: NavController) {
             ) {
                 Text(
                     text = "Create",
-                    color = Color.White,
+                    color = White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )

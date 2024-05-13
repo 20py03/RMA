@@ -29,14 +29,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import hr.ferit.zavrsni.ui.theme.Blue
+import hr.ferit.zavrsni.ui.theme.White
 import java.util.Calendar
 
-class WeightScreen@Composable
+@Composable
 fun WeightScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White),
+            .background(color = White),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -44,7 +45,7 @@ fun WeightScreen(navController: NavController) {
             text = "What is your weight?",
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
-            color = Color.Blue,
+            color = Blue,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(top = 70.dp, bottom = 150.dp)
         )
@@ -82,7 +83,7 @@ fun WeightScreen(navController: NavController) {
                         Text(
                             text = year.toString(),
                             fontSize = 20.sp,
-                            color = if (year == selectedYear) Color.Blue else Color.Black
+                            color = if (year == selectedYear) Blue else Color.Black
                         )
                     }
                 }
@@ -108,7 +109,7 @@ fun WeightScreen(navController: NavController) {
         ) {
             Text(
                 text = "Next",
-                color = Color.White,
+                color = White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )

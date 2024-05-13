@@ -100,6 +100,9 @@ fun DisplayNavComponent(){
         composable("GoalScreen") {
             GoalScreen(navController = navController)
         }
+        composable("HomeScreen"){
+            HomeScreen(navController = navController)
+        }
     }
 }
 

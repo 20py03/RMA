@@ -116,7 +116,7 @@ fun GenderScreen(navController: NavController) {
         ) {
             Text(
                 text = "Next",
-                color = Color.White,
+                color = White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )

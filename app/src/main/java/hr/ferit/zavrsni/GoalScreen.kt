@@ -31,7 +31,7 @@ import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
-class GoalScreen@Composable
+@Composable
 fun GoalScreen(navController: NavController) {
     var selectedActivity by remember { mutableStateOf("") }
 
@@ -83,7 +83,7 @@ fun GoalScreen(navController: NavController) {
         }
 
         Button(
-            onClick = { },
+            onClick = {navController.navigate("HomeScreen") },
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
                 .padding(top = 60.dp)
@@ -93,7 +93,7 @@ fun GoalScreen(navController: NavController) {
         ) {
             Text(
                 text = "Next",
-                color = Color.White,
+                color = White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )
