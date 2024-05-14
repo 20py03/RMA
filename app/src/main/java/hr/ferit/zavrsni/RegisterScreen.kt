@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -47,57 +48,33 @@ fun RegisterScreen(navController: NavController) {
                 color = Blue,
                 fontWeight = FontWeight.Bold
             )
-            TextField(
+            OutlinedTextField(
                 value = "",
                 onValueChange = {},
                 label = { Text("Name") },
                 singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
+                modifier = Modifier.fillMaxWidth()
             )
-            TextField(
+            OutlinedTextField(
                 value = "",
                 onValueChange = {},
                 label = { Text("Email") },
                 singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
+                modifier = Modifier.fillMaxWidth()
             )
-            TextField(
+            OutlinedTextField(
                 value = "",
                 onValueChange = {},
                 label = { Text("Password") },
                 singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
+                modifier = Modifier.fillMaxWidth()
             )
-            TextField(
+            OutlinedTextField(
                 value = "",
                 onValueChange = {},
                 label = { Text("Confirm Password") },
                 singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 3.dp,
-                        color = Blue,
-                        shape = RoundedCornerShape(8.dp)
-                    )
+                modifier = Modifier.fillMaxWidth()
             )
 
             Button(

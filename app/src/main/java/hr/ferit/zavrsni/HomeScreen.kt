@@ -98,19 +98,16 @@ fun HomeScreen(navController: NavController) {
                     mutableStateOf(List(7) { LightPink })
                 }
 
-                // Funkcija za promjenu boje ikone na klik
                 fun toggleIconColor(index: Int) {
                     val newColors = iconColors.toMutableList()
                     newColors[index] = if (iconColors[index] == LightPink) DarkBlue else LightPink
                     setIconColors(newColors)
                 }
 
-                // Kompozicija koja sadrži red s ikonama
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // IconButton komponenta za svaku ikonu
                     repeat(7) { index ->
                         IconButton(onClick = { toggleIconColor(index) }) {
                             Icon(
