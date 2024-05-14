@@ -9,6 +9,8 @@ sealed class Destinations (val route: String){
     data object WeightScreen: Destinations("WeightScreen")
     data object ActivityScreen: Destinations("ActivityScreen")
     data object GoalScreen: Destinations("GoalScreen")
+    data object HomeScreen : Destinations("HomeScreen")
+    data object RecipeScreen: Destinations("RecipeScreen")
 
 
 }

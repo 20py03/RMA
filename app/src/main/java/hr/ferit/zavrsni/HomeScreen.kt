@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import hr.ferit.zavrsni.ui.theme.Blue
+import hr.ferit.zavrsni.ui.theme.DarkBlue
 import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
@@ -46,7 +49,9 @@ fun HomeScreen(navController: NavController) {
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 Row (
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 30.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 30.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ){
                     Text(
@@ -64,7 +69,9 @@ fun HomeScreen(navController: NavController) {
                 }
 
                 Row (
-                    modifier = Modifier.fillMaxWidth().padding(40.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(40.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
                     Text(
@@ -87,105 +94,32 @@ fun HomeScreen(navController: NavController) {
                     )
                 }
 
-                Row (
+                val (iconColors, setIconColors) = remember {
+                    mutableStateOf(List(7) { LightPink })
+                }
+
+                // Funkcija za promjenu boje ikone na klik
+                fun toggleIconColor(index: Int) {
+                    val newColors = iconColors.toMutableList()
+                    newColors[index] = if (iconColors[index] == LightPink) DarkBlue else LightPink
+                    setIconColors(newColors)
+                }
+
+                // Kompozicija koja sadrži red s ikonama
+                Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
-                ){
-                    IconButton(
-                        onClick= {
-
-                        })
-                    {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
-                            contentDescription = "Right arrow",
-                            modifier = Modifier,
-                            tint = LightPink
-                        )
-                    }
-                    IconButton(
-                        onClick= {
-
-                        })
-                    {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
-                            contentDescription = "Right arrow",
-                            modifier = Modifier,
-                            tint = LightPink
-                        )
-                    }
-                    IconButton(
-                        onClick= {
-
-                        })
-                    {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
-                            contentDescription = "Right arrow",
-                            modifier = Modifier,
-                            tint = LightPink
-                        )
-                    }
-                    IconButton(
-                        onClick= {
-
-                        })
-                    {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
-                            contentDescription = "Right arrow",
-                            modifier = Modifier,
-                            tint = LightPink
-                        )
-                    }
-                    IconButton(
-                        onClick= {
-
-                        })
-                    {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
-                            contentDescription = "Right arrow",
-                            modifier = Modifier,
-                            tint = LightPink
-                        )
-                    }
-                    IconButton(
-                        onClick= {
-
-                        })
-                    {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
-                            contentDescription = "Right arrow",
-                            modifier = Modifier,
-                            tint = LightPink
-                        )
-                    }
-                    IconButton(
-                        onClick= {
-
-                        })
-                    {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
-                            contentDescription = "Right arrow",
-                            modifier = Modifier,
-                            tint = LightPink
-                        )
-                    }
-                    IconButton(
-                        onClick= {
-
-                        })
-                    {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
-                            contentDescription = "Right arrow",
-                            modifier = Modifier,
-                            tint = LightPink
-                        )
+                ) {
+                    // IconButton komponenta za svaku ikonu
+                    repeat(7) { index ->
+                        IconButton(onClick = { toggleIconColor(index) }) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
+                                contentDescription = "Right arrow",
+                                modifier = Modifier,
+                                tint = iconColors[index]
+                            )
+                        }
                     }
                 }
 
@@ -240,7 +174,7 @@ fun HomeScreen(navController: NavController) {
 
             IconButton(
                 onClick= {
-
+                    navController.navigate("RecipeScreen")
                 })
             {
                 Icon(
