@@ -11,6 +11,7 @@ sealed class Destinations (val route: String){
     data object GoalScreen: Destinations("GoalScreen")
     data object HomeScreen : Destinations("HomeScreen")
     data object RecipeScreen: Destinations("RecipeScreen")
+    data object ProfileScreen : Destinations("ProfileScreen")
 
 
 }

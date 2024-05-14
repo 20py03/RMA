@@ -106,6 +106,9 @@ fun DisplayNavComponent(){
         composable("RecipeScreen"){
             RecipeScreen(navController = navController)
         }
+        composable("ProfileScreen"){
+            ProfileScreen(navController = navController)
+        }
     }
 }
 

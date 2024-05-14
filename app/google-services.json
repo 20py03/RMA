@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "841898578822",
+    "project_id": "fitnessapp-290bb",
+    "storage_bucket": "fitnessapp-290bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:841898578822:android:c77a0d04c18efaeb8e1207",
+        "android_client_info": {
+          "package_name": "hr.ferit.zavrsni"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJCXGRNee60IR_S9LN_hG6ruECiSoIEhM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -141,64 +141,8 @@ fun HomeScreen(navController: NavController) {
             EmptySquareWithBorder()
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            IconButton(
-                onClick= {
-
-                })
-            {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.home_icon),
-                    contentDescription = "Right arrow",
-                    modifier = Modifier,
-                    tint = Blue
-                )
-            }
-            IconButton(
-                onClick= {
-
-                })
-            {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.challenge_target_icon),
-                    contentDescription = "Right arrow",
-                    modifier = Modifier,
-                    tint = Blue
-                )
-            }
-
-            IconButton(
-                onClick= {
-                    navController.navigate("RecipeScreen")
-                })
-            {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.cooking_chef_cap_icon),
-                    contentDescription = "Right arrow",
-                    modifier = Modifier,
-                    tint = Blue
-                )
-            }
-
-            IconButton(
-                onClick= {
-
-                })
-            {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.person_profile_image_icon),
-                    contentDescription = "Right arrow",
-                    modifier = Modifier,
-                    tint = Blue
-                )
-            }
+        Footer(navController = navController)
         }
-    }
 }
 
 @Composable

@@ -1,6 +1,5 @@
 package hr.ferit.zavrsni
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,15 +19,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import hr.ferit.zavrsni.ui.theme.Blue
+import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
+
 
 @Composable
 fun RecipeScreen(navController: NavController) {
@@ -44,8 +43,7 @@ fun RecipeScreen(navController: NavController) {
         RecipeCategory("Dinner")
         RecipeCategory("Snacks")
 
-        // Footer
-        Footer()
+        Footer(navController = navController)
     }
 }
 
@@ -78,71 +76,10 @@ fun RecipeImage() {
     Box(
         modifier = Modifier
             .size(100.dp)
-            .background(Color.LightGray)
+            .background(color = LightPink)
             .padding(8.dp)
     ) {
-        Image(painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "AvoToast" )
+
     }
 }
 
-@Composable
-fun Footer() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceAround
-    ) {
-        IconButton(
-            onClick= {
-
-            })
-        {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.home_icon),
-                contentDescription = "Right arrow",
-                modifier = Modifier,
-                tint = Blue
-            )
-        }
-        IconButton(
-            onClick= {
-
-            })
-        {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.challenge_target_icon),
-                contentDescription = "Right arrow",
-                modifier = Modifier,
-                tint = Blue
-            )
-        }
-
-        IconButton(
-            onClick= {
-
-            })
-        {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.cooking_chef_cap_icon),
-                contentDescription = "Right arrow",
-                modifier = Modifier,
-                tint = Blue
-            )
-        }
-
-        IconButton(
-            onClick= {
-
-            })
-        {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.person_profile_image_icon),
-                contentDescription = "Right arrow",
-                modifier = Modifier,
-                tint = Blue
-            )
-        }
-    }
-}
