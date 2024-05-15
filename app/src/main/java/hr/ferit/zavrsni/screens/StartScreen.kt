@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import hr.ferit.zavrsni.AppNavigation
@@ -29,7 +28,7 @@ import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun Start(navController: NavHostController) {
+fun StartScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,7 +57,7 @@ fun Start(navController: NavHostController) {
         Spacer(modifier = Modifier.weight(0.4f))
         IconButton(
             onClick= {
-                navController.navigate(route = AppNavigation.RegisterScreen.route)
+                navController.navigate(route = AppNavigation.LoginScreen.route)
             })
         {
             Icon(
@@ -75,5 +74,5 @@ fun Start(navController: NavHostController) {
 @Preview
 @Composable
 fun StartScreenPreview(){
-    Start(navController = rememberNavController())
+    StartScreen(navController = rememberNavController())
 }

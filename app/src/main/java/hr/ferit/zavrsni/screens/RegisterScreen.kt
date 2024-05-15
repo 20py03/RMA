@@ -13,7 +13,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
+import hr.ferit.zavrsni.components.ButtonComponent
+import hr.ferit.zavrsni.components.ClicableLoginTextComponent
+import hr.ferit.zavrsni.components.DividerComponent
 import hr.ferit.zavrsni.components.HeadingTextComponent
 import hr.ferit.zavrsni.components.MyTextFieldComponent
 import hr.ferit.zavrsni.components.NormalTextComponent
@@ -21,7 +27,7 @@ import hr.ferit.zavrsni.components.PwdTextFieldComponent
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(navController: NavHostController) {
 
     Surface(
         color = White,
@@ -32,24 +38,42 @@ fun RegisterScreen() {
     ) {
         Column(modifier = Modifier.fillMaxSize()){
             NormalTextComponent(value = stringResource(id = R.string.hello) )
+
             HeadingTextComponent(value = stringResource(id = R.string.create_account))
+
             Spacer(modifier = Modifier.height(20.dp))
+
             MyTextFieldComponent(
                 labelValue = stringResource(id = R.string.name),
                 painterResource(id = R.drawable.profile_1341_svgrepo_com)
             )
+
             MyTextFieldComponent(
                 labelValue = stringResource(id = R.string.e_mail),
                 painterResource = painterResource(id = R.drawable.mail_svgrepo_com)
             )
+
             PwdTextFieldComponent(
                 labelValue = stringResource(id = R.string.pwd),
                 painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com)
             )
+
             PwdTextFieldComponent(
                 labelValue = stringResource(id = R.string.confirm_pwd),
                 painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com)
             )
+            
+            Spacer(modifier = Modifier.height(80.dp))
+
+            ButtonComponent(value = stringResource(id = R.string.register))
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            DividerComponent()
+
+            ClicableLoginTextComponent (tryingToLogin = true, onTextSelected = {
+                navController.navigate(route = AppNavigation.LoginScreen.route)
+            })
 
         }
     }
@@ -58,7 +82,7 @@ fun RegisterScreen() {
 @Preview
 @Composable
 fun DefaultPreviewOfRegisterScreen(){
-    RegisterScreen()
+    RegisterScreen(navController = rememberNavController())
 }
 
 

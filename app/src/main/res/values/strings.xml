@@ -12,6 +12,9 @@
     <string name="e_mail">E-mail</string>
     <string name="pwd">Password</string>
     <string name="confirm_pwd">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="go_to_login">Already have an account? Login</string>
+    <string name="go_to_register">Dont have an account yet?</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -49,4 +52,6 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="login">Login</string>
+
 </resources>
