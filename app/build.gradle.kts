@@ -70,6 +70,13 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+
+    implementation ("androidx.compose.material:material-icons-extended-android:1.5.1")
+    implementation("com.google.firebase:firebase-firestore:24.9.1")
+    implementation("androidx.activity:activity-ktx:1.8.0")
+    //implementation("androidx.fragment:fragmentktx:1.6.1")
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
