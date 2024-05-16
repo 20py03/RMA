@@ -47,6 +47,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.ui.theme.Beige
 import hr.ferit.zavrsni.ui.theme.Blue
@@ -174,7 +175,7 @@ fun PwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSe
 }
 
 @Composable
-fun ButtonComponent(value:String, onButtonClicked: () -> Unit){
+fun ButtonComponent(value:String, onButtonClicked: () -> Unit, isEnabled:Boolean=false){
     Button(
         onClick = {
                 onButtonClicked.invoke()
@@ -183,7 +184,8 @@ fun ButtonComponent(value:String, onButtonClicked: () -> Unit){
             .fillMaxWidth()
             .heightIn(48.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        enabled = isEnabled
         ){
 
         Box(

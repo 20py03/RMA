@@ -1,13 +1,16 @@
 package hr.ferit.zavrsni.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,76 +28,90 @@ import hr.ferit.zavrsni.components.HeadingTextComponent
 import hr.ferit.zavrsni.components.MyTextFieldComponent
 import hr.ferit.zavrsni.components.NormalTextComponent
 import hr.ferit.zavrsni.components.PwdTextFieldComponent
-import hr.ferit.zavrsni.data.LoginViewModel
-import hr.ferit.zavrsni.data.UIEvent
+import hr.ferit.zavrsni.data.SignUpViewModel
+import hr.ferit.zavrsni.data.SignUpUIEvent
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun RegisterScreen(navController: NavHostController, loginViewModel: LoginViewModel = viewModel ()) {
+fun RegisterScreen(navController: NavHostController, loginViewModel: SignUpViewModel = viewModel ()) {
 
-    Surface(
-        color = White,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = White)
-            .padding(28.dp)
-    ) {
-        Column(modifier = Modifier.fillMaxSize()){
-            NormalTextComponent(value = stringResource(id = R.string.hello) )
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center){
+        Surface(
+            color = White,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = White)
+                .padding(28.dp)
+        ) {
+            Column(modifier = Modifier.fillMaxSize()){
+                NormalTextComponent(value = stringResource(id = R.string.hello) )
 
-            HeadingTextComponent(value = stringResource(id = R.string.create_account))
+                HeadingTextComponent(value = stringResource(id = R.string.create_account))
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-            MyTextFieldComponent(
-                labelValue = stringResource(id = R.string.name),
-                painterResource(id = R.drawable.profile_1341_svgrepo_com),
-                onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.NameChanged(it))
-                },
-                errorStatus = loginViewModel.registrationUIState.value.nameError
-            )
+                MyTextFieldComponent(
+                    labelValue = stringResource(id = R.string.name),
+                    painterResource(id = R.drawable.profile_1341_svgrepo_com),
+                    onTextSelected = {
+                        loginViewModel.onEvent(SignUpUIEvent.NameChanged(it), navController)
+                    },
+                    errorStatus = loginViewModel.registrationUIState.value.nameError
+                )
 
-            MyTextFieldComponent(
-                labelValue = stringResource(id = R.string.e_mail),
-                painterResource = painterResource(id = R.drawable.mail_svgrepo_com),
-                onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.EmailChanged(it))
-                },
-                errorStatus = loginViewModel.registrationUIState.value.emailError
-            )
+                MyTextFieldComponent(
+                    labelValue = stringResource(id = R.string.e_mail),
+                    painterResource = painterResource(id = R.drawable.mail_svgrepo_com),
+                    onTextSelected = {
+                        loginViewModel.onEvent(SignUpUIEvent.EmailChanged(it), navController)
+                    },
+                    errorStatus = loginViewModel.registrationUIState.value.emailError
+                )
 
-            PwdTextFieldComponent(
-                labelValue = stringResource(id = R.string.pwd),
-                painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
-                onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.PasswordChanged(it))
-                },
-                errorStatus = loginViewModel.registrationUIState.value.passwordError
-            )
+                PwdTextFieldComponent(
+                    labelValue = stringResource(id = R.string.pwd),
+                    painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
+                    onTextSelected = {
+                        loginViewModel.onEvent(SignUpUIEvent.PasswordChanged(it), navController)
+                    },
+                    errorStatus = loginViewModel.registrationUIState.value.passwordError
+                )
 
-            PwdTextFieldComponent(
-                labelValue = stringResource(id = R.string.confirm_pwd),
-                painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
-                onTextSelected = {
-                    loginViewModel.onEvent(UIEvent.ConfirmPasswordChanged(it))
-                },
-                errorStatus = loginViewModel.registrationUIState.value.confirmPasswordError
-            )
-            
-            Spacer(modifier = Modifier.height(80.dp))
+                PwdTextFieldComponent(
+                    labelValue = stringResource(id = R.string.confirm_pwd),
+                    painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
+                    onTextSelected = {
+                        loginViewModel.onEvent(SignUpUIEvent.ConfirmPasswordChanged(it), navController)
+                    },
+                    errorStatus = loginViewModel.registrationUIState.value.confirmPasswordError
+                )
 
-            ButtonComponent(value = stringResource(id = R.string.register), onButtonClicked = {loginViewModel.onEvent(UIEvent.RegisterButtonClicked)})
+                Spacer(modifier = Modifier.height(80.dp))
 
-            Spacer(modifier = Modifier.height(20.dp))
+                ButtonComponent(value = stringResource(id = R.string.register),
+                    onButtonClicked = {
+                        loginViewModel.onEvent(SignUpUIEvent.RegisterButtonClicked, navController)
+                    },
+                    isEnabled = loginViewModel.allValidationsPassed.value
+                )
 
-            DividerComponent()
+                Spacer(modifier = Modifier.height(20.dp))
 
-            ClicableLoginTextComponent (tryingToLogin = true, onTextSelected = {
-                navController.navigate(route = AppNavigation.LoginScreen.route)
-            })
+                DividerComponent()
 
+                ClicableLoginTextComponent (tryingToLogin = true, onTextSelected = {
+                    navController.navigate(route = AppNavigation.LoginScreen.route)
+                })
+
+            }
         }
+
+        if(loginViewModel.singUpInProgress.value) {
+            CircularProgressIndicator()
+        }
+
     }
 }
 
@@ -103,73 +120,4 @@ fun RegisterScreen(navController: NavHostController, loginViewModel: LoginViewMo
 fun DefaultPreviewOfRegisterScreen(){
     RegisterScreen(navController = rememberNavController())
 }
-
-
-    /*
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Create your account",
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center,
-                color = Blue,
-                fontWeight = FontWeight.Bold
-            )
-            OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Name") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Email") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Password") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Confirm Password") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Button(
-                onClick = { navController.navigate("GenderScreen")},
-                colors = ButtonDefaults.buttonColors(containerColor = Blue),
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .height(56.dp)
-                    .fillMaxWidth(0.7f)
-                    .clip(RoundedCornerShape(8.dp)),
-            ) {
-                Text(
-                    text = "Create",
-                    color = White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
-        }
-    }
-     */
 

@@ -26,12 +26,16 @@ import androidx.navigation.NavController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
+import hr.ferit.zavrsni.components.ButtonComponent
+import hr.ferit.zavrsni.data.SignUpViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun ProfileScreen(navController: NavController){
+fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel = viewModel ()){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -49,7 +53,16 @@ fun ProfileScreen(navController: NavController){
         ProfileInfo("Proteini: 150 g")
         ProfileInfo("Ugljikohidrati: 200 g")
         ProfileInfo("Masti: 70 g")
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(50.dp))
+
+        ButtonComponent(value = "Logout",
+            onButtonClicked = {
+                loginViewModel.logout(navController)
+            },
+            isEnabled = true
+        )
+
+        Spacer(modifier = Modifier.height(60.dp))
         Footer(navController = navController)
     }
 }
@@ -92,16 +105,16 @@ fun Footer(navController: NavController) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.home_icon)) {
-            navController.navigate("HomeScreen")
+            navController.navigate(route = AppNavigation.HomeScreen.route)
         }
         FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.challenge_target_icon)) {
-            navController.navigate("Screen")
+            navController.navigate(route = AppNavigation.ActivityScreen.route)
         }
         FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.cooking_chef_cap_icon)) {
-            navController.navigate("RecipeScreen")
+            navController.navigate(route = AppNavigation.RecipeScreen.route)
         }
         FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.person_profile_image_icon)) {
-            navController.navigate("ProfileScreen")
+            navController.navigate(route = AppNavigation.ProfileScreen.route)
         }
     }
 }
@@ -112,7 +125,8 @@ fun FooterIcon(imageVector: ImageVector, onClick: () -> Unit) {
         imageVector = imageVector,
         contentDescription = null,
         tint = Blue,
-        modifier = Modifier.size(40.dp)
-        .clickable(onClick = onClick)
+        modifier = Modifier
+            .size(40.dp)
+            .clickable(onClick = onClick)
     )
 }
