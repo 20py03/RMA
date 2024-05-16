@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -31,12 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -50,6 +53,7 @@ import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
 import hr.ferit.zavrsni.ui.theme.LightBlue
 import hr.ferit.zavrsni.ui.theme.LightGray
+import hr.ferit.zavrsni.ui.theme.White
 
 
 @Composable
@@ -87,7 +91,9 @@ fun HeadingTextComponent(value:String){
 }
 
 @Composable
-fun MyTextFieldComponent(labelValue: String, painterResource: Painter) {
+fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
+                         onTextSelected: (String) -> Unit
+) {
     val textValue = remember { mutableStateOf("") }
 
     OutlinedTextField(
@@ -96,12 +102,19 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter) {
         colors = TextFieldDefaults.colors(
             focusedLabelColor = Blue,
             cursorColor = Blue,
-            focusedContainerColor = Beige,
+            focusedTextColor = Blue,
+            unfocusedTextColor = Blue,
+            focusedContainerColor = White,
             unfocusedContainerColor = LightGray
         ),
-        keyboardOptions = KeyboardOptions.Default,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        singleLine = true,
+        maxLines = 1,
         value = textValue.value,
-        onValueChange = { textValue.value = it },
+        onValueChange = {
+            textValue.value = it
+            onTextSelected(it)
+        },
         leadingIcon = {
             Icon(
                 painter = painterResource,
@@ -111,7 +124,7 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter) {
 }
 
 @Composable
-fun PwdTextFieldComponent(labelValue: String, painterResource: Painter) {
+fun PwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSelected: (String) -> Unit) {
     val password = remember { mutableStateOf("") }
 
     val passwordVisible = remember {
@@ -124,12 +137,19 @@ fun PwdTextFieldComponent(labelValue: String, painterResource: Painter) {
         colors = TextFieldDefaults.colors(
             focusedLabelColor = Blue,
             cursorColor = Blue,
-            focusedContainerColor = Beige,
+            focusedTextColor = Blue,
+            unfocusedTextColor = Blue,
+            focusedContainerColor = White,
             unfocusedContainerColor = LightGray
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
+        singleLine = true,
+        maxLines = 1,
         value = password.value,
-        onValueChange = { password.value = it },
+        onValueChange = {
+            password.value = it
+            onTextSelected(it)
+        },
         leadingIcon = {
             Icon(
                 painter = painterResource,

@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import hr.ferit.zavrsni.AppNavigation
@@ -24,10 +25,12 @@ import hr.ferit.zavrsni.components.HeadingTextComponent
 import hr.ferit.zavrsni.components.MyTextFieldComponent
 import hr.ferit.zavrsni.components.NormalTextComponent
 import hr.ferit.zavrsni.components.PwdTextFieldComponent
+import hr.ferit.zavrsni.data.LoginViewModel
+import hr.ferit.zavrsni.data.UIEvent
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun LoginScreen(navController: NavHostController){
+fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel = viewModel ()){
     Surface(
         color = White,
         modifier = Modifier
@@ -44,12 +47,18 @@ fun LoginScreen(navController: NavHostController){
 
             MyTextFieldComponent(
                 labelValue = stringResource(id = R.string.e_mail),
-                painterResource = painterResource(id = R.drawable.mail_svgrepo_com)
+                painterResource = painterResource(id = R.drawable.mail_svgrepo_com),
+                onTextSelected = {
+                    loginViewModel.onEvent(UIEvent.EmailChanged(it))
+                }
             )
 
             PwdTextFieldComponent(
                 labelValue = stringResource(id = R.string.pwd),
-                painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com)
+                painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
+                onTextSelected = {
+                    loginViewModel.onEvent(UIEvent.PasswordChanged(it))
+                }
             )
 
             Spacer(modifier = Modifier.height(50.dp))

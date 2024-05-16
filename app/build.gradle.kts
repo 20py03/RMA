@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.firebase.firestore)
 
     implementation ("androidx.compose.material:material-icons-extended-android:1.5.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("com.google.firebase:firebase-firestore:24.9.1")
     implementation("androidx.activity:activity-ktx:1.8.0")
     //implementation("androidx.fragment:fragmentktx:1.6.1")
