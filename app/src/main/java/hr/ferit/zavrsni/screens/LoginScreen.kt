@@ -50,7 +50,8 @@ fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel
                 painterResource = painterResource(id = R.drawable.mail_svgrepo_com),
                 onTextSelected = {
                     loginViewModel.onEvent(UIEvent.EmailChanged(it))
-                }
+                },
+                errorStatus = loginViewModel.registrationUIState.value.emailError
             )
 
             PwdTextFieldComponent(
@@ -58,12 +59,13 @@ fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel
                 painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
                 onTextSelected = {
                     loginViewModel.onEvent(UIEvent.PasswordChanged(it))
-                }
+                },
+                errorStatus = loginViewModel.registrationUIState.value.passwordError
             )
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            ButtonComponent(value = stringResource(id = R.string.login))
+            ButtonComponent(value = stringResource(id = R.string.login), onButtonClicked = {loginViewModel.onEvent(UIEvent.RegisterButtonClicked)})
 
             Spacer(modifier = Modifier.height(30.dp))
 

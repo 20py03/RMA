@@ -92,7 +92,8 @@ fun HeadingTextComponent(value:String){
 
 @Composable
 fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
-                         onTextSelected: (String) -> Unit
+                         onTextSelected: (String) -> Unit,
+                         errorStatus: Boolean = false
 ) {
     val textValue = remember { mutableStateOf("") }
 
@@ -119,12 +120,13 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
             Icon(
                 painter = painterResource,
                 contentDescription = "")
-        }
+        },
+        isError = !errorStatus
     )
 }
 
 @Composable
-fun PwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSelected: (String) -> Unit) {
+fun PwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSelected: (String) -> Unit, errorStatus: Boolean =false) {
     val password = remember { mutableStateOf("") }
 
     val passwordVisible = remember {
@@ -155,6 +157,7 @@ fun PwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSe
                 painter = painterResource,
                 contentDescription = "")
         },
+        isError = !errorStatus,
         trailingIcon = {
             val iconImage = if(passwordVisible.value){
                 Icons.Filled.Visibility
@@ -171,9 +174,11 @@ fun PwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSe
 }
 
 @Composable
-fun ButtonComponent(value:String){
+fun ButtonComponent(value:String, onButtonClicked: () -> Unit){
     Button(
-        onClick = { /*TODO*/ },
+        onClick = {
+                onButtonClicked.invoke()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),

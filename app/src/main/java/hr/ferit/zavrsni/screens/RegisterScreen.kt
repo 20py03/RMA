@@ -51,7 +51,8 @@ fun RegisterScreen(navController: NavHostController, loginViewModel: LoginViewMo
                 painterResource(id = R.drawable.profile_1341_svgrepo_com),
                 onTextSelected = {
                     loginViewModel.onEvent(UIEvent.NameChanged(it))
-                }
+                },
+                errorStatus = loginViewModel.registrationUIState.value.nameError
             )
 
             MyTextFieldComponent(
@@ -59,7 +60,8 @@ fun RegisterScreen(navController: NavHostController, loginViewModel: LoginViewMo
                 painterResource = painterResource(id = R.drawable.mail_svgrepo_com),
                 onTextSelected = {
                     loginViewModel.onEvent(UIEvent.EmailChanged(it))
-                }
+                },
+                errorStatus = loginViewModel.registrationUIState.value.emailError
             )
 
             PwdTextFieldComponent(
@@ -67,7 +69,8 @@ fun RegisterScreen(navController: NavHostController, loginViewModel: LoginViewMo
                 painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
                 onTextSelected = {
                     loginViewModel.onEvent(UIEvent.PasswordChanged(it))
-                }
+                },
+                errorStatus = loginViewModel.registrationUIState.value.passwordError
             )
 
             PwdTextFieldComponent(
@@ -75,12 +78,13 @@ fun RegisterScreen(navController: NavHostController, loginViewModel: LoginViewMo
                 painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
                 onTextSelected = {
                     loginViewModel.onEvent(UIEvent.ConfirmPasswordChanged(it))
-                }
+                },
+                errorStatus = loginViewModel.registrationUIState.value.confirmPasswordError
             )
             
             Spacer(modifier = Modifier.height(80.dp))
 
-            ButtonComponent(value = stringResource(id = R.string.register))
+            ButtonComponent(value = stringResource(id = R.string.register), onButtonClicked = {loginViewModel.onEvent(UIEvent.RegisterButtonClicked)})
 
             Spacer(modifier = Modifier.height(20.dp))
 
