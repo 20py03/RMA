@@ -56,6 +56,8 @@ class SignUpViewModel : ViewModel(){
             is SignUpUIEvent.RegisterButtonClicked -> {
                 signUp(navController)
             }
+
+            else -> {}
         }
 
     }
@@ -113,7 +115,7 @@ class SignUpViewModel : ViewModel(){
                 singUpInProgress.value = false
 
                 if(it.isSuccessful){
-                    navController.navigate(route =  AppNavigation.HomeScreen.route)
+                    navController.navigate(route =  AppNavigation.GenderScreen.route)
                 }
 
             }

@@ -30,8 +30,6 @@ import hr.ferit.zavrsni.components.NormalTextComponent
 import hr.ferit.zavrsni.components.PwdTextFieldComponent
 import hr.ferit.zavrsni.data.LoginUIEvent
 import hr.ferit.zavrsni.data.LoginViewModel
-import hr.ferit.zavrsni.data.SignUpViewModel
-import hr.ferit.zavrsni.data.SignUpUIEvent
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable

@@ -30,24 +30,34 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.components.ButtonComponent
+import hr.ferit.zavrsni.data.ProfileDataUIState
+import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.data.SignUpViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel = viewModel ()){
+fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel = viewModel (),
+                  profileDataViewModel: ProfileDataViewModel = viewModel()
+){
+    val getData = profileDataViewModel.state.value
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = White)
             .padding(20.dp)
     ) {
+
         ProfileImage(imageResource = R.drawable.person_profile_image_icon)
         Spacer(modifier = Modifier.height(20.dp))
         ProfileInfo("Ime: John Doe")
-        ProfileInfo("Visina: 180 cm")
-        ProfileInfo("Težina: 75 kg")
-        ProfileInfo("Cilj: Mršavljenje")
+        Text(text = getData.age)
+        Text(text = getData.gender)
+        Text(text = getData.height)
+        Text(text = getData.weight)
+        Text(text = getData.goal)
+        Text(text = getData.activity)
         ProfileInfo("TDEE: 2500 kcal")
         ProfileInfo("Kalorije: 2000 kcal")
         ProfileInfo("Proteini: 150 g")

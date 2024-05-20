@@ -1,5 +1,7 @@
 package hr.ferit.zavrsni.screens
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,15 +33,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
+import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
+import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
 fun GenderScreen(navController: NavController) {
-    var isCircle1Selected by remember { mutableStateOf(false) }
-    var isCircle2Selected by remember { mutableStateOf(false) }
+    var male by remember { mutableStateOf(false) }
+    var female by remember { mutableStateOf(false) }
+    var selectedGender by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -64,18 +71,22 @@ fun GenderScreen(navController: NavController) {
             Box(
                 modifier = Modifier
                     .size(170.dp)
-                    .clickable { isCircle1Selected = !isCircle1Selected }
+                    .clickable {
+                        male = true
+                        female = false
+                        selectedGender = "male"
+                    }
                     .border(
                         width = 3.dp,
                         color = Blue,
                         shape = CircleShape
                     )
-                    .background(if (isCircle1Selected) Blue else White, shape = CircleShape),
+                    .background(if (male) Blue else White, shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.male_symbol_icon),
-                    contentDescription = "Circle 1",
+                    contentDescription = "Male Symbol",
                     modifier = Modifier.size(80.dp)
                 )
             }
@@ -88,25 +99,31 @@ fun GenderScreen(navController: NavController) {
             Box(
                 modifier = Modifier
                     .size(170.dp)
-                    .clickable { isCircle2Selected = !isCircle2Selected }
+                    .clickable {
+                        female = true
+                        male = false
+                        selectedGender = "female"
+                    }
                     .border(
                         width = 3.dp,
                         color = Blue,
                         shape = CircleShape
                     )
-                    .background(if (isCircle2Selected) Blue else White, shape = CircleShape),
+                    .background(if (female) Blue else White, shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.woman_symbol_icon),
-                    contentDescription = "Circle 2",
+                    contentDescription = "Female Symbol",
                     modifier = Modifier.size(80.dp)
                 )
             }
         }
 
         Button(
-            onClick = {navController.navigate("YearScreen") },
+            onClick = {
+                saveGenderToFirestore(selectedGender, navController)
+        },
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
                 .padding(top = 16.dp)
@@ -121,6 +138,22 @@ fun GenderScreen(navController: NavController) {
                 fontSize = 20.sp
             )
         }
-
     }
+}
+
+private fun saveGenderToFirestore(gender: String, navController:NavController) {
+    val db = FirebaseFirestore.getInstance()
+    val profileData = hashMapOf(
+        "gender" to gender
+    )
+    val documentId = "sGpBjAIYif34nHvNX0gB"
+
+    db.collection("profileData").document(documentId)
+        .set(profileData)
+        .addOnSuccessListener {
+            navController.navigate(route =  AppNavigation.YearScreen.route)
+        }
+        .addOnFailureListener { e ->
+            Log.d("error","Inside_OnFailureListener: $e")
+        }
 }

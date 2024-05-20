@@ -1,10 +1,12 @@
 package hr.ferit.zavrsni
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.screens.ActivityScreen
 import hr.ferit.zavrsni.screens.GenderScreen
 import hr.ferit.zavrsni.screens.GoalScreen
@@ -19,10 +21,14 @@ import hr.ferit.zavrsni.screens.WeightScreen
 import hr.ferit.zavrsni.screens.YearScreen
 
 @Composable
-fun AppNavGraph(navController: NavHostController = rememberNavController()){
+fun AppNavGraph(navController: NavHostController = rememberNavController(), loginViewModel: LoginViewModel = viewModel ()){
     NavHost(
         navController = navController,
-        startDestination = AppNavigation.StartScreen.route
+        startDestination = if(loginViewModel.currentUser != null ){
+             AppNavigation.HomeScreen.route
+        }else{
+            AppNavigation.LoginScreen.route
+        }
     ){
         composable(route = AppNavigation.StartScreen.route){
             StartScreen(navController = navController)

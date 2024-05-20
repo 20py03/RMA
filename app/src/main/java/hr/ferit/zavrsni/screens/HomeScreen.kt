@@ -34,10 +34,10 @@ fun HomeScreen(navController: NavController) {
     Surface (
         modifier = Modifier
             .fillMaxSize()
-            .background(color = White),
+            .background(color = White)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().background(color = White),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -118,7 +118,7 @@ fun HomeScreen(navController: NavController) {
                             IconButton(onClick = { toggleIconColor(index) }) {
                                 Icon(
                                     imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
-                                    contentDescription = "Right arrow",
+                                    contentDescription = "WaterGlass",
                                     modifier = Modifier,
                                     tint = iconColors[index]
                                 )

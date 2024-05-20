@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.data.validation.Validator
 
@@ -17,6 +18,9 @@ class LoginViewModel: ViewModel() {
     var allValidationsPassed = mutableStateOf(false)
 
     var loginInProgress  = mutableStateOf(false)
+
+    var currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
 
     fun onEvent(event:LoginUIEvent, navController: NavController){
         when(event) {
@@ -79,7 +83,10 @@ class LoginViewModel: ViewModel() {
                 loginInProgress.value = false
 
                 if(it.isSuccessful){
-                    navController.navigate(route =  AppNavigation.HomeScreen.route)
+                    currentUser = FirebaseAuth.getInstance().currentUser
+                    navController.navigate(route =  AppNavigation.HomeScreen.route){
+                        popUpTo(AppNavigation.LoginScreen.route) { inclusive = true }
+                    }
                 }
             }
             .addOnFailureListener{

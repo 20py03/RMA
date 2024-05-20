@@ -1,5 +1,6 @@
 package hr.ferit.zavrsni.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,12 +29,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
 import java.util.Calendar
 
 @Composable
 fun YearScreen(navController: NavController) {
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+    var selectedYear by remember { mutableStateOf(currentYear) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,9 +64,6 @@ fun YearScreen(navController: NavController) {
                 .height(10.dp)
                 .background(color = Blue)
         )
-
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        var selectedYear by remember { mutableStateOf(currentYear) }
 
         val years = (10..80).toList()
 
@@ -99,7 +103,7 @@ fun YearScreen(navController: NavController) {
         )
 
         Button(
-            onClick = { navController.navigate("HeightScreen")},
+            onClick = {  saveYearToFirestore(selectedYear, navController)},
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
                 .padding(top = 130.dp)
@@ -115,4 +119,21 @@ fun YearScreen(navController: NavController) {
             )
         }
     }
+}
+
+private fun saveYearToFirestore(year: Int, navController:NavController) {
+    val db = FirebaseFirestore.getInstance()
+    val profileData = hashMapOf(
+        "age" to year.toString()
+    )
+    val documentId = "sGpBjAIYif34nHvNX0gB"
+
+    db.collection("profileData").document(documentId)
+        .set(profileData, SetOptions.merge())
+        .addOnSuccessListener {
+            navController.navigate(route =  AppNavigation.WeightScreen.route)
+        }
+        .addOnFailureListener { e ->
+            Log.d("error","Inside_OnFailureListener: $e")
+        }
 }
