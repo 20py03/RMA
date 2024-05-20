@@ -48,31 +48,34 @@ fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel 
             .background(color = White)
             .padding(20.dp)
     ) {
-
-        ProfileImage(imageResource = R.drawable.person_profile_image_icon)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ProfileImage(imageResource = R.drawable.person_profile_image_icon)
+            ButtonComponent(
+                value = "Logout",
+                onButtonClicked = {
+                    loginViewModel.logout(navController)
+                },
+                isEnabled = true
+            )
+        }
         Spacer(modifier = Modifier.height(20.dp))
         ProfileInfo("Ime: John Doe")
-        Text(text = getData.age)
-        Text(text = getData.gender)
-        Text(text = getData.height)
-        Text(text = getData.weight)
-        Text(text = getData.goal)
-        Text(text = getData.activity)
+        ProfileInfo("Age: ${getData.age}")
+        ProfileInfo("Gender: ${getData.gender}")
+        ProfileInfo("Height: ${getData.height}")
+        ProfileInfo("Weight: ${getData.weight}")
+        ProfileInfo("Goal: ${getData.goal}")
+        ProfileInfo("Activity: ${getData.activity}")
         ProfileInfo("TDEE: 2500 kcal")
         ProfileInfo("Kalorije: 2000 kcal")
         ProfileInfo("Proteini: 150 g")
         ProfileInfo("Ugljikohidrati: 200 g")
         ProfileInfo("Masti: 70 g")
         Spacer(modifier = Modifier.height(50.dp))
-
-        ButtonComponent(value = "Logout",
-            onButtonClicked = {
-                loginViewModel.logout(navController)
-            },
-            isEnabled = true
-        )
-
-        Spacer(modifier = Modifier.height(60.dp))
         Footer(navController = navController)
     }
 }

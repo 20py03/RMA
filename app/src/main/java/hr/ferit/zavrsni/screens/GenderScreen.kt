@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,11 +43,13 @@ import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
 
+
 @Composable
-fun GenderScreen(navController: NavController) {
+fun GenderScreen(navController: NavController, loginViewModel:LoginViewModel= viewModel()) {
     var male by remember { mutableStateOf(false) }
     var female by remember { mutableStateOf(false) }
     var selectedGender by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -122,7 +125,18 @@ fun GenderScreen(navController: NavController) {
 
         Button(
             onClick = {
-                saveGenderToFirestore(selectedGender, navController)
+                if (loginViewModel.currentUser != null) {
+                    val uid = loginViewModel.currentUser?.uid
+                    if(uid!=null){
+                        saveGenderToFirestore(selectedGender, uid, navController)
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Please log in to continue",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
         },
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
@@ -141,14 +155,13 @@ fun GenderScreen(navController: NavController) {
     }
 }
 
-private fun saveGenderToFirestore(gender: String, navController:NavController) {
+private fun saveGenderToFirestore(gender: String, uid:String, navController:NavController) {
     val db = FirebaseFirestore.getInstance()
     val profileData = hashMapOf(
         "gender" to gender
     )
-    val documentId = "sGpBjAIYif34nHvNX0gB"
 
-    db.collection("profileData").document(documentId)
+    db.collection("profileData").document(uid)
         .set(profileData)
         .addOnSuccessListener {
             navController.navigate(route =  AppNavigation.YearScreen.route)

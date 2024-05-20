@@ -1,6 +1,7 @@
 package hr.ferit.zavrsni.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,19 +15,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import hr.ferit.zavrsni.AppNavigation
+import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun WeightScreen(navController: NavController) {
+fun WeightScreen(navController: NavController, loginViewModel:LoginViewModel= viewModel()) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -91,8 +97,19 @@ fun WeightScreen(navController: NavController) {
         )
 
         Button(
-            onClick = {
-                saveWeightToFirestore(selectedWeight, navController)
+                onClick = {
+                    if (loginViewModel.currentUser != null) {
+                        val uid = loginViewModel.currentUser?.uid
+                        if(uid!=null){
+                            saveWeightToFirestore(selectedWeight, uid, navController)
+                        }
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Please log in to continue",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
@@ -111,14 +128,13 @@ fun WeightScreen(navController: NavController) {
     }
 }
 
-private fun saveWeightToFirestore(weight: Int, navController:NavController) {
+private fun saveWeightToFirestore(weight: Int,uid:String, navController:NavController) {
     val db = FirebaseFirestore.getInstance()
     val profileData = hashMapOf(
         "weight" to weight.toString()
     )
-    val documentId = "sGpBjAIYif34nHvNX0gB"
 
-    db.collection("profileData").document(documentId)
+    db.collection("profileData").document(uid)
         .set(profileData, SetOptions.merge())
         .addOnSuccessListener {
             navController.navigate(route =  AppNavigation.HeightScreen.route)
