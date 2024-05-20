@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.firebase.auth.FirebaseAuth
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.components.ButtonComponent
@@ -41,6 +42,7 @@ fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel 
                   profileDataViewModel: ProfileDataViewModel = viewModel()
 ){
     val getData = profileDataViewModel.state.value
+    val firebaseAuth = FirebaseAuth.getInstance()
     
     Column(
         modifier = Modifier
@@ -63,18 +65,21 @@ fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel 
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
-        ProfileInfo("Ime: John Doe")
-        ProfileInfo("Age: ${getData.age}")
-        ProfileInfo("Gender: ${getData.gender}")
-        ProfileInfo("Height: ${getData.height}")
-        ProfileInfo("Weight: ${getData.weight}")
-        ProfileInfo("Goal: ${getData.goal}")
-        ProfileInfo("Activity: ${getData.activity}")
-        ProfileInfo("TDEE: 2500 kcal")
-        ProfileInfo("Kalorije: 2000 kcal")
-        ProfileInfo("Proteini: 150 g")
-        ProfileInfo("Ugljikohidrati: 200 g")
-        ProfileInfo("Masti: 70 g")
+        if(firebaseAuth.currentUser != null){
+            ProfileInfo("Ime: ${getData.name}")
+            ProfileInfo("Age: ${getData.age}")
+            ProfileInfo("Gender: ${getData.gender}")
+            ProfileInfo("Height: ${getData.height}")
+            ProfileInfo("Weight: ${getData.weight}")
+            ProfileInfo("Goal: ${getData.goal}")
+            ProfileInfo("Activity: ${getData.activity}")
+            ProfileInfo("TDEE: 2500 kcal")
+            ProfileInfo("Kalorije: 2000 kcal")
+            ProfileInfo("Proteini: 150 g")
+            ProfileInfo("Ugljikohidrati: 200 g")
+            ProfileInfo("Masti: 70 g")
+        }
+
         Spacer(modifier = Modifier.height(50.dp))
         Footer(navController = navController)
     }

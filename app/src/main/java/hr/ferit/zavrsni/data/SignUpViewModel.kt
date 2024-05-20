@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.auth.UserProfileChangeRequest
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.data.validation.Validator
 
@@ -68,6 +69,7 @@ class SignUpViewModel : ViewModel(){
         createUserInFirebase(
             email=registrationUIState.value.email,
             password=registrationUIState.value.password,
+            name = registrationUIState.value.name,
             navController = navController
         )
     }
@@ -101,29 +103,24 @@ class SignUpViewModel : ViewModel(){
         Log.d(TAG, registrationUIState.value.toString())
     }
 
-    private fun createUserInFirebase(email:String, password:String, navController: NavController){
-
+    private fun createUserInFirebase(email: String, password: String, name: String, navController: NavController) {
         singUpInProgress.value = true
 
-        FirebaseAuth
-            .getInstance()
-            .createUserWithEmailAndPassword(email,password)
-            .addOnCompleteListener{
-                Log.d(TAG,"Inside_OnCompleteListener")
-                Log.d(TAG,"IsSuccessful = ${it.isSuccessful}")
-
+        val firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
                 singUpInProgress.value = false
-
-                if(it.isSuccessful){
-                    navController.navigate(route =  AppNavigation.GenderScreen.route)
+                if (task.isSuccessful) {
+                    val user = firebaseAuth.currentUser
+                    val profileUpdates = UserProfileChangeRequest.Builder()
+                        .setDisplayName(name)
+                        .build()
+                    user?.updateProfile(profileUpdates)
+                        ?.addOnCompleteListener { navController.navigate(route = AppNavigation.GenderScreen.route) }
                 }
-
             }
-            .addOnFailureListener{
-                Log.d(TAG,"Inside_OnFailureListener")
-                Log.d(TAG,"Exception = ${it.message}")
-                Log.d(TAG,"Exception = ${it.localizedMessage}")
-
+            .addOnFailureListener { e ->
+                Log.d(TAG, "Registration failed: ${e.message}")
             }
     }
 
