@@ -2,6 +2,7 @@ package hr.ferit.zavrsni.components
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -306,6 +307,20 @@ fun FooterIcon(imageVector: ImageVector, onClick: () -> Unit) {
             .size(40.dp)
             .clickable(onClick = onClick)
     )
+}
+
+@Composable
+fun EmptySquareWithBorder() {
+    Box(
+        modifier = Modifier
+            .size(170.dp)
+            .background(color = Color.Transparent, shape = RoundedCornerShape(8.dp))
+            .padding(bottom = 10.dp)
+            .border(1.dp, Color.Blue, shape = RoundedCornerShape(8.dp)),
+        contentAlignment = Alignment.Center
+    ) {
+
+    }
 }
 
 

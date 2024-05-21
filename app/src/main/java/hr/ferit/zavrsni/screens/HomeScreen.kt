@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import hr.ferit.zavrsni.R
+import hr.ferit.zavrsni.components.EmptySquareWithBorder
 import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
@@ -66,6 +68,12 @@ fun HomeScreen(navController: NavController) {
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp
                         )
+
+                        ProgressCircle(
+                            modifier = Modifier.size(60.dp),
+                            progress = 0.7f, // Zamijeni ovu vrijednost sa stvarnim postotkom
+                            color = Color.White
+                        )
                         Text(
                             text = "200 \nkcal left",
                             color = Color.White,
@@ -84,19 +92,19 @@ fun HomeScreen(navController: NavController) {
                             text = "Carbs\n 120G",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+                            fontSize = 15.sp
                         )
                         Text(
                             text = "Protein\n 130G",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+                            fontSize = 15.sp
                         )
                         Text(
                             text = "Fat\n 80G",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+                            fontSize = 15.sp
                         )
                     }
 
@@ -151,18 +159,30 @@ fun HomeScreen(navController: NavController) {
 }
 
 @Composable
-fun EmptySquareWithBorder() {
+fun ProgressCircle(
+    modifier: Modifier = Modifier,
+    progress: Float,
+    color: Color
+) {
     Box(
-        modifier = Modifier
-            .size(170.dp)
-            .background(color = Color.Transparent, shape = RoundedCornerShape(8.dp))
-            .padding(bottom = 10.dp)
-            .border(1.dp, Color.Blue, shape = RoundedCornerShape(8.dp)),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-
+        CircularProgressIndicator(
+            modifier = Modifier.size(60.dp),
+            progress = progress,
+            color = color,
+            strokeWidth = 6.dp
+        )
+        Text(
+            text = "${(progress * 100).toInt()}%",
+            fontSize = 10.sp,
+            color = Color.White
+        )
     }
 }
+
+
 
 @Preview
 @Composable
