@@ -26,6 +26,7 @@ import com.google.firebase.firestore.SetOptions
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
+import hr.ferit.zavrsni.ui.theme.DarkBlue
 import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
@@ -76,7 +77,7 @@ fun ActivityScreen(navController: NavController, loginViewModel : LoginViewModel
                 Text(
                     text = level,
                     fontSize = 18.sp,
-                    color = if (level == selectedActivity) Blue else LightPink,
+                    color = if (level == selectedActivity) Blue else DarkBlue,
                     fontWeight = FontWeight.Normal
                 )
             }
