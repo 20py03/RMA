@@ -40,5 +40,6 @@ class ProfileDataViewModel : ViewModel() {
     private suspend fun getCurrentUserUid(): String? {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
+
 }
 

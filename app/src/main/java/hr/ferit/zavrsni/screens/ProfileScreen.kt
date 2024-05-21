@@ -40,15 +40,25 @@ import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel = viewModel (),
-                  profileDataViewModel: ProfileDataViewModel = viewModel()
-){
+fun ProfileScreen(
+    navController: NavController,
+    loginViewModel: SignUpViewModel = viewModel(),
+    profileDataViewModel: ProfileDataViewModel = viewModel()
+) {
     val getData = profileDataViewModel.state.value
 
     LaunchedEffect(Unit) {
         profileDataViewModel.getData()
     }
-    
+
+    val tdee = calculateTDEE(
+        gender = getData.gender,
+        age = getData.age,
+        height = getData.height,
+        weight = getData.weight,
+        activity = getData.activity
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,6 +75,7 @@ fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel 
                 value = "Logout",
                 onButtonClicked = {
                     loginViewModel.logout(navController)
+                    // Reload profile data after logout
                     profileDataViewModel.getData()
                 },
                 isEnabled = true
@@ -79,7 +90,7 @@ fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel 
         ProfileInfo("Weight: ${getData.weight}")
         ProfileInfo("Goal: ${getData.goal}")
         ProfileInfo("Activity: ${getData.activity}")
-        ProfileInfo("TDEE: 2500 kcal")
+        ProfileInfo("TDEE: $tdee kcal")
         ProfileInfo("Kalorije: 2000 kcal")
         ProfileInfo("Proteini: 150 g")
         ProfileInfo("Ugljikohidrati: 200 g")
@@ -88,6 +99,29 @@ fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel 
         Spacer(modifier = Modifier.height(50.dp))
         Footer(navController = navController)
     }
+}
+
+fun calculateTDEE(gender: String, age: String, height: String, weight: String, activity: String): Double {
+    val ageInt = age.toIntOrNull() ?: 0
+    val heightDouble = height.toDoubleOrNull() ?: 0.0
+    val weightDouble = weight.toDoubleOrNull() ?: 0.0
+
+    val bmr = if (gender.lowercase() == "male") {
+        10 * weightDouble + 6.25 * heightDouble - 5 * ageInt + 5
+    } else {
+        10 * weightDouble + 6.25 * heightDouble - 5 * ageInt - 161
+    }
+
+    val activityFactor = when (activity.lowercase()) {
+        "sedentary" -> 1.2
+        "lightly active" -> 1.375
+        "moderately active" -> 1.55
+        "very active" -> 1.725
+        "athlete" -> 1.9
+        else -> 1.2
+    }
+
+    return bmr * activityFactor
 }
 
 @Composable
