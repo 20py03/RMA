@@ -12,17 +12,37 @@ import kotlinx.coroutines.tasks.await
 
 class ProfileDataViewModel : ViewModel() {
     val state = mutableStateOf(ProfileDataUIState())
+    val energyDataViewModel = EnergyDataViewModel()
 
     fun getData() {
         viewModelScope.launch {
             val uid = getCurrentUserUid()
             if (uid != null) {
-                state.value = getDataFromFireStore(uid)
+                val data = getDataFromFirestore(uid)
+                energyDataViewModel.calculateEnergyData(
+                    gender = data.gender,
+                    age = data.age,
+                    height = data.height,
+                    weight = data.weight,
+                    activity = data.activity,
+                    goal = data.goal
+                )
+                state.value = data
             }
         }
     }
 
-    private suspend fun getDataFromFireStore(uid: String): ProfileDataUIState {
+    fun saveEnergyData() {
+        viewModelScope.launch {
+            val uid = getCurrentUserUid()
+            if (uid != null) {
+                val energyData = energyDataViewModel.state.value
+                saveEnergyDataToFirestore(uid, energyData)
+            }
+        }
+    }
+
+    private suspend fun getDataFromFirestore(uid: String): ProfileDataUIState {
         val db = FirebaseFirestore.getInstance()
         var data = ProfileDataUIState()
 
@@ -32,7 +52,7 @@ class ProfileDataViewModel : ViewModel() {
                 data = document.toObject(ProfileDataUIState::class.java) ?: ProfileDataUIState()
             }
         } catch (e: FirebaseFirestoreException) {
-            Log.d("error", "getDataFromFireStore: $e")
+            Log.d("error", "getDataFromFirestore: $e")
         }
         return data
     }
@@ -41,5 +61,14 @@ class ProfileDataViewModel : ViewModel() {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
 
-}
+    private suspend fun saveEnergyDataToFirestore(uid: String, energyData: EnergyDataUIState) {
+        val db = FirebaseFirestore.getInstance()
 
+        try {
+            db.collection("energyData").document(uid).set(energyData).await()
+            Log.d("success", "Energy data saved successfully.")
+        } catch (e: FirebaseFirestoreException) {
+            Log.d("error", "saveEnergyDataToFirestore: $e")
+        }
+    }
+}

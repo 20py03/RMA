@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import hr.ferit.zavrsni.R
+import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
 import hr.ferit.zavrsni.ui.theme.LightPink
@@ -144,7 +145,7 @@ fun HomeScreen(navController: NavController) {
                 EmptySquareWithBorder()
             }
 
-            Footer(navController = navController)
+            Footer(navController)
         }
     }
 }

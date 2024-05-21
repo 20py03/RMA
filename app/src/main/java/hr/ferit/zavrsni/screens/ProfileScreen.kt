@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.components.ButtonComponent
+import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.data.ProfileDataUIState
 import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.data.SignUpViewModel
@@ -46,18 +47,11 @@ fun ProfileScreen(
     profileDataViewModel: ProfileDataViewModel = viewModel()
 ) {
     val getData = profileDataViewModel.state.value
+    val energyData = profileDataViewModel.energyDataViewModel.state.value
 
     LaunchedEffect(Unit) {
         profileDataViewModel.getData()
     }
-
-    val tdee = calculateTDEE(
-        gender = getData.gender,
-        age = getData.age,
-        height = getData.height,
-        weight = getData.weight,
-        activity = getData.activity
-    )
 
     Column(
         modifier = Modifier
@@ -75,7 +69,6 @@ fun ProfileScreen(
                 value = "Logout",
                 onButtonClicked = {
                     loginViewModel.logout(navController)
-                    // Reload profile data after logout
                     profileDataViewModel.getData()
                 },
                 isEnabled = true
@@ -90,39 +83,17 @@ fun ProfileScreen(
         ProfileInfo("Weight: ${getData.weight}")
         ProfileInfo("Goal: ${getData.goal}")
         ProfileInfo("Activity: ${getData.activity}")
-        ProfileInfo("TDEE: $tdee kcal")
-        ProfileInfo("Kalorije: 2000 kcal")
-        ProfileInfo("Proteini: 150 g")
-        ProfileInfo("Ugljikohidrati: 200 g")
-        ProfileInfo("Masti: 70 g")
+        ProfileInfo("TDEE: ${energyData.tdee} kcal")
+        ProfileInfo("Kalorije: ${energyData.goalCalories} kcal")
+        ProfileInfo("Proteini: ${energyData.protein} g")
+        ProfileInfo("Ugljikohidrati: ${energyData.carbohydrates} g")
+        ProfileInfo("Masti: ${energyData.fat} g")
 
         Spacer(modifier = Modifier.height(50.dp))
         Footer(navController = navController)
     }
 }
 
-fun calculateTDEE(gender: String, age: String, height: String, weight: String, activity: String): Double {
-    val ageInt = age.toIntOrNull() ?: 0
-    val heightDouble = height.toDoubleOrNull() ?: 0.0
-    val weightDouble = weight.toDoubleOrNull() ?: 0.0
-
-    val bmr = if (gender.lowercase() == "male") {
-        10 * weightDouble + 6.25 * heightDouble - 5 * ageInt + 5
-    } else {
-        10 * weightDouble + 6.25 * heightDouble - 5 * ageInt - 161
-    }
-
-    val activityFactor = when (activity.lowercase()) {
-        "sedentary" -> 1.2
-        "lightly active" -> 1.375
-        "moderately active" -> 1.55
-        "very active" -> 1.725
-        "athlete" -> 1.9
-        else -> 1.2
-    }
-
-    return bmr * activityFactor
-}
 
 @Composable
 fun ProfileImage(imageResource: Int) {
@@ -152,38 +123,6 @@ fun ProfileInfo(text: String) {
     )
 }
 
-@Composable
-fun Footer(navController: NavController) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.home_icon)) {
-            navController.navigate(route = AppNavigation.HomeScreen.route)
-        }
-        FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.challenge_target_icon)) {
-            navController.navigate(route = AppNavigation.ActivityScreen.route)
-        }
-        FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.cooking_chef_cap_icon)) {
-            navController.navigate(route = AppNavigation.RecipeScreen.route)
-        }
-        FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.person_profile_image_icon)) {
-            navController.navigate(route = AppNavigation.ProfileScreen.route)
-        }
-    }
-}
 
-@Composable
-fun FooterIcon(imageVector: ImageVector, onClick: () -> Unit) {
-    Icon(
-        imageVector = imageVector,
-        contentDescription = null,
-        tint = Blue,
-        modifier = Modifier
-            .size(40.dp)
-            .clickable(onClick = onClick)
-    )
-}
+
+

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
@@ -36,7 +37,7 @@ fun RecipeScreen(navController: NavController) {
         RecipeCategory("Dinner")
         RecipeCategory("Snacks")
 
-        Footer(navController = navController)
+        Footer(navController)
     }
 }
 
