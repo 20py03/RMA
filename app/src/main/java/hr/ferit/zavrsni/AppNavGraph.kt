@@ -27,7 +27,7 @@ fun AppNavGraph(navController: NavHostController = rememberNavController(), logi
         startDestination = if(loginViewModel.currentUser != null ){
              AppNavigation.HomeScreen.route
         }else{
-            AppNavigation.LoginScreen.route
+            AppNavigation.StartScreen.route
         }
     ){
         composable(route = AppNavigation.StartScreen.route){

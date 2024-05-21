@@ -25,6 +25,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
+import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
@@ -32,7 +33,7 @@ fun StartScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Blue),
+            .background(color = Blue),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

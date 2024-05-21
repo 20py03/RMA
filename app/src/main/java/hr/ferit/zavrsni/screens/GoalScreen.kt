@@ -27,6 +27,7 @@ import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
+import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
@@ -68,7 +69,7 @@ fun GoalScreen(navController: NavController, loginViewModel : LoginViewModel = v
                     .clickable(onClick = { selectedGoal = goal })
                     .padding(8.dp)
                     .background(
-                        color = if (goal == selectedGoal) LightPink else Blue,
+                        color = if (goal == selectedGoal) DarkGray else Blue,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .height(56.dp),
@@ -77,7 +78,7 @@ fun GoalScreen(navController: NavController, loginViewModel : LoginViewModel = v
                 Text(
                     text = goal,
                     fontSize = 18.sp,
-                    color = if (goal == selectedGoal) Blue else DarkBlue,
+                    color = if (goal == selectedGoal) Blue else DarkGray,
                     fontWeight = FontWeight.Normal
                 )
             }

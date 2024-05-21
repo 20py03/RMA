@@ -114,7 +114,8 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
             focusedTextColor = Blue,
             unfocusedTextColor = Blue,
             focusedContainerColor = White,
-            unfocusedContainerColor = LightGray
+            unfocusedContainerColor = LightGray,
+            errorContainerColor = White
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         singleLine = true,
@@ -150,7 +151,8 @@ fun PwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSe
             focusedTextColor = Blue,
             unfocusedTextColor = Blue,
             focusedContainerColor = White,
-            unfocusedContainerColor = LightGray
+            unfocusedContainerColor = LightGray,
+            errorContainerColor = White
         ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
         singleLine = true,
