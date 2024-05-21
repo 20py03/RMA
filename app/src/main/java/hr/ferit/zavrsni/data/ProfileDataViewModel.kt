@@ -10,36 +10,35 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class ProfileDataViewModel : ViewModel(){
+class ProfileDataViewModel : ViewModel() {
     val state = mutableStateOf(ProfileDataUIState())
 
-    init {
-        getData()
-    }
-
-    private fun getData(){
+    fun getData() {
         viewModelScope.launch {
-            val userName = getUserNameFromFirebase()
-            state.value = getDataFromFireStore(userName)
+            val uid = getCurrentUserUid()
+            if (uid != null) {
+                state.value = getDataFromFireStore(uid)
+            }
         }
     }
 
-    private suspend fun getDataFromFireStore(userName: String?) : ProfileDataUIState{
+    private suspend fun getDataFromFireStore(uid: String): ProfileDataUIState {
         val db = FirebaseFirestore.getInstance()
         var data = ProfileDataUIState()
 
-        try{
-            db.collection("profileData").get().await().map {
-                val result = it.toObject(ProfileDataUIState::class.java)
-                data = result.copy(name = userName ?: "")
+        try {
+            val document = db.collection("profileData").document(uid).get().await()
+            if (document.exists()) {
+                data = document.toObject(ProfileDataUIState::class.java) ?: ProfileDataUIState()
             }
-        }catch (e:FirebaseFirestoreException){
-            Log.d("error","getDataFromFireStore: $e")
+        } catch (e: FirebaseFirestoreException) {
+            Log.d("error", "getDataFromFireStore: $e")
         }
         return data
     }
-}
-suspend fun getUserNameFromFirebase(): String? {
-    return FirebaseAuth.getInstance().currentUser?.displayName
+
+    private suspend fun getCurrentUserUid(): String? {
+        return FirebaseAuth.getInstance().currentUser?.uid
+    }
 }
 

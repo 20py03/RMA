@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -42,7 +44,10 @@ fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel 
                   profileDataViewModel: ProfileDataViewModel = viewModel()
 ){
     val getData = profileDataViewModel.state.value
-    val firebaseAuth = FirebaseAuth.getInstance()
+
+    LaunchedEffect(Unit) {
+        profileDataViewModel.getData()
+    }
     
     Column(
         modifier = Modifier
@@ -60,25 +65,25 @@ fun ProfileScreen(navController: NavController, loginViewModel: SignUpViewModel 
                 value = "Logout",
                 onButtonClicked = {
                     loginViewModel.logout(navController)
+                    profileDataViewModel.getData()
                 },
                 isEnabled = true
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
-        if(firebaseAuth.currentUser != null){
-            ProfileInfo("Ime: ${getData.name}")
-            ProfileInfo("Age: ${getData.age}")
-            ProfileInfo("Gender: ${getData.gender}")
-            ProfileInfo("Height: ${getData.height}")
-            ProfileInfo("Weight: ${getData.weight}")
-            ProfileInfo("Goal: ${getData.goal}")
-            ProfileInfo("Activity: ${getData.activity}")
-            ProfileInfo("TDEE: 2500 kcal")
-            ProfileInfo("Kalorije: 2000 kcal")
-            ProfileInfo("Proteini: 150 g")
-            ProfileInfo("Ugljikohidrati: 200 g")
-            ProfileInfo("Masti: 70 g")
-        }
+
+        ProfileInfo("Ime: ${getData.name}")
+        ProfileInfo("Age: ${getData.age}")
+        ProfileInfo("Gender: ${getData.gender}")
+        ProfileInfo("Height: ${getData.height}")
+        ProfileInfo("Weight: ${getData.weight}")
+        ProfileInfo("Goal: ${getData.goal}")
+        ProfileInfo("Activity: ${getData.activity}")
+        ProfileInfo("TDEE: 2500 kcal")
+        ProfileInfo("Kalorije: 2000 kcal")
+        ProfileInfo("Proteini: 150 g")
+        ProfileInfo("Ugljikohidrati: 200 g")
+        ProfileInfo("Masti: 70 g")
 
         Spacer(modifier = Modifier.height(50.dp))
         Footer(navController = navController)

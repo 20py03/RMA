@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.data.validation.Validator
 
@@ -116,7 +117,10 @@ class SignUpViewModel : ViewModel(){
                         .setDisplayName(name)
                         .build()
                     user?.updateProfile(profileUpdates)
-                        ?.addOnCompleteListener { navController.navigate(route = AppNavigation.GenderScreen.route) }
+                        ?.addOnCompleteListener {
+                            ProfileDataViewModel().getData()
+                            navController.navigate(route = AppNavigation.GenderScreen.route)
+                        }
                 }
             }
             .addOnFailureListener { e ->
@@ -139,6 +143,6 @@ class SignUpViewModel : ViewModel(){
         }
 
         firebaseAuth.addAuthStateListener(authStateListener)
-
     }
+
 }
