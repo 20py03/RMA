@@ -56,9 +56,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
-import hr.ferit.zavrsni.ui.theme.Beige
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
+import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.LightBlue
 import hr.ferit.zavrsni.ui.theme.LightGray
 import hr.ferit.zavrsni.ui.theme.White
@@ -302,7 +302,7 @@ fun FooterIcon(imageVector: ImageVector, onClick: () -> Unit) {
     Icon(
         imageVector = imageVector,
         contentDescription = null,
-        tint = Blue,
+        tint = DarkGray,
         modifier = Modifier
             .size(40.dp)
             .clickable(onClick = onClick)
@@ -316,7 +316,7 @@ fun EmptySquareWithBorder() {
             .size(170.dp)
             .background(color = Color.Transparent, shape = RoundedCornerShape(8.dp))
             .padding(bottom = 10.dp)
-            .border(1.dp, Color.Blue, shape = RoundedCornerShape(8.dp)),
+            .border(2.dp, Blue, shape = RoundedCornerShape(8.dp)),
         contentAlignment = Alignment.Center
     ) {
 

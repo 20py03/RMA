@@ -38,6 +38,8 @@ import hr.ferit.zavrsni.data.ProfileDataUIState
 import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.data.SignUpViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
+import hr.ferit.zavrsni.ui.theme.DarkBlue
+import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
@@ -107,7 +109,7 @@ fun ProfileImage(imageResource: Int) {
             painter = painterResource(id = imageResource),
             contentDescription = "Profile picture",
             modifier = Modifier.size(100.dp),
-            tint = Blue
+            tint = DarkGray
         )
     }
 }

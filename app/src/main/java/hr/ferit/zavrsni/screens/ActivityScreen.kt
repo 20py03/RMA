@@ -27,6 +27,7 @@ import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
+import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
@@ -68,7 +69,7 @@ fun ActivityScreen(navController: NavController, loginViewModel : LoginViewModel
                     .clickable(onClick = { selectedActivity = level })
                     .padding(8.dp)
                     .background(
-                        color = if (level == selectedActivity) LightPink else Blue,
+                        color = if (level == selectedActivity) DarkGray else Blue,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .height(56.dp),
@@ -77,7 +78,7 @@ fun ActivityScreen(navController: NavController, loginViewModel : LoginViewModel
                 Text(
                     text = level,
                     fontSize = 18.sp,
-                    color = if (level == selectedActivity) Blue else DarkBlue,
+                    color = if (level == selectedActivity) Blue else DarkGray,
                     fontWeight = FontWeight.Normal
                 )
             }
