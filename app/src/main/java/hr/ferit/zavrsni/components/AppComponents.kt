@@ -110,12 +110,13 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
         label = { Text(text = labelValue) },
         colors = TextFieldDefaults.colors(
             focusedLabelColor = Blue,
-            cursorColor = Blue,
+            cursorColor = DarkGray,
             focusedTextColor = Blue,
             unfocusedTextColor = Blue,
             focusedContainerColor = White,
             unfocusedContainerColor = LightGray,
-            errorContainerColor = White
+            errorContainerColor = White,
+            errorTextColor = DarkGray
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         singleLine = true,
@@ -147,12 +148,13 @@ fun PwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSe
         label = { Text(text = labelValue) },
         colors = TextFieldDefaults.colors(
             focusedLabelColor = Blue,
-            cursorColor = Blue,
+            cursorColor = DarkGray,
             focusedTextColor = Blue,
             unfocusedTextColor = Blue,
             focusedContainerColor = White,
             unfocusedContainerColor = LightGray,
-            errorContainerColor = White
+            errorContainerColor = White,
+            errorTextColor = DarkGray
         ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
         singleLine = true,
@@ -202,12 +204,12 @@ fun ButtonComponent(value:String, onButtonClicked: () -> Unit, isEnabled:Boolean
                 .fillMaxWidth()
                 .heightIn(48.dp)
                 .background(
-                    brush = Brush.horizontalGradient(listOf(Blue, LightBlue)),
+                    brush = Brush.horizontalGradient(listOf(Blue, LightGray)),
                     shape = RoundedCornerShape(50.dp)
                 ),
             contentAlignment = Alignment.Center
         ){
-            Text(text = value, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text(text = value, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = DarkGray)
         }
 
 
