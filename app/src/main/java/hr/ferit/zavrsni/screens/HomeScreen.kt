@@ -173,7 +173,13 @@ fun HomeScreen(navController: NavController, profileDataViewModel: ProfileDataVi
                 EmptySquareWithBorder()
             }
 
-            Footer(navController)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Footer(navController)
+            }
         }
     }
 }

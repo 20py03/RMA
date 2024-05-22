@@ -92,7 +92,13 @@ fun ProfileScreen(
         ProfileInfo("Fats: ${energyData.fat} g")
 
         Spacer(modifier = Modifier.height(50.dp))
-        Footer(navController = navController)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Footer(navController)
+        }
     }
 }
 
