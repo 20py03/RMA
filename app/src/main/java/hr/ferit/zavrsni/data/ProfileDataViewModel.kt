@@ -23,7 +23,7 @@ class ProfileDataViewModel : ViewModel() {
                     gender = data.gender,
                     age = data.age,
                     height = data.height,
-                    weight = data.currentWeight,
+                    weight = data.weight,
                     activity = data.activity,
                     goal = data.goal
                 )
