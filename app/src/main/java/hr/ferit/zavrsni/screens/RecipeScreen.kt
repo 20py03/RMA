@@ -22,11 +22,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.data.RecipeViewModel
 import hr.ferit.zavrsni.data.Recipes.Recipe
@@ -89,25 +92,44 @@ fun RecipeItem(recipe: Recipe) {
             modifier = Modifier
                 .padding(16.dp)
         ) {
+            Image(
+                painter = rememberImagePainter(recipe.image),
+                contentDescription = recipe.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(200.dp),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.size(16.dp))
             Text(
-                text = "Title: ${recipe.title ?: "N/A"}",
-                fontSize = 18.sp,
+                text = recipe.title ?: "N/A",
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = DarkGray
             )
             Spacer(modifier = Modifier.size(8.dp))
             Text(
-                text = "Servings: ${recipe.servings}",
-                fontSize = 16.sp,
+                text = "Ready in minutes: ${recipe.readyInMinutes}",
+                fontSize = 18.sp,
                 color = DarkGray
             )
             Text(
-                text = "Ready in minutes: ${recipe.readyInMinutes}",
+                text = "Servings: ${recipe.servings}",
+                fontSize = 18.sp,
+                color = DarkGray
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(
+                text = "Instructions",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = DarkGray
+            )
+            Text(
+                text = recipe.instructions ?: "No instructions available",
                 fontSize = 16.sp,
                 color = DarkGray
             )
-            Spacer(modifier = Modifier.size(8.dp))
-            // Dodajte više detalja po potrebi
         }
     }
 }

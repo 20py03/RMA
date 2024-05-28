@@ -6,5 +6,4 @@ data class EnergyDataUIState (
     val protein: String = "",
     val fat: String = "",
     val carbohydrates: String = ""
-
 )

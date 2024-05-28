@@ -8,4 +8,10 @@ data class ProfileDataUIState (
     val height:String="",
     val activity:String="",
     val goal:String="",
+
+    val beforeWeight: String = "",
+    val currentWeight: String = "",
+    val afterWeight: String = "",
+    val note1: String = "",
+    val note2: String = "",
 )

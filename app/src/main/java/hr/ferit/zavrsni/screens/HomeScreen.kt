@@ -154,7 +154,6 @@ fun HomeScreen(navController: NavController, profileDataViewModel: ProfileDataVi
                             }
                         }
                     }
-
                 }
             }
             Row(

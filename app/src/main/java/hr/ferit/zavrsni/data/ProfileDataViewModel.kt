@@ -32,6 +32,15 @@ class ProfileDataViewModel : ViewModel() {
         }
     }
 
+    fun saveNotes(note1: String, note2: String) {
+        viewModelScope.launch {
+            val uid = getCurrentUserUid()
+            if (uid != null) {
+                saveNotesToFirestore(uid, note1, note2)
+            }
+        }
+    }
+
     fun saveEnergyData() {
         viewModelScope.launch {
             val uid = getCurrentUserUid()
@@ -71,4 +80,20 @@ class ProfileDataViewModel : ViewModel() {
             Log.d("error", "saveEnergyDataToFirestore: $e")
         }
     }
+
+    private suspend fun saveNotesToFirestore(uid: String, note1: String, note2: String) {
+        val db = FirebaseFirestore.getInstance()
+        val notes = hashMapOf(
+            "note1" to note1,
+            "note2" to note2
+        )
+
+        try {
+            db.collection("profileData").document(uid).update(notes as Map<String, Any>).await()
+            Log.d("success", "Notes updated successfully.")
+        } catch (e: FirebaseFirestoreException) {
+            Log.d("error", "saveNotesToFirestore: $e")
+        }
+    }
+
 }

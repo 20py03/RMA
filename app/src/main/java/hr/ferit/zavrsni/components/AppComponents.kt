@@ -1,6 +1,7 @@
 package hr.ferit.zavrsni.components
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -28,9 +30,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -48,6 +54,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
@@ -61,6 +68,7 @@ import hr.ferit.zavrsni.ui.theme.DarkBlue
 import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.LightBlue
 import hr.ferit.zavrsni.ui.theme.LightGray
+import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
 
@@ -218,7 +226,9 @@ fun ButtonComponent(value:String, onButtonClicked: () -> Unit, isEnabled:Boolean
 
 @Composable
 fun DividerComponent(){
-    Row (modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
+    Row (modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     )
     {
@@ -290,7 +300,7 @@ fun Footer(navController: NavController) {
             navController.navigate(route = AppNavigation.HomeScreen.route)
         }
         FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.challenge_target_icon)) {
-            navController.navigate(route = AppNavigation.ActivityScreen.route)
+            navController.navigate(route = AppNavigation.ProgressScreen.route)
         }
         FooterIcon(imageVector = ImageVector.vectorResource(id = R.drawable.cooking_chef_cap_icon)) {
             navController.navigate(route = AppNavigation.RecipeScreen.route)
@@ -326,6 +336,14 @@ fun EmptySquareWithBorder() {
 
     }
 }
+
+@Composable
+fun EmotionLabel(text : String){
+    Text(text = text, color= DarkGray, fontSize = 25.sp, fontWeight = FontWeight.Bold)
+}
+
+
+
 
 
 

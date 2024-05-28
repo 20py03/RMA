@@ -14,6 +14,7 @@ import hr.ferit.zavrsni.screens.HeightScreen
 import hr.ferit.zavrsni.screens.HomeScreen
 import hr.ferit.zavrsni.screens.LoginScreen
 import hr.ferit.zavrsni.screens.ProfileScreen
+import hr.ferit.zavrsni.screens.ProgressScreen
 import hr.ferit.zavrsni.screens.RecipeScreen
 import hr.ferit.zavrsni.screens.RegisterScreen
 import hr.ferit.zavrsni.screens.StartScreen
@@ -59,6 +60,9 @@ fun AppNavGraph(navController: NavHostController = rememberNavController(), logi
         }
         composable(route = AppNavigation.HomeScreen.route){
             HomeScreen(navController = navController)
+        }
+        composable(route = AppNavigation.ProgressScreen.route){
+            ProgressScreen(navController = navController)
         }
         composable(route = AppNavigation.RecipeScreen.route){
             RecipeScreen(navController = navController)
