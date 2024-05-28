@@ -51,9 +51,9 @@ fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel 
     val context = LocalContext.current
     val state by profileDataViewModel.state
 
-    var beforeWeight by rememberSaveable { mutableStateOf("") }
-    var afterWeight by rememberSaveable { mutableStateOf("") }
-    var currentWeight by rememberSaveable { mutableStateOf("") }
+    var beforeWeight by rememberSaveable { mutableStateOf(state.beforeWeight) }
+    var afterWeight by rememberSaveable { mutableStateOf(state.afterWeight) }
+    var currentWeight by rememberSaveable { mutableStateOf(state.currentWeight) }
     var note1 by rememberSaveable { mutableStateOf(state.note1) }
     var note2 by rememberSaveable { mutableStateOf(state.note2) }
 
@@ -62,6 +62,9 @@ fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel 
     }
 
     LaunchedEffect(state) {
+        beforeWeight = state.beforeWeight
+        currentWeight = state.currentWeight
+        afterWeight = state.afterWeight
         note1 = state.note1
         note2 = state.note2
     }
@@ -100,7 +103,6 @@ fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel 
                     textStyle = TextStyle(color = Color.Black),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 1,
-                    placeholder = { Text(text = "75") },
                     colors = TextFieldDefaults.colors(
                         focusedLabelColor = Blue,
                         cursorColor = DarkGray,
@@ -122,7 +124,6 @@ fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel 
                     textStyle = TextStyle(color = Color.Black),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 1,
-                    placeholder = { Text(text = "68") },
                     colors = TextFieldDefaults.colors(
                         focusedLabelColor = Blue,
                         cursorColor = DarkGray,
@@ -144,7 +145,6 @@ fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel 
                     textStyle = TextStyle(color = Color.Black),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 1,
-                    placeholder = { Text(text = "60") },
                     colors = TextFieldDefaults.colors(
                         focusedLabelColor = Blue,
                         cursorColor = DarkGray,
@@ -239,9 +239,10 @@ fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel 
                         val uid = loginViewModel.currentUser?.uid
                         if(uid != null){
                             profileDataViewModel.saveNotes(note1, note2)
+                            profileDataViewModel.saveWeights(beforeWeight, currentWeight, afterWeight)
                             Toast.makeText(
                                 context,
-                                "Thoughts saved successfully",
+                                "Data saved successfully",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -261,7 +262,7 @@ fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel 
                     .clip(RoundedCornerShape(8.dp)),
             ) {
                 Text(
-                    text = "Save thoughts",
+                    text = "Save data",
                     color = White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp

@@ -23,7 +23,7 @@ class ProfileDataViewModel : ViewModel() {
                     gender = data.gender,
                     age = data.age,
                     height = data.height,
-                    weight = data.weight,
+                    weight = data.currentWeight,
                     activity = data.activity,
                     goal = data.goal
                 )
@@ -37,6 +37,15 @@ class ProfileDataViewModel : ViewModel() {
             val uid = getCurrentUserUid()
             if (uid != null) {
                 saveNotesToFirestore(uid, note1, note2)
+            }
+        }
+    }
+
+    fun saveWeights(beforeWeight: String, currentWeight: String, afterWeight: String) {
+        viewModelScope.launch {
+            val uid = getCurrentUserUid()
+            if (uid != null) {
+                saveWeightsToFirestore(uid, beforeWeight, currentWeight, afterWeight)
             }
         }
     }
@@ -93,6 +102,22 @@ class ProfileDataViewModel : ViewModel() {
             Log.d("success", "Notes updated successfully.")
         } catch (e: FirebaseFirestoreException) {
             Log.d("error", "saveNotesToFirestore: $e")
+        }
+    }
+
+    private suspend fun saveWeightsToFirestore(uid: String, beforeWeight: String, currentWeight: String, afterWeight: String) {
+        val db = FirebaseFirestore.getInstance()
+        val weights = hashMapOf(
+            "beforeWeight" to beforeWeight,
+            "currentWeight" to currentWeight,
+            "afterWeight" to afterWeight
+        )
+
+        try {
+            db.collection("profileData").document(uid).update(weights as Map<String, Any>).await()
+            Log.d("success", "Weights updated successfully.")
+        } catch (e: FirebaseFirestoreException) {
+            Log.d("error", "saveWeightsToFirestore: $e")
         }
     }
 

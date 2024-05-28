@@ -82,7 +82,7 @@ fun ProfileScreen(
         ProfileInfo("Age: ${getData.age}")
         ProfileInfo("Gender: ${getData.gender}")
         ProfileInfo("Height: ${getData.height}")
-        ProfileInfo("Weight: ${getData.weight}")
+        ProfileInfo("Weight: ${getData.currentWeight}")
         ProfileInfo("Goal: ${getData.goal}")
         ProfileInfo("Activity: ${getData.activity}")
         ProfileInfo("TDEE: ${energyData.tdee} kcal")
