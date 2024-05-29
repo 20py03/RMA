@@ -36,7 +36,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.components.EmotionLabel
-import hr.ferit.zavrsni.components.EmptySquareWithBorder
 import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.data.ProfileDataViewModel

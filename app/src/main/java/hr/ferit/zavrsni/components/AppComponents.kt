@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -324,19 +325,22 @@ fun FooterIcon(imageVector: ImageVector, onClick: () -> Unit) {
 }
 
 @Composable
-fun EmptySquareWithBorder() {
+fun MealSquare(label: String, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .size(170.dp)
-            .background(color = Color.Transparent, shape = RoundedCornerShape(8.dp))
-            .padding(bottom = 10.dp)
-            .border(2.dp, Blue, shape = RoundedCornerShape(8.dp)),
+            .size(160.dp)
+            .padding(10.dp)
+            .border(2.dp, Blue, RoundedCornerShape(10.dp))
+            .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = label, fontSize = 18.sp, color = DarkGray)
+        }
     }
 }
-
 @Composable
 fun EmotionLabel(text : String){
     Text(text = text, color= DarkGray, fontSize = 25.sp, fontWeight = FontWeight.Bold)

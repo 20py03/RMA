@@ -14,6 +14,6 @@ sealed class AppNavigation (val route: String){
     data object RecipeScreen : AppNavigation("recipe_screen")
     data object ProfileScreen : AppNavigation("profile_screen")
     data object ProgressScreen : AppNavigation("progress_screen")
-
+    data object FoodEntryScreen : AppNavigation("fod_entry_screen")
 
 }

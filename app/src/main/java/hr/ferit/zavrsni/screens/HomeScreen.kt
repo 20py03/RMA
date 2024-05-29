@@ -27,9 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
-import hr.ferit.zavrsni.components.EmptySquareWithBorder
 import hr.ferit.zavrsni.components.Footer
+import hr.ferit.zavrsni.components.MealSquare
 import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
@@ -160,16 +161,24 @@ fun HomeScreen(navController: NavController, profileDataViewModel: ProfileDataVi
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                EmptySquareWithBorder()
-                EmptySquareWithBorder()
+                MealSquare(label = "Breakfast\n" + "\n300kcal") {
+                    navController.navigate(route = AppNavigation.FoodEntryScreen.route)
+                }
+                MealSquare(label = "Lunch\n" + "\n400kcal") {
+                    navController.navigate(route = AppNavigation.FoodEntryScreen.route)
+                }
             }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                EmptySquareWithBorder()
-                EmptySquareWithBorder()
+                MealSquare(label = "Dinner\n" + "\n500kcal") {
+                    navController.navigate(route = AppNavigation.FoodEntryScreen.route)
+                }
+                MealSquare(label = "Snack\n"+ "\n200kcal") {
+                    navController.navigate(route = AppNavigation.FoodEntryScreen.route)
+                }
             }
 
             Box(

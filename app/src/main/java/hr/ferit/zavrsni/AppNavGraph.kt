@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.screens.ActivityScreen
+import hr.ferit.zavrsni.screens.FoodEntryScreen
 import hr.ferit.zavrsni.screens.GenderScreen
 import hr.ferit.zavrsni.screens.GoalScreen
 import hr.ferit.zavrsni.screens.HeightScreen
@@ -69,6 +70,9 @@ fun AppNavGraph(navController: NavHostController = rememberNavController(), logi
         }
         composable(route = AppNavigation.ProfileScreen.route){
             ProfileScreen(navController = navController)
+        }
+        composable(route = AppNavigation.FoodEntryScreen.route){
+            FoodEntryScreen(navController = navController)
         }
     }
 }
