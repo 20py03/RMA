@@ -80,19 +80,21 @@ fun CalorieCounterScreen(navController: NavController, foodViewModel: FoodViewMo
             )
         )
 
-        val searchResults = allFoodItems.filter { it.name.contains(searchQuery, ignoreCase = true) }
-        LazyColumn {
-            items(searchResults) { food ->
-                Text(
-                    text = food.name,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            selectedFood = food
-                            showDialog = true
-                        }
-                        .padding(8.dp)
-                )
+        if (searchQuery.isNotBlank()) {
+            val searchResults = allFoodItems.filter { it.name.contains(searchQuery, ignoreCase = true) }
+            LazyColumn {
+                items(searchResults) { food ->
+                    Text(
+                        text = food.name,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                selectedFood = food
+                                showDialog = true
+                            }
+                            .padding(8.dp)
+                    )
+                }
             }
         }
 
@@ -104,7 +106,7 @@ fun CalorieCounterScreen(navController: NavController, foodViewModel: FoodViewMo
 
         LazyColumn {
             items(selectedFoods) { (food, grams) ->
-                Text("${food.name}: $grams grams : ${food.calories} kcal/100g")
+                Text("${food.name}: $grams grams  (${food.calories} kcal/100g)")
             }
         }
 
