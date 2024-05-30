@@ -162,10 +162,10 @@ fun HomeScreen(navController: NavController, profileDataViewModel: ProfileDataVi
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 MealSquare(label = "Breakfast\n" + "\n300kcal") {
-                    navController.navigate(route = AppNavigation.FoodEntryScreen.route)
+                    navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
                 MealSquare(label = "Lunch\n" + "\n400kcal") {
-                    navController.navigate(route = AppNavigation.FoodEntryScreen.route)
+                    navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
             }
 
@@ -174,10 +174,10 @@ fun HomeScreen(navController: NavController, profileDataViewModel: ProfileDataVi
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 MealSquare(label = "Dinner\n" + "\n500kcal") {
-                    navController.navigate(route = AppNavigation.FoodEntryScreen.route)
+                    navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
                 MealSquare(label = "Snack\n"+ "\n200kcal") {
-                    navController.navigate(route = AppNavigation.FoodEntryScreen.route)
+                    navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
             }
 

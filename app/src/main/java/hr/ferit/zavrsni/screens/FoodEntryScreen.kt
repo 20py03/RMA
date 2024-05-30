@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.FoodViewModel
@@ -86,7 +87,7 @@ fun FoodEntryScreen(navController: NavController,
                     .fillMaxWidth()
                     .background(color = Color.Transparent, shape = RoundedCornerShape(8.dp))
                     .padding(15.dp),
-                textStyle = TextStyle(color = Color.Black),
+                textStyle = TextStyle(color = DarkGray),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 maxLines = 1,
                 colors = TextFieldDefaults.colors(
@@ -101,13 +102,13 @@ fun FoodEntryScreen(navController: NavController,
 
             OutlinedTextField(
                 value = calories,
-                label = { Text(text = "Calories") },
+                label = { Text(text = "Calories/100g") },
                 onValueChange = { calories = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color.Transparent, shape = RoundedCornerShape(8.dp))
                     .padding(15.dp),
-                textStyle = TextStyle(color = Color.Black),
+                textStyle = TextStyle(color = DarkGray),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Next),
                 maxLines = 1,
                 colors = TextFieldDefaults.colors(
@@ -122,13 +123,13 @@ fun FoodEntryScreen(navController: NavController,
 
             OutlinedTextField(
                 value = protein,
-                label = { Text(text = "Protein") },
+                label = { Text(text = "Protein/100g") },
                 onValueChange = { protein = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color.Transparent, shape = RoundedCornerShape(8.dp))
                     .padding(15.dp),
-                textStyle = TextStyle(color = Color.Black),
+                textStyle = TextStyle(color = DarkGray),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Next),
                 maxLines = 1,
                 colors = TextFieldDefaults.colors(
@@ -143,13 +144,13 @@ fun FoodEntryScreen(navController: NavController,
 
             OutlinedTextField(
                 value = carbs,
-                label = { Text(text = "Carbs") },
+                label = { Text(text = "Carbs/100g") },
                 onValueChange = { carbs = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color.Transparent, shape = RoundedCornerShape(8.dp))
                     .padding(15.dp),
-                textStyle = TextStyle(color = Color.Black),
+                textStyle = TextStyle(color = DarkGray),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Next),
                 maxLines = 1,
                 colors = TextFieldDefaults.colors(
@@ -164,13 +165,13 @@ fun FoodEntryScreen(navController: NavController,
 
             OutlinedTextField(
                 value = fats,
-                label = { Text(text = "Fat") },
+                label = { Text(text = "Fat/100g") },
                 onValueChange = { fats = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color.Transparent, shape = RoundedCornerShape(8.dp))
                     .padding(15.dp),
-                textStyle = TextStyle(color = Color.Black),
+                textStyle = TextStyle(color = DarkGray),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Done),
                 maxLines = 1,
                 colors = TextFieldDefaults.colors(
@@ -207,6 +208,7 @@ fun FoodEntryScreen(navController: NavController,
                                     "Data saved successfully",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                             }
                         } else {
                             Toast.makeText(

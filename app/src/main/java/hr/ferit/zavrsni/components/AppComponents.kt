@@ -236,17 +236,17 @@ fun DividerComponent(){
         Divider(modifier = Modifier
             .fillMaxWidth()
             .weight(1f),
-            color = DarkBlue,
+            color = Blue,
             thickness = 1.dp
         )
 
         Text(modifier = Modifier.padding(8.dp),
-            text = "or", fontSize = 18.sp, color = DarkBlue)
+            text = "or", fontSize = 18.sp, color = DarkGray)
         
         Divider(modifier = Modifier
             .fillMaxWidth()
             .weight(1f),
-            color = DarkBlue,
+            color = Blue,
             thickness = 1.dp
         )
     }
@@ -344,6 +344,42 @@ fun MealSquare(label: String, onClick: () -> Unit) {
 @Composable
 fun EmotionLabel(text : String){
     Text(text = text, color= DarkGray, fontSize = 25.sp, fontWeight = FontWeight.Bold)
+}
+
+@Composable
+fun ClicableTextComponent(tryinToAddProduct:Boolean = false, onTextSelected : (String) -> Unit){
+    val initialtext = "Add your product "
+    val addText = "here"
+
+    val annotatedString = buildAnnotatedString {
+        append(initialtext)
+        withStyle(style = SpanStyle(color = Blue)){
+            pushStringAnnotation(tag = initialtext, annotation = addText)
+            append(addText)
+        }
+    }
+
+    ClickableText(modifier = Modifier
+        .fillMaxWidth()
+        .heightIn(min = 40.dp),
+        style = TextStyle(
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal,
+            textAlign = TextAlign.Center
+        ),
+        text=annotatedString,
+        onClick = { offset ->
+            annotatedString.getStringAnnotations(offset, offset)
+                .firstOrNull()?.also {span->
+                    Log.d("ClicableTextComponent", "{${span.item}}")
+
+                    if (span.item == addText){
+                        onTextSelected(span.item)
+                    }
+                }
+
+        })
 }
 
 
