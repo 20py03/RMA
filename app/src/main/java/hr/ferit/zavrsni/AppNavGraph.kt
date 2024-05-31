@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.LoginViewModel
+import hr.ferit.zavrsni.data.SharedViewModel
 import hr.ferit.zavrsni.screens.ActivityScreen
 import hr.ferit.zavrsni.screens.CalorieCounterScreen
 import hr.ferit.zavrsni.screens.FoodEntryScreen
@@ -25,7 +26,9 @@ import hr.ferit.zavrsni.screens.WeightScreen
 import hr.ferit.zavrsni.screens.YearScreen
 
 @Composable
-fun AppNavGraph(navController: NavHostController = rememberNavController(), loginViewModel: LoginViewModel = viewModel ()){
+fun AppNavGraph(navController: NavHostController = rememberNavController(),
+                loginViewModel: LoginViewModel = viewModel(),
+                sharedViewModel: SharedViewModel = viewModel()){
     NavHost(
         navController = navController,
         startDestination = if(loginViewModel.currentUser != null ){
@@ -62,7 +65,7 @@ fun AppNavGraph(navController: NavHostController = rememberNavController(), logi
             GoalScreen(navController = navController)
         }
         composable(route = AppNavigation.HomeScreen.route){
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController, sharedViewModel= sharedViewModel)
         }
         composable(route = AppNavigation.ProgressScreen.route){
             ProgressScreen(navController = navController)
@@ -77,7 +80,7 @@ fun AppNavGraph(navController: NavHostController = rememberNavController(), logi
             FoodEntryScreen(navController = navController)
         }
         composable(route = AppNavigation.CalorieCounterScreen.route){
-            CalorieCounterScreen(navController = navController)
+            CalorieCounterScreen(navController = navController, mealType = sharedViewModel.mealType.value)
         }
     }
 }

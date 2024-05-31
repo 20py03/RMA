@@ -324,6 +324,7 @@ fun FooterIcon(imageVector: ImageVector, onClick: () -> Unit) {
     )
 }
 
+
 @Composable
 fun MealSquare(label: String, onClick: () -> Unit) {
     Box(
@@ -331,7 +332,9 @@ fun MealSquare(label: String, onClick: () -> Unit) {
             .size(160.dp)
             .padding(10.dp)
             .border(2.dp, Blue, RoundedCornerShape(10.dp))
-            .clickable { onClick() },
+            .clickable {
+                onClick()
+            },
         contentAlignment = Alignment.Center
     ) {
         Column(

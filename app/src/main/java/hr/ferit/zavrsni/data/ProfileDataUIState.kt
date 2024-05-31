@@ -14,4 +14,15 @@ data class ProfileDataUIState (
     val afterWeight: String = "",
     val note1: String = "",
     val note2: String = "",
+
+    val breakfastCalories: Int = 0,
+    val lunchCalories: Int = 0,
+    val dinnerCalories: Int = 0,
+    val snackCalories: Int = 0,
+
+    val breakfastFoods: List<Food> = emptyList(),
+    val lunchFoods: List<Food> = emptyList(),
+    val dinnerFoods: List<Food> = emptyList(),
+    val snackFoods: List<Food> = emptyList(),
+
 )

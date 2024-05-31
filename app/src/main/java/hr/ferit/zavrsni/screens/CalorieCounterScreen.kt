@@ -1,5 +1,6 @@
 package hr.ferit.zavrsni.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -35,6 +36,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.components.ClicableLoginTextComponent
 import hr.ferit.zavrsni.components.ClicableTextComponent
@@ -42,12 +45,18 @@ import hr.ferit.zavrsni.components.DividerComponent
 import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.FoodViewModel
+import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.White
+import java.util.Calendar
 
 @Composable
-fun CalorieCounterScreen(navController: NavController, foodViewModel: FoodViewModel = viewModel()) {
+fun CalorieCounterScreen(navController: NavController,
+                         foodViewModel: FoodViewModel = viewModel(),
+                         profileDataViewModel: ProfileDataViewModel = viewModel(),
+                         mealType: Int
+) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedFoods by remember { mutableStateOf(listOf<Pair<Food, Int>>()) }
     var showDialog by remember { mutableStateOf(false) }
@@ -116,7 +125,14 @@ fun CalorieCounterScreen(navController: NavController, foodViewModel: FoodViewMo
                 onDismiss = { showDialog = false },
                 onAdd = { grams ->
                     selectedFoods = selectedFoods + Pair(selectedFood!!, grams)
+                    profileDataViewModel.saveMeal(mealType, selectedFood!!, totalCalories)
                     showDialog = false
+                    /*
+                    val mealType = determineMealType()
+                    val foodItem = selectedFood!!
+                    val calories = foodItem.calories * grams / 100
+                    saveCaloriesAndFoodForMeal(profileDataViewModel, mealType, foodItem, grams, calories)
+                    */
                 }
             )
         }
@@ -176,3 +192,4 @@ fun AddFoodDialog(food: Food, onDismiss: () -> Unit, onAdd: (Int) -> Unit) {
         }
     )
 }
+

@@ -31,14 +31,19 @@ import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.components.MealSquare
+import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.ProfileDataViewModel
+import hr.ferit.zavrsni.data.SharedViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
 import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun HomeScreen(navController: NavController, profileDataViewModel: ProfileDataViewModel = viewModel()) {
+fun HomeScreen(navController: NavController,
+               profileDataViewModel: ProfileDataViewModel = viewModel(),
+               sharedViewModel: SharedViewModel,
+) {
 
     val getData = profileDataViewModel.state.value
     val energyData = profileDataViewModel.energyDataViewModel.state.value
@@ -161,10 +166,12 @@ fun HomeScreen(navController: NavController, profileDataViewModel: ProfileDataVi
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MealSquare(label = "Breakfast\n" + "\n300kcal") {
+                MealSquare(label = "Breakfast\n" + "\n${getData.breakfastCalories} kcal") {
+                    sharedViewModel.mealType.value = 0
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
-                MealSquare(label = "Lunch\n" + "\n400kcal") {
+                MealSquare(label = "Lunch\n" + "\n${getData.lunchCalories} kcal") {
+                    sharedViewModel.mealType.value = 1
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
             }
@@ -173,10 +180,12 @@ fun HomeScreen(navController: NavController, profileDataViewModel: ProfileDataVi
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MealSquare(label = "Dinner\n" + "\n500kcal") {
+                MealSquare(label = "Dinner\n" + "\n${getData.dinnerCalories} kcal") {
+                    sharedViewModel.mealType.value = 2
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
-                MealSquare(label = "Snack\n"+ "\n200kcal") {
+                MealSquare(label = "Snack\n"+ "\n${getData.snackCalories} kcal") {
+                    sharedViewModel.mealType.value = 3
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
             }
@@ -190,12 +199,6 @@ fun HomeScreen(navController: NavController, profileDataViewModel: ProfileDataVi
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview(){
-    HomeScreen(navController = rememberNavController())
 }
 
 

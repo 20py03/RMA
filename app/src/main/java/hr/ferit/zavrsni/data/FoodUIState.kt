@@ -1,5 +1,6 @@
 package hr.ferit.zavrsni.data
 
+
 data class Food(
     val id: String="",
     val name: String="",

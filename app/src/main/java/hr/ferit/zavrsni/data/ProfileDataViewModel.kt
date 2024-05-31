@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.launch
@@ -121,4 +122,43 @@ class ProfileDataViewModel : ViewModel() {
         }
     }
 
+    fun saveMeal(mealType: Int, food: Food, totalCalories: Int) {
+        viewModelScope.launch {
+            val uid = getCurrentUserUid()
+            if (uid != null) {
+                val currentData = getDataFromFirestore(uid)
+                val updatedData = when (mealType) {
+                    0 -> currentData.copy(
+                        breakfastCalories = currentData.breakfastCalories + totalCalories,
+                        breakfastFoods = currentData.breakfastFoods + food
+                    )
+                    1 -> currentData.copy(
+                        lunchCalories = currentData.lunchCalories + totalCalories,
+                        lunchFoods = currentData.lunchFoods + food
+                    )
+                    2 -> currentData.copy(
+                        dinnerCalories = currentData.dinnerCalories + totalCalories,
+                        dinnerFoods = currentData.dinnerFoods + food
+                    )
+                    3 -> currentData.copy(
+                        snackCalories = currentData.snackCalories + totalCalories,
+                        snackFoods = currentData.snackFoods + food
+                    )
+                    else -> currentData
+                }
+                saveDataToFirestore(uid, updatedData)
+            }
+        }
+    }
+
+    private suspend fun saveDataToFirestore(uid: String, profileData: ProfileDataUIState) {
+        val db = FirebaseFirestore.getInstance()
+
+        try {
+            db.collection("profileData").document(uid).set(profileData).await()
+            Log.d("success", "Profile data saved successfully.")
+        } catch (e: FirebaseFirestoreException) {
+            Log.d("error", "saveDataToFirestore: $e")
+        }
+    }
 }
