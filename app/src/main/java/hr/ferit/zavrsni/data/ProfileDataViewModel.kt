@@ -50,7 +50,6 @@ class ProfileDataViewModel : ViewModel() {
         }
     }
 
-
     fun getData() {
         viewModelScope.launch {
             val uid = getCurrentUserUid()

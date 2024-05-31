@@ -115,6 +115,8 @@ fun CalorieCounterScreen(navController: NavController,
             }
         }
 
+        Spacer(modifier = Modifier.height(20.dp))
+
         when (mealType) {
             0 -> {
                 Text("Breakfast Foods:")
@@ -262,16 +264,15 @@ suspend fun getDataFromFirestore(uid: String, mealType: Int): ProfileDataUIState
 
     if (documentSnapshot.exists()) {
         val data = documentSnapshot.toObject(ProfileDataUIState::class.java)
-        // Provjeri mealType i vrati odgovarajuće podatke
         return when (mealType) {
             0 -> ProfileDataUIState(breakfastCalories = data?.breakfastCalories ?: 0, breakfastFoods = data?.breakfastFoods ?: emptyList())
             1 -> ProfileDataUIState(lunchCalories = data?.lunchCalories ?: 0, lunchFoods = data?.lunchFoods ?: emptyList())
             2 -> ProfileDataUIState(dinnerCalories = data?.dinnerCalories ?: 0, dinnerFoods = data?.dinnerFoods ?: emptyList())
             3 -> ProfileDataUIState(snackCalories = data?.snackCalories ?: 0, snackFoods = data?.snackFoods ?: emptyList())
-            else -> ProfileDataUIState() // Ako mealType nije odgovarajući, vrati prazan objekt
+            else -> ProfileDataUIState()
         }
     } else {
-        return ProfileDataUIState() // Ako dokument ne postoji, vrati prazan objekt
+        return ProfileDataUIState()
     }
 }
 
