@@ -34,6 +34,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
@@ -45,10 +46,13 @@ import hr.ferit.zavrsni.components.DividerComponent
 import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.FoodViewModel
+import hr.ferit.zavrsni.data.ProfileDataUIState
 import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.White
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 
 @Composable
@@ -62,6 +66,10 @@ fun CalorieCounterScreen(navController: NavController,
     var showDialog by remember { mutableStateOf(false) }
     var selectedFood by remember { mutableStateOf<Food?>(null) }
     val allFoodItems by foodViewModel.allFoodItems.collectAsState()
+
+    LaunchedEffect(Unit) {
+        profileDataViewModel.loadDataFromFirestore(mealType)
+    }
 
     Column(
         modifier = Modifier
@@ -107,6 +115,61 @@ fun CalorieCounterScreen(navController: NavController,
             }
         }
 
+        when (mealType) {
+            0 -> {
+                Text("Breakfast Foods:")
+                LazyColumn {
+                    items(profileDataViewModel.profileData.value.breakfastFoods) { food ->
+                        Text(
+                            text = "${food.name}: ${food.calories} kcal/100g",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        )
+                    }
+                }
+            }
+            1 -> {
+                Text("Lunch Foods:")
+                LazyColumn {
+                    items(profileDataViewModel.profileData.value.lunchFoods) { food ->
+                        Text(
+                            text = "${food.name}: ${food.calories} kcal/100g",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        )
+                    }
+                }
+            }
+            2 -> {
+                Text("Dinner Foods:")
+                LazyColumn {
+                    items(profileDataViewModel.profileData.value.dinnerFoods) { food ->
+                        Text(
+                            text = "${food.name}: ${food.calories} kcal/100g",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        )
+                    }
+                }
+            }
+            3 -> {
+                Text("Snack Foods:")
+                LazyColumn {
+                    items(profileDataViewModel.profileData.value.snackFoods) { food ->
+                        Text(
+                            text = "${food.name}: ${food.calories} kcal/100g",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        )
+                    }
+                }
+            }
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         val totalCalories = selectedFoods.sumOf { (food, grams) -> (food.calories * grams) / 100 }
@@ -126,13 +189,11 @@ fun CalorieCounterScreen(navController: NavController,
                 onAdd = { grams ->
                     selectedFoods = selectedFoods + Pair(selectedFood!!, grams)
                     profileDataViewModel.saveMeal(mealType, selectedFood!!, totalCalories)
+
+                    val calories = selectedFood!!.calories * grams / 100
+                    profileDataViewModel.addFoodToMeal(mealType, selectedFood!!, calories)
+
                     showDialog = false
-                    /*
-                    val mealType = determineMealType()
-                    val foodItem = selectedFood!!
-                    val calories = foodItem.calories * grams / 100
-                    saveCaloriesAndFoodForMeal(profileDataViewModel, mealType, foodItem, grams, calories)
-                    */
                 }
             )
         }
@@ -192,4 +253,27 @@ fun AddFoodDialog(food: Food, onDismiss: () -> Unit, onAdd: (Int) -> Unit) {
         }
     )
 }
+
+suspend fun getDataFromFirestore(uid: String, mealType: Int): ProfileDataUIState {
+    val firestore = FirebaseFirestore.getInstance()
+    val docRef = firestore.collection("profileData").document(uid)
+
+    val documentSnapshot = docRef.get().await()
+
+    if (documentSnapshot.exists()) {
+        val data = documentSnapshot.toObject(ProfileDataUIState::class.java)
+        // Provjeri mealType i vrati odgovarajuće podatke
+        return when (mealType) {
+            0 -> ProfileDataUIState(breakfastCalories = data?.breakfastCalories ?: 0, breakfastFoods = data?.breakfastFoods ?: emptyList())
+            1 -> ProfileDataUIState(lunchCalories = data?.lunchCalories ?: 0, lunchFoods = data?.lunchFoods ?: emptyList())
+            2 -> ProfileDataUIState(dinnerCalories = data?.dinnerCalories ?: 0, dinnerFoods = data?.dinnerFoods ?: emptyList())
+            3 -> ProfileDataUIState(snackCalories = data?.snackCalories ?: 0, snackFoods = data?.snackFoods ?: emptyList())
+            else -> ProfileDataUIState() // Ako mealType nije odgovarajući, vrati prazan objekt
+        }
+    } else {
+        return ProfileDataUIState() // Ako dokument ne postoji, vrati prazan objekt
+    }
+}
+
+
 

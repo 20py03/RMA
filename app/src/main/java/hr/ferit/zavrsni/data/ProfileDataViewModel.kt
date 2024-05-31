@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
+import androidx.compose.runtime.State
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.launch
@@ -14,6 +14,42 @@ import kotlinx.coroutines.tasks.await
 class ProfileDataViewModel : ViewModel() {
     val state = mutableStateOf(ProfileDataUIState())
     val energyDataViewModel = EnergyDataViewModel()
+
+    private val _profileData = mutableStateOf(ProfileDataUIState(
+        breakfastFoods = emptyList(),
+        lunchFoods = emptyList(),
+        dinnerFoods = emptyList(),
+        snackFoods = emptyList(),
+        breakfastCalories = 0,
+        lunchCalories = 0,
+        dinnerCalories = 0,
+        snackCalories = 0
+    ))
+    val profileData: State<ProfileDataUIState> = _profileData
+
+    fun addFoodToMeal(mealType: Int, food: Food, calories: Int) {
+        _profileData.value = _profileData.value.copy(
+            breakfastFoods = if (mealType == 0) _profileData.value.breakfastFoods + food else _profileData.value.breakfastFoods,
+            lunchFoods = if (mealType == 1) _profileData.value.lunchFoods + food else _profileData.value.lunchFoods,
+            dinnerFoods = if (mealType == 2) _profileData.value.dinnerFoods + food else _profileData.value.dinnerFoods,
+            snackFoods = if (mealType == 3) _profileData.value.snackFoods + food else _profileData.value.snackFoods,
+            breakfastCalories = if (mealType == 0) _profileData.value.breakfastCalories + calories else _profileData.value.breakfastCalories,
+            lunchCalories = if (mealType == 1) _profileData.value.lunchCalories + calories else _profileData.value.lunchCalories,
+            dinnerCalories = if (mealType == 2) _profileData.value.dinnerCalories + calories else _profileData.value.dinnerCalories,
+            snackCalories = if (mealType == 3) _profileData.value.snackCalories + calories else _profileData.value.snackCalories
+        )
+    }
+
+    fun loadDataFromFirestore(mealType: Int) {
+        viewModelScope.launch {
+            val uid = getCurrentUserUid()
+            if (uid != null) {
+                val data = hr.ferit.zavrsni.screens.getDataFromFirestore(uid, mealType)
+                _profileData.value = data
+            }
+        }
+    }
+
 
     fun getData() {
         viewModelScope.launch {
