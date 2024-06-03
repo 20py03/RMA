@@ -166,11 +166,11 @@ fun HomeScreen(navController: NavController,
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MealSquare(label = "Breakfast\n" + "\n${getData.breakfastCalories} kcal") {
+                MealSquare(label = "Breakfast\n" + "\n${getData.breakfast.breakfastCalories} kcal") {
                     sharedViewModel.mealType.value = 0
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
-                MealSquare(label = "Lunch\n" + "\n${getData.lunchCalories} kcal") {
+                MealSquare(label = "Lunch\n" + "\n${getData.lunch.lunchCalories} kcal") {
                     sharedViewModel.mealType.value = 1
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
@@ -180,11 +180,11 @@ fun HomeScreen(navController: NavController,
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MealSquare(label = "Dinner\n" + "\n${getData.dinnerCalories} kcal") {
+                MealSquare(label = "Dinner\n" + "\n${getData.dinner.dinnerCalories} kcal") {
                     sharedViewModel.mealType.value = 2
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
-                MealSquare(label = "Snack\n"+ "\n${getData.snackCalories} kcal") {
+                MealSquare(label = "Snack\n"+ "\n${getData.snack.snackCalories} kcal") {
                     sharedViewModel.mealType.value = 3
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }

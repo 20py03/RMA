@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.runtime.State
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -16,29 +17,22 @@ class ProfileDataViewModel : ViewModel() {
     val energyDataViewModel = EnergyDataViewModel()
 
     private val _profileData = mutableStateOf(ProfileDataUIState(
-        breakfastFoods = emptyList(),
-        lunchFoods = emptyList(),
-        dinnerFoods = emptyList(),
-        snackFoods = emptyList(),
-        breakfastCalories = 0,
-        lunchCalories = 0,
-        dinnerCalories = 0,
-        snackCalories = 0
+        breakfast = Breakfast(),
+        lunch = Lunch(),
+        dinner = Dinner(),
+        snack = Snack()
     ))
     val profileData: State<ProfileDataUIState> = _profileData
 
     fun addFoodToMeal(mealType: Int, food: Food, calories: Int) {
         _profileData.value = _profileData.value.copy(
-            breakfastFoods = if (mealType == 0) _profileData.value.breakfastFoods + food else _profileData.value.breakfastFoods,
-            lunchFoods = if (mealType == 1) _profileData.value.lunchFoods + food else _profileData.value.lunchFoods,
-            dinnerFoods = if (mealType == 2) _profileData.value.dinnerFoods + food else _profileData.value.dinnerFoods,
-            snackFoods = if (mealType == 3) _profileData.value.snackFoods + food else _profileData.value.snackFoods,
-            breakfastCalories = if (mealType == 0) _profileData.value.breakfastCalories + calories else _profileData.value.breakfastCalories,
-            lunchCalories = if (mealType == 1) _profileData.value.lunchCalories + calories else _profileData.value.lunchCalories,
-            dinnerCalories = if (mealType == 2) _profileData.value.dinnerCalories + calories else _profileData.value.dinnerCalories,
-            snackCalories = if (mealType == 3) _profileData.value.snackCalories + calories else _profileData.value.snackCalories
+            breakfast = if (mealType == 0) Breakfast(_profileData.value.breakfast.breakfastFoods.plus(food)) else _profileData.value.breakfast,
+            lunch = if (mealType == 1) Lunch(_profileData.value.lunch.lunchFoods.plus(food)) else _profileData.value.lunch,
+            dinner = if (mealType == 2) Dinner(_profileData.value.dinner.dinnerFoods.plus(food)) else _profileData.value.dinner,
+            snack = if (mealType == 3) Snack(_profileData.value.snack.snackFoods.plus(food)) else _profileData.value.snack
         )
     }
+
 
     private suspend fun updateProfileDataInFirestore(uid: String, updates: Map<String, Any>) {
         val db = FirebaseFirestore.getInstance()
@@ -57,31 +51,34 @@ class ProfileDataViewModel : ViewModel() {
             if (uid != null) {
                 val updatedData = when (mealType) {
                     0 -> {
-                        val newFoods = _profileData.value.breakfastFoods.filter { it != food }
-                        _profileData.value.copy(breakfastFoods = newFoods)
+                        val newFoods: List<Food> = _profileData.value.breakfast.breakfastFoods.filter { it != food }
+                        _profileData.value.breakfast.breakfastFoods = newFoods
+                        _profileData.value
                     }
                     1 -> {
-                        val newFoods = _profileData.value.lunchFoods.filter { it != food }
-                        _profileData.value.copy(lunchFoods = newFoods)
+                        val newFoods: List<Food> = _profileData.value.lunch.lunchFoods.filter { it != food }
+                        _profileData.value.lunch.lunchFoods = newFoods
+                        _profileData.value
                     }
                     2 -> {
-                        val newFoods = _profileData.value.dinnerFoods.filter { it != food }
-                        _profileData.value.copy(dinnerFoods = newFoods)
+                        val newFoods: List<Food> = _profileData.value.dinner.dinnerFoods.filter { it != food }
+                        _profileData.value.dinner.dinnerFoods = newFoods
+                        _profileData.value
                     }
                     3 -> {
-                        val newFoods = _profileData.value.snackFoods.filter { it != food }
-                        _profileData.value.copy(snackFoods = newFoods)
+                        val newFoods: List<Food> = _profileData.value.snack.snackFoods.filter { it != food }
+                        _profileData.value.snack.snackFoods = newFoods
+                        _profileData.value
                     }
                     else -> _profileData.value
                 }
                 _profileData.value = updatedData
 
-                // Mapiranje ažuriranih podataka za Firestore
                 val updates = when (mealType) {
-                    0 -> mapOf("breakfastFoods" to updatedData.breakfastFoods)
-                    1 -> mapOf("lunchFoods" to updatedData.lunchFoods)
-                    2 -> mapOf("dinnerFoods" to updatedData.dinnerFoods)
-                    3 -> mapOf("snackFoods" to updatedData.snackFoods)
+                    0 -> mapOf("breakfast" to updatedData.breakfast)
+                    1 -> mapOf("lunch" to updatedData.lunch)
+                    2 -> mapOf("dinner" to updatedData.dinner)
+                    3 -> mapOf("snack" to updatedData.snack)
                     else -> emptyMap()
                 }
                 updateProfileDataInFirestore(uid, updates)
@@ -206,34 +203,55 @@ class ProfileDataViewModel : ViewModel() {
         }
     }
 
-    fun saveMeal(mealType: Int, food: Food, totalCalories: Int) {
-        viewModelScope.launch {
-            val uid = getCurrentUserUid()
-            if (uid != null) {
-                val currentData = getDataFromFirestore(uid)
-                val updatedData = when (mealType) {
-                    0 -> currentData.copy(
-                        breakfastCalories = currentData.breakfastCalories + totalCalories,
-                        breakfastFoods = currentData.breakfastFoods + food
+    suspend fun saveMeal(mealType: Int, food: Food, totalCalories: Int) {
+        val uid = getCurrentUserUid() ?: return
+        val firestore = FirebaseFirestore.getInstance()
+        val docRef = firestore.collection("profileData").document(uid)
+        val breakfastFoods: List<Food> = _profileData.value.breakfast.breakfastFoods
+        val lunchFoods: List<Food> = _profileData.value.lunch.lunchFoods
+        val dinnerFoods: List<Food> = _profileData.value.dinner.dinnerFoods
+        val snackFoods: List<Food> = _profileData.value.snack.snackFoods
+        try {
+            when (mealType) {
+                0 -> {
+                    _profileData.value.breakfast = Breakfast(
+                        breakfastFoods.plus(food),
+                        totalCalories
                     )
-                    1 -> currentData.copy(
-                        lunchCalories = currentData.lunchCalories + totalCalories,
-                        lunchFoods = currentData.lunchFoods + food
-                    )
-                    2 -> currentData.copy(
-                        dinnerCalories = currentData.dinnerCalories + totalCalories,
-                        dinnerFoods = currentData.dinnerFoods + food
-                    )
-                    3 -> currentData.copy(
-                        snackCalories = currentData.snackCalories + totalCalories,
-                        snackFoods = currentData.snackFoods + food
-                    )
-                    else -> currentData
+                    docRef.update("breakfast", _profileData.value.breakfast)
                 }
-                saveDataToFirestore(uid, updatedData)
+
+                1 -> {
+                    _profileData.value.lunch = Lunch(
+                        lunchFoods.plus(food),
+                        totalCalories
+                    )
+                    docRef.update("lunch", _profileData.value.lunch)
+                }
+
+                2 -> {
+                    _profileData.value.dinner = Dinner(
+                        dinnerFoods.plus(food),
+                        totalCalories
+                    )
+                    docRef.update("dinner", _profileData.value.dinner)
+                }
+                3 -> {
+                    _profileData.value.snack = Snack(
+                        snackFoods.plus(food),
+                        totalCalories
+                    )
+                    docRef.update("snack", _profileData.value.snack)
+                }
+
+                else -> return
             }
+        }catch (e: Exception) {
+            Log.e("SaveMeal", "Error saving meal: ${e.message}", e)
         }
+
     }
+
 
     private suspend fun saveDataToFirestore(uid: String, profileData: ProfileDataUIState) {
         val db = FirebaseFirestore.getInstance()
@@ -245,4 +263,5 @@ class ProfileDataViewModel : ViewModel() {
             Log.d("error", "saveDataToFirestore: $e")
         }
     }
+
 }

@@ -1,6 +1,6 @@
 package hr.ferit.zavrsni.data
 
-data class ProfileDataUIState (
+data class ProfileDataUIState(
     val name: String="",
     val gender: String="",
     val age:String="",
@@ -15,14 +15,27 @@ data class ProfileDataUIState (
     val note1: String = "",
     val note2: String = "",
 
+    var breakfast: Breakfast = Breakfast(),
+    var lunch: Lunch = Lunch(),
+    var dinner: Dinner = Dinner(),
+    var snack: Snack = Snack(),
+)
+data class Breakfast(
+    var breakfastFoods: List<Food> = emptyList(),
     val breakfastCalories: Int = 0,
+)
+
+data class Lunch(
+    var lunchFoods: List<Food> = emptyList(),
     val lunchCalories: Int = 0,
+)
+
+data class Dinner(
+    var dinnerFoods: List<Food> = emptyList(),
     val dinnerCalories: Int = 0,
+)
+
+data class Snack(
+    var snackFoods: List<Food> = emptyList(),
     val snackCalories: Int = 0,
-
-    val breakfastFoods: List<Food> = emptyList(),
-    val lunchFoods: List<Food> = emptyList(),
-    val dinnerFoods: List<Food> = emptyList(),
-    val snackFoods: List<Food> = emptyList(),
-
 )

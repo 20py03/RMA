@@ -1,6 +1,5 @@
 package hr.ferit.zavrsni.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,28 +32,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import hr.ferit.zavrsni.AppNavigation
-import hr.ferit.zavrsni.components.ClicableLoginTextComponent
 import hr.ferit.zavrsni.components.ClicableTextComponent
 import hr.ferit.zavrsni.components.DividerComponent
 import hr.ferit.zavrsni.components.Footer
+import hr.ferit.zavrsni.data.Breakfast
+import hr.ferit.zavrsni.data.Dinner
 import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.FoodViewModel
+import hr.ferit.zavrsni.data.Lunch
 import hr.ferit.zavrsni.data.ProfileDataUIState
 import hr.ferit.zavrsni.data.ProfileDataViewModel
+import hr.ferit.zavrsni.data.Snack
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.White
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.util.Calendar
 
 @Composable
 fun CalorieCounterScreen(navController: NavController,
@@ -122,7 +121,7 @@ fun CalorieCounterScreen(navController: NavController,
             0 -> {
                 Text("Breakfast Foods:")
                 LazyColumn {
-                    items(profileDataViewModel.profileData.value.breakfastFoods) { food ->
+                    items(profileDataViewModel.profileData.value.breakfast.breakfastFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -142,7 +141,7 @@ fun CalorieCounterScreen(navController: NavController,
             1 -> {
                 Text("Lunch Foods:")
                 LazyColumn {
-                    items(profileDataViewModel.profileData.value.lunchFoods) { food ->
+                    items(profileDataViewModel.profileData.value.lunch.lunchFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -162,7 +161,7 @@ fun CalorieCounterScreen(navController: NavController,
             2 -> {
                 Text("Dinner Foods:")
                 LazyColumn {
-                    items(profileDataViewModel.profileData.value.dinnerFoods) { food ->
+                    items(profileDataViewModel.profileData.value.dinner.dinnerFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -182,7 +181,7 @@ fun CalorieCounterScreen(navController: NavController,
             3 -> {
                 Text("Snack Foods:")
                 LazyColumn {
-                    items(profileDataViewModel.profileData.value.snackFoods) { food ->
+                    items(profileDataViewModel.profileData.value.snack.snackFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -204,13 +203,20 @@ fun CalorieCounterScreen(navController: NavController,
         Spacer(modifier = Modifier.height(16.dp))
 
         val totalCalories = selectedFoods.sumOf { (food, grams) -> (food.calories * grams) / 100 }
-
-        Text("Total Calories: $totalCalories")
-
-        LazyColumn {
-            items(selectedFoods) { (food, grams) ->
-                Text("${food.name}: $grams grams  (${food.calories} kcal/100g)")
+        when (mealType) {
+            0 -> {
+                Text("Total Calories: ${profileDataViewModel.profileData.value.breakfast.breakfastCalories}")
             }
+            1 -> {
+                Text("Total Calories: ${profileDataViewModel.profileData.value.lunch.lunchCalories}")
+            }
+            2 -> {
+                Text("Total Calories: ${profileDataViewModel.profileData.value.dinner.dinnerCalories}")
+            }
+            3 -> {
+                Text("Total Calories: ${profileDataViewModel.profileData.value.snack.snackCalories}")
+            }
+            else -> Text("Total Calories: $totalCalories")
         }
 
         if (showDialog && selectedFood != null) {
@@ -219,11 +225,11 @@ fun CalorieCounterScreen(navController: NavController,
                 onDismiss = { showDialog = false },
                 onAdd = { grams ->
                     selectedFoods = selectedFoods + Pair(selectedFood!!, grams)
-                    profileDataViewModel.saveMeal(mealType, selectedFood!!, totalCalories)
+                    val totalCalories = selectedFoods.sumOf { (food, grams) -> (food.calories * grams) / 100 }
 
-                    val calories = selectedFood!!.calories * grams / 100
-                    profileDataViewModel.addFoodToMeal(mealType, selectedFood!!, calories)
-
+                    profileDataViewModel.viewModelScope.launch {
+                        profileDataViewModel.saveMeal(mealType, selectedFood!!, totalCalories)
+                    }
                     showDialog = false
                 }
             )
@@ -294,10 +300,10 @@ suspend fun getDataFromFirestore(uid: String, mealType: Int): ProfileDataUIState
     if (documentSnapshot.exists()) {
         val data = documentSnapshot.toObject(ProfileDataUIState::class.java)
         return when (mealType) {
-            0 -> ProfileDataUIState(breakfastCalories = data?.breakfastCalories ?: 0, breakfastFoods = data?.breakfastFoods ?: emptyList())
-            1 -> ProfileDataUIState(lunchCalories = data?.lunchCalories ?: 0, lunchFoods = data?.lunchFoods ?: emptyList())
-            2 -> ProfileDataUIState(dinnerCalories = data?.dinnerCalories ?: 0, dinnerFoods = data?.dinnerFoods ?: emptyList())
-            3 -> ProfileDataUIState(snackCalories = data?.snackCalories ?: 0, snackFoods = data?.snackFoods ?: emptyList())
+            0 -> ProfileDataUIState(breakfast = data?.breakfast ?: Breakfast())
+            1 -> ProfileDataUIState(lunch = data?.lunch ?: Lunch())
+            2 -> ProfileDataUIState(dinner = data?.dinner ?: Dinner())
+            3 -> ProfileDataUIState(snack = data?.snack ?: Snack())
             else -> ProfileDataUIState()
         }
     } else {
