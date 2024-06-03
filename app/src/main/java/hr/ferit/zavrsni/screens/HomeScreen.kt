@@ -52,6 +52,16 @@ fun HomeScreen(navController: NavController,
         profileDataViewModel.getData()
     }
 
+    val goalCalories: Int = energyData.goalCalories.toIntOrNull() ?: 0
+    val breakfastCalories: Int = getData.breakfast.breakfastCalories
+    val lunchCalories: Int = getData.lunch.lunchCalories
+    val dinnerCalories: Int = getData.dinner.dinnerCalories
+    val snackCalories: Int = getData.snack.snackCalories
+
+    // Izračunavanje unesenih kalorija
+    val eatenCal: Int = breakfastCalories + lunchCalories + dinnerCalories + snackCalories
+    val remainingCal: Int = goalCalories - eatenCal
+
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -81,7 +91,7 @@ fun HomeScreen(navController: NavController,
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Text(
-                            text = "1800 \nkcal eaten",
+                            text = "$eatenCal \nkcal eaten",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
@@ -97,7 +107,7 @@ fun HomeScreen(navController: NavController,
                         )
 
                         Text(
-                            text = "200 \nkcal left",
+                            text = "$remainingCal \nkcal left",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
