@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -122,12 +123,19 @@ fun CalorieCounterScreen(navController: NavController,
                 Text("Breakfast Foods:")
                 LazyColumn {
                     items(profileDataViewModel.profileData.value.breakfastFoods) { food ->
-                        Text(
-                            text = "${food.name}: ${food.calories} kcal/100g",
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)
-                        )
+                        ) {
+                            Text(
+                                text = "${food.name}: ${food.calories} kcal/100g",
+                                modifier = Modifier.weight(1f)
+                            )
+                            Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
+                                Text("Delete")
+                            }
+                        }
                     }
                 }
             }
@@ -135,12 +143,19 @@ fun CalorieCounterScreen(navController: NavController,
                 Text("Lunch Foods:")
                 LazyColumn {
                     items(profileDataViewModel.profileData.value.lunchFoods) { food ->
-                        Text(
-                            text = "${food.name}: ${food.calories} kcal/100g",
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)
-                        )
+                        ) {
+                            Text(
+                                text = "${food.name}: ${food.calories} kcal/100g",
+                                modifier = Modifier.weight(1f)
+                            )
+                            Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
+                                Text("Delete")
+                            }
+                        }
                     }
                 }
             }
@@ -148,12 +163,19 @@ fun CalorieCounterScreen(navController: NavController,
                 Text("Dinner Foods:")
                 LazyColumn {
                     items(profileDataViewModel.profileData.value.dinnerFoods) { food ->
-                        Text(
-                            text = "${food.name}: ${food.calories} kcal/100g",
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)
-                        )
+                        ) {
+                            Text(
+                                text = "${food.name}: ${food.calories} kcal/100g",
+                                modifier = Modifier.weight(1f)
+                            )
+                            Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
+                                Text("Delete")
+                            }
+                        }
                     }
                 }
             }
@@ -161,12 +183,19 @@ fun CalorieCounterScreen(navController: NavController,
                 Text("Snack Foods:")
                 LazyColumn {
                     items(profileDataViewModel.profileData.value.snackFoods) { food ->
-                        Text(
-                            text = "${food.name}: ${food.calories} kcal/100g",
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)
-                        )
+                        ) {
+                            Text(
+                                text = "${food.name}: ${food.calories} kcal/100g",
+                                modifier = Modifier.weight(1f)
+                            )
+                            Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
+                                Text("Delete")
+                            }
+                        }
                     }
                 }
             }

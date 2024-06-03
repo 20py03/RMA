@@ -40,6 +40,55 @@ class ProfileDataViewModel : ViewModel() {
         )
     }
 
+    private suspend fun updateProfileDataInFirestore(uid: String, updates: Map<String, Any>) {
+        val db = FirebaseFirestore.getInstance()
+
+        try {
+            db.collection("profileData").document(uid).update(updates).await()
+            Log.d("success", "Profile data updated successfully.")
+        } catch (e: FirebaseFirestoreException) {
+            Log.d("error", "updateProfileDataInFirestore: $e")
+        }
+    }
+
+    fun removeFoodFromMeal(mealType: Int, food: Food) {
+        viewModelScope.launch {
+            val uid = getCurrentUserUid()
+            if (uid != null) {
+                val updatedData = when (mealType) {
+                    0 -> {
+                        val newFoods = _profileData.value.breakfastFoods.filter { it != food }
+                        _profileData.value.copy(breakfastFoods = newFoods)
+                    }
+                    1 -> {
+                        val newFoods = _profileData.value.lunchFoods.filter { it != food }
+                        _profileData.value.copy(lunchFoods = newFoods)
+                    }
+                    2 -> {
+                        val newFoods = _profileData.value.dinnerFoods.filter { it != food }
+                        _profileData.value.copy(dinnerFoods = newFoods)
+                    }
+                    3 -> {
+                        val newFoods = _profileData.value.snackFoods.filter { it != food }
+                        _profileData.value.copy(snackFoods = newFoods)
+                    }
+                    else -> _profileData.value
+                }
+                _profileData.value = updatedData
+
+                // Mapiranje ažuriranih podataka za Firestore
+                val updates = when (mealType) {
+                    0 -> mapOf("breakfastFoods" to updatedData.breakfastFoods)
+                    1 -> mapOf("lunchFoods" to updatedData.lunchFoods)
+                    2 -> mapOf("dinnerFoods" to updatedData.dinnerFoods)
+                    3 -> mapOf("snackFoods" to updatedData.snackFoods)
+                    else -> emptyMap()
+                }
+                updateProfileDataInFirestore(uid, updates)
+            }
+        }
+    }
+
     fun loadDataFromFirestore(mealType: Int) {
         viewModelScope.launch {
             val uid = getCurrentUserUid()

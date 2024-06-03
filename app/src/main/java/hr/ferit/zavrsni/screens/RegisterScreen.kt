@@ -23,6 +23,7 @@ import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.components.ButtonComponent
 import hr.ferit.zavrsni.components.ClicableLoginTextComponent
+import hr.ferit.zavrsni.components.ConfirmPwdTextFieldComponent
 import hr.ferit.zavrsni.components.DividerComponent
 import hr.ferit.zavrsni.components.HeadingTextComponent
 import hr.ferit.zavrsni.components.MyTextFieldComponent
@@ -79,7 +80,7 @@ fun RegisterScreen(navController: NavHostController, loginViewModel: SignUpViewM
                     errorStatus = loginViewModel.registrationUIState.value.passwordError
                 )
 
-                PwdTextFieldComponent(
+                ConfirmPwdTextFieldComponent(
                     labelValue = stringResource(id = R.string.confirm_pwd),
                     painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
                     onTextSelected = {

@@ -195,6 +195,106 @@ fun PwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSe
 }
 
 @Composable
+fun ConfirmPwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSelected: (String) -> Unit, errorStatus: Boolean =false) {
+    val password = remember { mutableStateOf("") }
+
+    val passwordVisible = remember {
+        mutableStateOf(false)
+    }
+
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = labelValue) },
+        colors = TextFieldDefaults.colors(
+            focusedLabelColor = Blue,
+            cursorColor = DarkGray,
+            focusedTextColor = Blue,
+            unfocusedTextColor = Blue,
+            focusedContainerColor = White,
+            unfocusedContainerColor = LightGray,
+            errorContainerColor = White,
+            errorTextColor = DarkGray
+        ),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+        singleLine = true,
+        maxLines = 1,
+        value = password.value,
+        onValueChange = {
+            password.value = it
+            onTextSelected(it)
+        },
+        leadingIcon = {
+            Icon(
+                painter = painterResource,
+                contentDescription = "")
+        },
+        isError = !errorStatus,
+        trailingIcon = {
+            val iconImage = if(passwordVisible.value){
+                Icons.Filled.Visibility
+            }else{
+                Icons.Filled.VisibilityOff
+            }
+
+            IconButton(onClick = { passwordVisible.value = !passwordVisible.value}) {
+                Icon(imageVector = iconImage, contentDescription ="" )
+            }
+        },
+        visualTransformation = if(passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+    )
+}
+
+@Composable
+fun LoginPwdTextFieldComponent(labelValue: String, painterResource: Painter, onTextSelected: (String) -> Unit, errorStatus: Boolean =false) {
+    val password = remember { mutableStateOf("") }
+
+    val passwordVisible = remember {
+        mutableStateOf(false)
+    }
+
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = labelValue) },
+        colors = TextFieldDefaults.colors(
+            focusedLabelColor = Blue,
+            cursorColor = DarkGray,
+            focusedTextColor = Blue,
+            unfocusedTextColor = Blue,
+            focusedContainerColor = White,
+            unfocusedContainerColor = LightGray,
+            errorContainerColor = White,
+            errorTextColor = DarkGray
+        ),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+        singleLine = true,
+        maxLines = 1,
+        value = password.value,
+        onValueChange = {
+            password.value = it
+            onTextSelected(it)
+        },
+        leadingIcon = {
+            Icon(
+                painter = painterResource,
+                contentDescription = "")
+        },
+        isError = !errorStatus,
+        trailingIcon = {
+            val iconImage = if(passwordVisible.value){
+                Icons.Filled.Visibility
+            }else{
+                Icons.Filled.VisibilityOff
+            }
+
+            IconButton(onClick = { passwordVisible.value = !passwordVisible.value}) {
+                Icon(imageVector = iconImage, contentDescription ="" )
+            }
+        },
+        visualTransformation = if(passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+    )
+}
+
+@Composable
 fun ButtonComponent(value:String, onButtonClicked: () -> Unit, isEnabled:Boolean=false){
     Button(
         onClick = {

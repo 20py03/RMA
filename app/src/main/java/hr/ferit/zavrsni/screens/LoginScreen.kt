@@ -25,6 +25,7 @@ import hr.ferit.zavrsni.components.ButtonComponent
 import hr.ferit.zavrsni.components.ClicableLoginTextComponent
 import hr.ferit.zavrsni.components.DividerComponent
 import hr.ferit.zavrsni.components.HeadingTextComponent
+import hr.ferit.zavrsni.components.LoginPwdTextFieldComponent
 import hr.ferit.zavrsni.components.MyTextFieldComponent
 import hr.ferit.zavrsni.components.NormalTextComponent
 import hr.ferit.zavrsni.components.PwdTextFieldComponent
@@ -62,7 +63,7 @@ fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel
                     errorStatus = loginViewModel.loginUIState.value.emailError
                 )
 
-                PwdTextFieldComponent(
+                LoginPwdTextFieldComponent(
                     labelValue = stringResource(id = R.string.pwd),
                     painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
                     onTextSelected = {
