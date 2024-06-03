@@ -33,6 +33,35 @@ class ProfileDataViewModel : ViewModel() {
         )
     }
 
+    fun toggleWaterGlass(index: Int) {
+        viewModelScope.launch {
+            val uid = getCurrentUserUid() ?: return@launch
+            val firestore = FirebaseFirestore.getInstance()
+            val docRef = firestore.collection("profileData").document(uid)
+
+            try {
+                docRef.get().addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        val profileData = documentSnapshot.toObject(ProfileDataUIState::class.java)
+                        profileData?.let {
+                            val updatedWaterGlasses = profileData.waterGlasses.toMutableList()
+                            updatedWaterGlasses[index] = !updatedWaterGlasses[index]
+                            val updates = mapOf("waterGlasses" to updatedWaterGlasses)
+
+                            docRef.update(updates).addOnSuccessListener {
+                                Log.d("ToggleWaterGlass", "Water glass toggled successfully.")
+                            }.addOnFailureListener { e ->
+                                Log.e("ToggleWaterGlass", "Error toggling water glass: ${e.message}", e)
+                            }
+                        }
+                    }
+                }.await()
+            } catch (e: Exception) {
+                Log.e("ToggleWaterGlass", "Error toggling water glass: ${e.message}", e)
+            }
+        }
+    }
+
 
     private suspend fun updateProfileDataInFirestore(uid: String, updates: Map<String, Any>) {
         val db = FirebaseFirestore.getInstance()

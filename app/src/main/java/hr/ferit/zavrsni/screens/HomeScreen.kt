@@ -36,6 +36,7 @@ import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.data.SharedViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
+import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
@@ -58,7 +59,6 @@ fun HomeScreen(navController: NavController,
     val dinnerCalories: Int = getData.dinner.dinnerCalories
     val snackCalories: Int = getData.snack.snackCalories
 
-    // Izračunavanje unesenih kalorija
     val eatenCal: Int = breakfastCalories + lunchCalories + dinnerCalories + snackCalories
     val remainingCal: Int = goalCalories - eatenCal
 
@@ -143,33 +143,24 @@ fun HomeScreen(navController: NavController,
                             textAlign = TextAlign.Center
                         )
                     }
-
-                    val (iconColors, setIconColors) = remember {
-                        mutableStateOf(List(7) { LightPink })
-                    }
-
-                    fun toggleIconColor(index: Int) {
-                        val newColors = iconColors.toMutableList()
-                        newColors[index] =
-                            if (iconColors[index] == LightPink) DarkBlue else LightPink
-                        setIconColors(newColors)
-                    }
-
+                    
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        repeat(7) { index ->
-                            IconButton(onClick = { toggleIconColor(index) }) {
+                        getData.waterGlasses.forEachIndexed { index, isClicked ->
+                            IconButton(onClick = {
+                                profileDataViewModel.toggleWaterGlass(index)
+                            }) {
                                 Icon(
                                     imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
                                     contentDescription = "WaterGlass",
-                                    modifier = Modifier,
-                                    tint = iconColors[index]
+                                    tint = if (isClicked) DarkBlue else DarkGray
                                 )
                             }
                         }
                     }
+
                 }
             }
             Row(

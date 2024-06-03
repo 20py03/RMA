@@ -19,6 +19,8 @@ data class ProfileDataUIState(
     var lunch: Lunch = Lunch(),
     var dinner: Dinner = Dinner(),
     var snack: Snack = Snack(),
+
+    val waterGlasses: List<Boolean> = List(7) { false }
 )
 data class Breakfast(
     var breakfastFoods: List<Food> = emptyList(),
