@@ -245,7 +245,7 @@ class ProfileDataViewModel : ViewModel() {
                 0 -> {
                     _profileData.value.breakfast = Breakfast(
                         breakfastFoods.plus(food),
-                        totalCalories
+                        totalCalories + _profileData.value.breakfast.breakfastCalories
                     )
                     docRef.update("breakfast", _profileData.value.breakfast)
                 }
@@ -253,7 +253,7 @@ class ProfileDataViewModel : ViewModel() {
                 1 -> {
                     _profileData.value.lunch = Lunch(
                         lunchFoods.plus(food),
-                        totalCalories
+                        totalCalories + _profileData.value.lunch.lunchCalories
                     )
                     docRef.update("lunch", _profileData.value.lunch)
                 }
@@ -261,14 +261,14 @@ class ProfileDataViewModel : ViewModel() {
                 2 -> {
                     _profileData.value.dinner = Dinner(
                         dinnerFoods.plus(food),
-                        totalCalories
+                        totalCalories + _profileData.value.dinner.dinnerCalories
                     )
                     docRef.update("dinner", _profileData.value.dinner)
                 }
                 3 -> {
                     _profileData.value.snack = Snack(
                         snackFoods.plus(food),
-                        totalCalories
+                        totalCalories + _profileData.value.snack.snackCalories
                     )
                     docRef.update("snack", _profileData.value.snack)
                 }

@@ -204,15 +204,19 @@ fun CalorieCounterScreen(navController: NavController,
 
         val totalCalories = selectedFoods.sumOf { (food, grams) -> (food.calories * grams) / 100 }
         when (mealType) {
+
             0 -> {
                 Text("Total Calories: ${profileDataViewModel.profileData.value.breakfast.breakfastCalories}")
             }
+
             1 -> {
                 Text("Total Calories: ${profileDataViewModel.profileData.value.lunch.lunchCalories}")
             }
+
             2 -> {
                 Text("Total Calories: ${profileDataViewModel.profileData.value.dinner.dinnerCalories}")
             }
+
             3 -> {
                 Text("Total Calories: ${profileDataViewModel.profileData.value.snack.snackCalories}")
             }
