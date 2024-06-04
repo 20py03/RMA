@@ -128,7 +128,7 @@ fun CalorieCounterScreen(navController: NavController,
                                 .padding(8.dp)
                         ) {
                             Text(
-                                text = "${food.name}: ${food.calories} kcal/100g",
+                                text = "${food.name}: ${food.grams}g (${food.calories}kcal/100g)",
                                 modifier = Modifier.weight(1f)
                             )
                             Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
@@ -148,7 +148,7 @@ fun CalorieCounterScreen(navController: NavController,
                                 .padding(8.dp)
                         ) {
                             Text(
-                                text = "${food.name}: ${food.calories} kcal/100g",
+                                text = "${food.name}: ${food.grams}g (${food.calories}kcal/100g)",
                                 modifier = Modifier.weight(1f)
                             )
                             Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
@@ -168,7 +168,7 @@ fun CalorieCounterScreen(navController: NavController,
                                 .padding(8.dp)
                         ) {
                             Text(
-                                text = "${food.name}: ${food.calories} kcal/100g",
+                                text = "${food.name}: ${food.grams}g (${food.calories}kcal/100g)",
                                 modifier = Modifier.weight(1f)
                             )
                             Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
@@ -188,7 +188,7 @@ fun CalorieCounterScreen(navController: NavController,
                                 .padding(8.dp)
                         ) {
                             Text(
-                                text = "${food.name}: ${food.calories} kcal/100g",
+                                text = "${food.name}: ${food.grams}g (${food.calories}kcal/100g)",
                                 modifier = Modifier.weight(1f)
                             )
                             Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
@@ -232,7 +232,7 @@ fun CalorieCounterScreen(navController: NavController,
                     val totalCalories = selectedFoods.sumOf { (food, grams) -> (food.calories * grams) / 100 }
 
                     profileDataViewModel.viewModelScope.launch {
-                        profileDataViewModel.saveMeal(mealType, selectedFood!!, totalCalories)
+                        profileDataViewModel.saveMeal(mealType, selectedFood!!, grams)
                     }
                     showDialog = false
                 }

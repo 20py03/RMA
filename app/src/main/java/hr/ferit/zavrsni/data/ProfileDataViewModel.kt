@@ -80,23 +80,27 @@ class ProfileDataViewModel : ViewModel() {
             if (uid != null) {
                 val updatedData = when (mealType) {
                     0 -> {
-                        val newFoods: List<Food> = _profileData.value.breakfast.breakfastFoods.filter { it != food }
-                        _profileData.value.breakfast.breakfastFoods = newFoods
+                        val newFoods = _profileData.value.breakfast.breakfastFoods.filter { it != food }
+                        val updatedCalories = _profileData.value.breakfast.breakfastCalories - (food.calories * food.grams) / 100
+                        _profileData.value.breakfast = Breakfast(newFoods, updatedCalories)
                         _profileData.value
                     }
                     1 -> {
-                        val newFoods: List<Food> = _profileData.value.lunch.lunchFoods.filter { it != food }
-                        _profileData.value.lunch.lunchFoods = newFoods
+                        val newFoods = _profileData.value.lunch.lunchFoods.filter { it != food }
+                        val updatedCalories = _profileData.value.lunch.lunchCalories - (food.calories * food.grams) / 100
+                        _profileData.value.lunch = Lunch(newFoods, updatedCalories)
                         _profileData.value
                     }
                     2 -> {
-                        val newFoods: List<Food> = _profileData.value.dinner.dinnerFoods.filter { it != food }
-                        _profileData.value.dinner.dinnerFoods = newFoods
+                        val newFoods = _profileData.value.dinner.dinnerFoods.filter { it != food }
+                        val updatedCalories = _profileData.value.dinner.dinnerCalories - (food.calories * food.grams) / 100
+                        _profileData.value.dinner = Dinner(newFoods, updatedCalories)
                         _profileData.value
                     }
                     3 -> {
-                        val newFoods: List<Food> = _profileData.value.snack.snackFoods.filter { it != food }
-                        _profileData.value.snack.snackFoods = newFoods
+                        val newFoods = _profileData.value.snack.snackFoods.filter { it != food }
+                        val updatedCalories = _profileData.value.snack.snackCalories - (food.calories * food.grams) / 100
+                        _profileData.value.snack = Snack(newFoods, updatedCalories)
                         _profileData.value
                     }
                     else -> _profileData.value
@@ -232,54 +236,50 @@ class ProfileDataViewModel : ViewModel() {
         }
     }
 
-    suspend fun saveMeal(mealType: Int, food: Food, totalCalories: Int) {
+    suspend fun saveMeal(mealType: Int, food: Food, grams: Int) {
         val uid = getCurrentUserUid() ?: return
         val firestore = FirebaseFirestore.getInstance()
         val docRef = firestore.collection("profileData").document(uid)
-        val breakfastFoods: List<Food> = _profileData.value.breakfast.breakfastFoods
-        val lunchFoods: List<Food> = _profileData.value.lunch.lunchFoods
-        val dinnerFoods: List<Food> = _profileData.value.dinner.dinnerFoods
-        val snackFoods: List<Food> = _profileData.value.snack.snackFoods
+
+        val caloriesForFood = (food.calories * grams) / 100 // Calculate calories for the specific food being added
+
         try {
             when (mealType) {
                 0 -> {
-                    _profileData.value.breakfast = Breakfast(
-                        breakfastFoods.plus(food),
-                        totalCalories + _profileData.value.breakfast.breakfastCalories
-                    )
+                    val updatedBreakfastFoods = _profileData.value.breakfast.breakfastFoods + food.copy(grams = grams)
+                    val updatedCalories = _profileData.value.breakfast.breakfastCalories + caloriesForFood
+                    _profileData.value.breakfast = Breakfast(updatedBreakfastFoods, updatedCalories)
                     docRef.update("breakfast", _profileData.value.breakfast)
                 }
 
                 1 -> {
-                    _profileData.value.lunch = Lunch(
-                        lunchFoods.plus(food),
-                        totalCalories + _profileData.value.lunch.lunchCalories
-                    )
+                    val updatedLunchFoods = _profileData.value.lunch.lunchFoods + food.copy(grams = grams)
+                    val updatedCalories = _profileData.value.lunch.lunchCalories + caloriesForFood
+                    _profileData.value.lunch = Lunch(updatedLunchFoods, updatedCalories)
                     docRef.update("lunch", _profileData.value.lunch)
                 }
 
                 2 -> {
-                    _profileData.value.dinner = Dinner(
-                        dinnerFoods.plus(food),
-                        totalCalories + _profileData.value.dinner.dinnerCalories
-                    )
+                    val updatedDinnerFoods = _profileData.value.dinner.dinnerFoods + food.copy(grams = grams)
+                    val updatedCalories = _profileData.value.dinner.dinnerCalories + caloriesForFood
+                    _profileData.value.dinner = Dinner(updatedDinnerFoods, updatedCalories)
                     docRef.update("dinner", _profileData.value.dinner)
                 }
+
                 3 -> {
-                    _profileData.value.snack = Snack(
-                        snackFoods.plus(food),
-                        totalCalories + _profileData.value.snack.snackCalories
-                    )
+                    val updatedSnackFoods = _profileData.value.snack.snackFoods + food.copy(grams = grams)
+                    val updatedCalories = _profileData.value.snack.snackCalories + caloriesForFood
+                    _profileData.value.snack = Snack(updatedSnackFoods, updatedCalories)
                     docRef.update("snack", _profileData.value.snack)
                 }
 
                 else -> return
             }
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             Log.e("SaveMeal", "Error saving meal: ${e.message}", e)
         }
-
     }
+
 
 
     private suspend fun saveDataToFirestore(uid: String, profileData: ProfileDataUIState) {
