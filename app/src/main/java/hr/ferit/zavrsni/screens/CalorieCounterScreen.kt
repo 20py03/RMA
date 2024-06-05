@@ -38,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import hr.ferit.zavrsni.AppNavigation
+import hr.ferit.zavrsni.components.AddFoodDialog
 import hr.ferit.zavrsni.components.ClicableTextComponent
 import hr.ferit.zavrsni.components.DividerComponent
 import hr.ferit.zavrsni.components.Footer
@@ -46,6 +47,8 @@ import hr.ferit.zavrsni.data.Dinner
 import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.FoodViewModel
 import hr.ferit.zavrsni.data.Lunch
+import hr.ferit.zavrsni.data.MealDataUIState
+import hr.ferit.zavrsni.data.MealDataViewModel
 import hr.ferit.zavrsni.data.ProfileDataUIState
 import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.data.Snack
@@ -58,7 +61,7 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun CalorieCounterScreen(navController: NavController,
                          foodViewModel: FoodViewModel = viewModel(),
-                         profileDataViewModel: ProfileDataViewModel = viewModel(),
+                         mealDataViewModel: MealDataViewModel = viewModel(),
                          mealType: Int
 ) {
     var searchQuery by remember { mutableStateOf("") }
@@ -68,7 +71,7 @@ fun CalorieCounterScreen(navController: NavController,
     val allFoodItems by foodViewModel.allFoodItems.collectAsState()
 
     LaunchedEffect(Unit) {
-        profileDataViewModel.loadDataFromFirestore(mealType)
+        mealDataViewModel.getMealData()
     }
 
     Column(
@@ -121,7 +124,7 @@ fun CalorieCounterScreen(navController: NavController,
             0 -> {
                 Text("Breakfast Foods:")
                 LazyColumn {
-                    items(profileDataViewModel.profileData.value.breakfast.breakfastFoods) { food ->
+                    items(mealDataViewModel.state.value.breakfast.breakfastFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -131,7 +134,7 @@ fun CalorieCounterScreen(navController: NavController,
                                 text = "${food.name}: ${food.grams}g (${food.calories}kcal/100g)",
                                 modifier = Modifier.weight(1f)
                             )
-                            Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
+                            Button(onClick = { mealDataViewModel.removeFoodFromMeal(mealType, food) }) {
                                 Text("Delete")
                             }
                         }
@@ -141,7 +144,7 @@ fun CalorieCounterScreen(navController: NavController,
             1 -> {
                 Text("Lunch Foods:")
                 LazyColumn {
-                    items(profileDataViewModel.profileData.value.lunch.lunchFoods) { food ->
+                    items(mealDataViewModel.state.value.lunch.lunchFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -151,7 +154,9 @@ fun CalorieCounterScreen(navController: NavController,
                                 text = "${food.name}: ${food.grams}g (${food.calories}kcal/100g)",
                                 modifier = Modifier.weight(1f)
                             )
-                            Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
+                            Button(onClick = {
+                                mealDataViewModel.removeFoodFromMeal(mealType, food)
+                            }) {
                                 Text("Delete")
                             }
                         }
@@ -161,7 +166,7 @@ fun CalorieCounterScreen(navController: NavController,
             2 -> {
                 Text("Dinner Foods:")
                 LazyColumn {
-                    items(profileDataViewModel.profileData.value.dinner.dinnerFoods) { food ->
+                    items(mealDataViewModel.state.value.dinner.dinnerFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -171,7 +176,7 @@ fun CalorieCounterScreen(navController: NavController,
                                 text = "${food.name}: ${food.grams}g (${food.calories}kcal/100g)",
                                 modifier = Modifier.weight(1f)
                             )
-                            Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
+                            Button(onClick = { mealDataViewModel.removeFoodFromMeal(mealType, food) }) {
                                 Text("Delete")
                             }
                         }
@@ -181,7 +186,7 @@ fun CalorieCounterScreen(navController: NavController,
             3 -> {
                 Text("Snack Foods:")
                 LazyColumn {
-                    items(profileDataViewModel.profileData.value.snack.snackFoods) { food ->
+                    items(mealDataViewModel.state.value.snack.snackFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -191,7 +196,7 @@ fun CalorieCounterScreen(navController: NavController,
                                 text = "${food.name}: ${food.grams}g (${food.calories}kcal/100g)",
                                 modifier = Modifier.weight(1f)
                             )
-                            Button(onClick = { profileDataViewModel.removeFoodFromMeal(mealType, food) }) {
+                            Button(onClick = { mealDataViewModel.removeFoodFromMeal(mealType, food) }) {
                                 Text("Delete")
                             }
                         }
@@ -206,19 +211,19 @@ fun CalorieCounterScreen(navController: NavController,
         when (mealType) {
 
             0 -> {
-                Text("Total Calories: ${profileDataViewModel.profileData.value.breakfast.breakfastCalories}")
+                Text("Total Calories: ${mealDataViewModel.profileData.value.breakfast.breakfastCalories}")
             }
 
             1 -> {
-                Text("Total Calories: ${profileDataViewModel.profileData.value.lunch.lunchCalories}")
+                Text("Total Calories: ${mealDataViewModel.profileData.value.lunch.lunchCalories}")
             }
 
             2 -> {
-                Text("Total Calories: ${profileDataViewModel.profileData.value.dinner.dinnerCalories}")
+                Text("Total Calories: ${mealDataViewModel.profileData.value.dinner.dinnerCalories}")
             }
 
             3 -> {
-                Text("Total Calories: ${profileDataViewModel.profileData.value.snack.snackCalories}")
+                Text("Total Calories: ${mealDataViewModel.profileData.value.snack.snackCalories}")
             }
             else -> Text("Total Calories: $totalCalories")
         }
@@ -229,10 +234,10 @@ fun CalorieCounterScreen(navController: NavController,
                 onDismiss = { showDialog = false },
                 onAdd = { grams ->
                     selectedFoods = selectedFoods + Pair(selectedFood!!, grams)
-                    val totalCalories = selectedFoods.sumOf { (food, grams) -> (food.calories * grams) / 100 }
+                    //val totalCalories = selectedFoods.sumOf { (food, grams) -> (food.calories * grams) / 100 }
 
-                    profileDataViewModel.viewModelScope.launch {
-                        profileDataViewModel.saveMeal(mealType, selectedFood!!, grams)
+                    mealDataViewModel.viewModelScope.launch {
+                        mealDataViewModel.saveMeal(mealType, selectedFood!!, grams)
                     }
                     showDialog = false
                 }
@@ -259,61 +264,9 @@ fun CalorieCounterScreen(navController: NavController,
     }
 }
 
-@Composable
-fun AddFoodDialog(food: Food, onDismiss: () -> Unit, onAdd: (Int) -> Unit) {
-    var grams by remember { mutableStateOf("") }
 
-    AlertDialog(
-        onDismissRequest = { onDismiss() },
-        title = { Text("Add ${food.name}") },
-        text = {
-            Column {
-                Text("Enter the amount in grams:")
-                TextField(
-                    value = grams,
-                    onValueChange = { grams = it },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        },
-        confirmButton = {
-            Button(onClick = {
-                val gramsInt = grams.toIntOrNull() ?: 0
-                if (gramsInt > 0) {
-                    onAdd(gramsInt)
-                }
-                onDismiss()
-            }) {
-                Text("Add")
-            }
-        },
-        dismissButton = {
-            Button(onClick = { onDismiss() }) {
-                Text("Cancel")
-            }
-        }
-    )
-}
 
-suspend fun getDataFromFirestore(uid: String, mealType: Int): ProfileDataUIState {
-    val firestore = FirebaseFirestore.getInstance()
-    val docRef = firestore.collection("profileData").document(uid)
 
-    val documentSnapshot = docRef.get().await()
-
-    if (documentSnapshot.exists()) {
-        val data = documentSnapshot.toObject(ProfileDataUIState::class.java)
-        return when (mealType) {
-            0 -> ProfileDataUIState(breakfast = data?.breakfast ?: Breakfast())
-            1 -> ProfileDataUIState(lunch = data?.lunch ?: Lunch())
-            2 -> ProfileDataUIState(dinner = data?.dinner ?: Dinner())
-            3 -> ProfileDataUIState(snack = data?.snack ?: Snack())
-            else -> ProfileDataUIState()
-        }
-    } else {
-        return ProfileDataUIState()
-    }
-}
 
 
 

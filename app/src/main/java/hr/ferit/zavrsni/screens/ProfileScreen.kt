@@ -34,6 +34,8 @@ import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.components.ButtonComponent
 import hr.ferit.zavrsni.components.Footer
+import hr.ferit.zavrsni.components.ProfileImage
+import hr.ferit.zavrsni.components.ProfileInfo
 import hr.ferit.zavrsni.data.ProfileDataUIState
 import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.data.SignUpViewModel
@@ -52,7 +54,7 @@ fun ProfileScreen(
     val energyData = profileDataViewModel.energyDataViewModel.state.value
 
     LaunchedEffect(Unit) {
-        profileDataViewModel.getData()
+        profileDataViewModel.getProfileData()
     }
 
     Column(
@@ -71,7 +73,7 @@ fun ProfileScreen(
                 value = "Logout",
                 onButtonClicked = {
                     loginViewModel.logout(navController)
-                    profileDataViewModel.getData()
+                    profileDataViewModel.getProfileData()
                 },
                 isEnabled = true
             )
@@ -103,33 +105,9 @@ fun ProfileScreen(
 }
 
 
-@Composable
-fun ProfileImage(imageResource: Int) {
-    Box(
-        modifier = Modifier
-            .size(120.dp)
-            .background(color = Color.White, shape = CircleShape),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            painter = painterResource(id = imageResource),
-            contentDescription = "Profile picture",
-            modifier = Modifier.size(100.dp),
-            tint = DarkGray
-        )
-    }
-}
 
-@Composable
-fun ProfileInfo(text: String) {
-    Text(
-        text = text,
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        color = Blue,
-        modifier = Modifier.padding(bottom = 10.dp)
-    )
-}
+
+
 
 
 

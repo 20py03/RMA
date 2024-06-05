@@ -118,7 +118,7 @@ class SignUpViewModel : ViewModel(){
                         .build()
                     user?.updateProfile(profileUpdates)
                         ?.addOnCompleteListener {
-                            ProfileDataViewModel().getData()
+                            ProfileDataViewModel().getProfileData()
                             navController.navigate(route = AppNavigation.GenderScreen.route)
                         }
                 }

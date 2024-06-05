@@ -32,6 +32,7 @@ import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.components.MealSquare
 import hr.ferit.zavrsni.data.Food
+import hr.ferit.zavrsni.data.MealDataViewModel
 import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.data.SharedViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
@@ -41,23 +42,25 @@ import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun HomeScreen(navController: NavController,
-               profileDataViewModel: ProfileDataViewModel = viewModel(),
-               sharedViewModel: SharedViewModel,
+fun HomeScreen(
+    navController: NavController,
+    profileDataViewModel: ProfileDataViewModel = viewModel(),
+    mealDataViewModel: MealDataViewModel = viewModel(),
+    sharedViewModel : SharedViewModel,
 ) {
 
-    val getData = profileDataViewModel.state.value
     val energyData = profileDataViewModel.energyDataViewModel.state.value
 
     LaunchedEffect(Unit) {
-        profileDataViewModel.getData()
+        mealDataViewModel.getMealData()
+        profileDataViewModel.getProfileData()
     }
 
     val goalCalories: Int = energyData.goalCalories.toIntOrNull() ?: 0
-    val breakfastCalories: Int = getData.breakfast.breakfastCalories
-    val lunchCalories: Int = getData.lunch.lunchCalories
-    val dinnerCalories: Int = getData.dinner.dinnerCalories
-    val snackCalories: Int = getData.snack.snackCalories
+    val breakfastCalories: Int = mealDataViewModel.state.value.breakfast.breakfastCalories
+    val lunchCalories: Int = mealDataViewModel.state.value.lunch.lunchCalories
+    val dinnerCalories: Int = mealDataViewModel.state.value.dinner.dinnerCalories
+    val snackCalories: Int = mealDataViewModel.state.value.snack.snackCalories
 
     val eatenCal: Int = breakfastCalories + lunchCalories + dinnerCalories + snackCalories
     val remainingCal: Int = goalCalories - eatenCal
@@ -148,9 +151,9 @@ fun HomeScreen(navController: NavController,
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        getData.waterGlasses.forEachIndexed { index, isClicked ->
+                        mealDataViewModel.state.value.waterGlasses.forEachIndexed { index, isClicked ->
                             IconButton(onClick = {
-                                profileDataViewModel.toggleWaterGlass(index)
+                                mealDataViewModel.toggleWaterGlass(index)
                             }) {
                                 Icon(
                                     imageVector = ImageVector.vectorResource(id = R.drawable.water_glass_color_icon),
@@ -167,11 +170,11 @@ fun HomeScreen(navController: NavController,
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MealSquare(label = "Breakfast\n" + "\n${getData.breakfast.breakfastCalories} kcal") {
+                MealSquare(label = "Breakfast\n" + "\n${mealDataViewModel.state.value.breakfast.breakfastCalories} kcal") {
                     sharedViewModel.mealType.value = 0
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
-                MealSquare(label = "Lunch\n" + "\n${getData.lunch.lunchCalories} kcal") {
+                MealSquare(label = "Lunch\n" + "\n${mealDataViewModel.state.value.lunch.lunchCalories} kcal") {
                     sharedViewModel.mealType.value = 1
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
@@ -181,11 +184,11 @@ fun HomeScreen(navController: NavController,
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MealSquare(label = "Dinner\n" + "\n${getData.dinner.dinnerCalories} kcal") {
+                MealSquare(label = "Dinner\n" + "\n${mealDataViewModel.state.value.dinner.dinnerCalories} kcal") {
                     sharedViewModel.mealType.value = 2
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
-                MealSquare(label = "Snack\n"+ "\n${getData.snack.snackCalories} kcal") {
+                MealSquare(label = "Snack\n"+ "\n${mealDataViewModel.state.value.snack.snackCalories} kcal") {
                     sharedViewModel.mealType.value = 3
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }

@@ -44,11 +44,15 @@ import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.LightGray
 import hr.ferit.zavrsni.ui.theme.White
 import androidx.compose.runtime.collectAsState
+import hr.ferit.zavrsni.data.ProgressDataViewModel
 
 @Composable
-fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel = viewModel(), profileDataViewModel: ProfileDataViewModel = viewModel()) {
+fun ProgressScreen(navController: NavController,
+                   loginViewModel: LoginViewModel = viewModel(),
+                   progressDataViewModel: ProgressDataViewModel = viewModel()
+) {
     val context = LocalContext.current
-    val state by profileDataViewModel.state
+    val state by progressDataViewModel.state
 
     var beforeWeight by rememberSaveable { mutableStateOf(state.beforeWeight) }
     var afterWeight by rememberSaveable { mutableStateOf(state.afterWeight) }
@@ -57,7 +61,7 @@ fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel 
     var note2 by rememberSaveable { mutableStateOf(state.note2) }
 
     LaunchedEffect(Unit) {
-        profileDataViewModel.getData()
+        progressDataViewModel.getProgressData()
     }
 
     LaunchedEffect(state) {
@@ -237,8 +241,8 @@ fun ProgressScreen(navController: NavController, loginViewModel: LoginViewModel 
                     if (loginViewModel.currentUser != null) {
                         val uid = loginViewModel.currentUser?.uid
                         if(uid != null){
-                            profileDataViewModel.saveNotes(note1, note2)
-                            profileDataViewModel.saveWeights(beforeWeight, currentWeight, afterWeight)
+                            progressDataViewModel.saveNotes(note1, note2)
+                            progressDataViewModel.saveWeights(beforeWeight, currentWeight, afterWeight)
                             Toast.makeText(
                                 context,
                                 "Data saved successfully",

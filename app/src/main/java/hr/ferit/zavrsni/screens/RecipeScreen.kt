@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.components.Footer
+import hr.ferit.zavrsni.components.RecipeList
 import hr.ferit.zavrsni.data.RecipeViewModel
 import hr.ferit.zavrsni.data.Recipes.Recipe
 import hr.ferit.zavrsni.ui.theme.Blue
@@ -66,71 +67,4 @@ fun RecipeScreen(navController: NavController) {
     }
 }
 
-@Composable
-fun RecipeList(recipes: List<Recipe>) {
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(recipes) { recipe->
-                    RecipeItem(recipe)
-            }
-        }
-}
-
-@Composable
-fun RecipeItem(recipe: Recipe) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Blue
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
-            Image(
-                painter = rememberImagePainter(recipe.image),
-                contentDescription = recipe.title,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .size(200.dp),
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.size(16.dp))
-            Text(
-                text = recipe.title ?: "N/A",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = DarkGray
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(
-                text = "Ready in minutes: ${recipe.readyInMinutes}",
-                fontSize = 18.sp,
-                color = DarkGray
-            )
-            Text(
-                text = "Servings: ${recipe.servings}",
-                fontSize = 18.sp,
-                color = DarkGray
-            )
-            Spacer(modifier = Modifier.size(16.dp))
-            Text(
-                text = "Instructions",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = DarkGray
-            )
-            Text(
-                text = recipe.instructions ?: "No instructions available",
-                fontSize = 16.sp,
-                color = DarkGray
-            )
-        }
-    }
-}
 
