@@ -124,7 +124,7 @@ fun CalorieCounterScreen(navController: NavController,
             0 -> {
                 Text("Breakfast Foods:")
                 LazyColumn {
-                    items(mealDataViewModel.state.value.breakfast.breakfastFoods) { food ->
+                    items(mealDataViewModel.profileData.value.breakfast.breakfastFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -144,7 +144,7 @@ fun CalorieCounterScreen(navController: NavController,
             1 -> {
                 Text("Lunch Foods:")
                 LazyColumn {
-                    items(mealDataViewModel.state.value.lunch.lunchFoods) { food ->
+                    items(mealDataViewModel.profileData.value.lunch.lunchFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -166,7 +166,7 @@ fun CalorieCounterScreen(navController: NavController,
             2 -> {
                 Text("Dinner Foods:")
                 LazyColumn {
-                    items(mealDataViewModel.state.value.dinner.dinnerFoods) { food ->
+                    items(mealDataViewModel.profileData.value.dinner.dinnerFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -186,7 +186,7 @@ fun CalorieCounterScreen(navController: NavController,
             3 -> {
                 Text("Snack Foods:")
                 LazyColumn {
-                    items(mealDataViewModel.state.value.snack.snackFoods) { food ->
+                    items(mealDataViewModel.profileData.value.snack.snackFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

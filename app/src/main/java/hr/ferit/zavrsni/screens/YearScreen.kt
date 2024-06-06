@@ -67,7 +67,7 @@ fun YearScreen(navController: NavController, loginViewModel:LoginViewModel= view
         Box(
             modifier = Modifier
                 .padding(vertical = 16.dp)
-                .fillMaxWidth(0.3f)
+                .fillMaxWidth()
                 .height(10.dp)
                 .background(color = Blue)
         )
@@ -103,7 +103,7 @@ fun YearScreen(navController: NavController, loginViewModel:LoginViewModel= view
 
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.3f)
+                .fillMaxWidth()
                 .padding(vertical = 16.dp)
                 .height(10.dp)
                 .background(color = Blue)

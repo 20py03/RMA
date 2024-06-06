@@ -53,12 +53,12 @@ fun HeightScreen(navController: NavController, loginViewModel : LoginViewModel =
         Box(
             modifier = Modifier
                 .padding(vertical = 16.dp)
-                .fillMaxWidth(0.3f)
+                .fillMaxWidth()
                 .height(10.dp)
                 .background(color = Blue)
         )
 
-        var selectedHeight by remember { mutableStateOf(170) }
+        var selectedHeight by remember { mutableStateOf(150) }
 
         val heights = (150..200).toList()
 
@@ -91,7 +91,7 @@ fun HeightScreen(navController: NavController, loginViewModel : LoginViewModel =
 
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.3f)
+                .fillMaxWidth()
                 .padding(vertical = 16.dp)
                 .height(10.dp)
                 .background(color = Blue)

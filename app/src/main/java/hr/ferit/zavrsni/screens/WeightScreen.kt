@@ -52,12 +52,12 @@ fun WeightScreen(navController: NavController, loginViewModel:LoginViewModel= vi
         Box(
             modifier = Modifier
                 .padding(vertical = 16.dp)
-                .fillMaxWidth(0.3f)
+                .fillMaxWidth()
                 .height(10.dp)
                 .background(color = Blue)
         )
 
-        var selectedWeight by remember { mutableStateOf(70) }
+        var selectedWeight by remember { mutableStateOf(50) }
 
         val weights = (50..110).toList()
 
@@ -90,7 +90,7 @@ fun WeightScreen(navController: NavController, loginViewModel:LoginViewModel= vi
 
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.3f)
+                .fillMaxWidth()
                 .padding(vertical = 16.dp)
                 .height(10.dp)
                 .background(color = Blue)
