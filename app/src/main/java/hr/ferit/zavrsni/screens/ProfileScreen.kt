@@ -43,6 +43,7 @@ import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
 import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.White
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun ProfileScreen(
@@ -65,20 +66,11 @@ fun ProfileScreen(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             ProfileImage(imageResource = R.drawable.person_profile_image_icon)
-            ButtonComponent(
-                value = "Logout",
-                onButtonClicked = {
-                    loginViewModel.logout(navController)
-                    profileDataViewModel.getProfileData()
-                },
-                isEnabled = true
-            )
         }
-        Spacer(modifier = Modifier.height(20.dp))
 
         ProfileInfo("Ime: ${getData.name}")
         ProfileInfo("Age: ${getData.age}")
@@ -93,14 +85,27 @@ fun ProfileScreen(
         ProfileInfo("Carbs: ${energyData.carbohydrates} g")
         ProfileInfo("Fats: ${energyData.fat} g")
 
-        Spacer(modifier = Modifier.height(50.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            Footer(navController)
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Row(
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ){
+            ButtonComponent(
+            value = "Logout",
+            onButtonClicked = {
+                loginViewModel.logout(navController)
+                profileDataViewModel.getProfileData()
+            },
+            isEnabled = true
+            )
         }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Footer(navController)
     }
 }
 

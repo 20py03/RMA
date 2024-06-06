@@ -193,15 +193,14 @@ fun HomeScreen(
                     navController.navigate(route = AppNavigation.CalorieCounterScreen.route)
                 }
             }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Footer(navController)
-            }
         }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Footer(navController)
     }
 }
 

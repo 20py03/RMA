@@ -253,14 +253,14 @@ fun CalorieCounterScreen(navController: NavController,
         ClicableTextComponent(tryinToAddProduct = false, onTextSelected = {
             navController.navigate(route = AppNavigation.FoodEntryScreen.route)
         })
+    }
 
-        Box(
+    Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            Footer(navController)
-        }
+                .fillMaxSize(),
+    contentAlignment = Alignment.BottomCenter
+    ) {
+        Footer(navController)
     }
 }
 

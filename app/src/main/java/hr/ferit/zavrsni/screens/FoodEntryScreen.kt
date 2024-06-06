@@ -37,6 +37,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -78,6 +79,14 @@ fun FoodEntryScreen(navController: NavController,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(
+                text = "Add food below!",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Blue,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(bottom = 5.dp)
+            )
 
             OutlinedTextField(
                 value = foodName,
@@ -233,9 +242,13 @@ fun FoodEntryScreen(navController: NavController,
                     )
                 }
             }
-
-            Footer(navController)
-
         }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Footer(navController)
     }
 }
