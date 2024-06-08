@@ -4,17 +4,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,23 +18,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.components.Footer
 import hr.ferit.zavrsni.components.MealSquare
-import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.MealDataViewModel
 import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.data.SharedViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
 import hr.ferit.zavrsni.ui.theme.DarkGray
-import hr.ferit.zavrsni.ui.theme.LightPink
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
@@ -46,16 +38,13 @@ fun HomeScreen(
     navController: NavController,
     profileDataViewModel: ProfileDataViewModel = viewModel(),
     mealDataViewModel: MealDataViewModel = viewModel(),
-    sharedViewModel : SharedViewModel,
+    sharedViewModel: SharedViewModel
 ) {
 
+    //val waterFoodNotification = WaterFoodNotification()
+    //val context = LocalContext.current
+
     val energyData = profileDataViewModel.energyDataViewModel.state.value
-
-    LaunchedEffect(Unit) {
-        mealDataViewModel.getMealData()
-        profileDataViewModel.getProfileData()
-    }
-
     val goalCalories: Int = energyData.goalCalories.toIntOrNull() ?: 0
     val breakfastCalories: Int = mealDataViewModel.state.value.breakfast.breakfastCalories
     val lunchCalories: Int = mealDataViewModel.state.value.lunch.lunchCalories
@@ -64,6 +53,30 @@ fun HomeScreen(
 
     val eatenCal: Int = breakfastCalories + lunchCalories + dinnerCalories + snackCalories
     val remainingCal: Int = goalCalories - eatenCal
+
+    LaunchedEffect(Unit) {
+        mealDataViewModel.getMealData()
+        profileDataViewModel.getProfileData()
+
+        /*
+        val waterNotDrunk = mealDataViewModel.state.value.waterGlasses.any { !it }
+        val tooManyCalories = eatenCal > goalCalories
+        val tooFewCalories = remainingCal > 800
+
+        if (waterNotDrunk) {
+            waterFoodNotification.showNotification(context,"Reminder", "You haven't drunk all your water today.")
+        }
+
+        if (tooManyCalories) {
+            waterFoodNotification.showNotification(context,"Calorie Alert", "You have exceeded your calorie goal.")
+        }
+
+        if (tooFewCalories) {
+            waterFoodNotification.showNotification(context,"Calorie Alert", "You have consumed too few calories.")
+        }
+         */
+    }
+
 
     Surface (
         modifier = Modifier

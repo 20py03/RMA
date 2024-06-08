@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.data.SharedViewModel
 import hr.ferit.zavrsni.screens.ActivityScreen
@@ -65,7 +64,7 @@ fun AppNavGraph(navController: NavHostController = rememberNavController(),
             GoalScreen(navController = navController)
         }
         composable(route = AppNavigation.HomeScreen.route){
-            HomeScreen(navController = navController, sharedViewModel= sharedViewModel)
+            HomeScreen(navController = navController, sharedViewModel = sharedViewModel)
         }
         composable(route = AppNavigation.ProgressScreen.route){
             ProgressScreen(navController = navController)

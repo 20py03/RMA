@@ -80,13 +80,9 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.8.0")
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-    implementation ("com.journeyapps:zxing-android-embedded:4.3.0") // or the latest version
-    implementation ("com.google.zxing:core:3.4.1") // or the latest version
-    implementation ("androidx.camera:camera-camera2:1.0.2") // CameraX dependencies
-    implementation ("androidx.camera:camera-lifecycle:1.0.2")
-    implementation ("androidx.camera:camera-view:1.0.0-alpha23")
-    implementation ("com.google.accompanist:accompanist-permissions:0.18.0") // Permissions
-    implementation ("com.google.guava:guava:31.0.1-android")
+    implementation ("com.google.firebase:firebase-messaging:23.0.0")
+    implementation ("androidx.core:core-ktx:1.7.0")
+    implementation ("androidx.work:work-runtime-ktx:2.7.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

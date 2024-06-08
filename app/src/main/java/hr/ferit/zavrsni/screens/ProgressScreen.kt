@@ -282,3 +282,4 @@ fun ProgressScreen(navController: NavController,
         Footer(navController)
     }
 }
+

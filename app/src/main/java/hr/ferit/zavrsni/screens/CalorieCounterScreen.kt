@@ -234,8 +234,7 @@ fun CalorieCounterScreen(navController: NavController,
                 onDismiss = { showDialog = false },
                 onAdd = { grams ->
                     selectedFoods = selectedFoods + Pair(selectedFood!!, grams)
-                    //val totalCalories = selectedFoods.sumOf { (food, grams) -> (food.calories * grams) / 100 }
-
+                    
                     mealDataViewModel.viewModelScope.launch {
                         mealDataViewModel.saveMeal(mealType, selectedFood!!, grams)
                     }
