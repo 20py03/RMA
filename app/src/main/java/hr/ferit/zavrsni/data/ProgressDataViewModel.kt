@@ -6,6 +6,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
+import kotlin.math.sqrt
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
@@ -15,12 +16,44 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class ProgressDataViewModel : ViewModel() {
 
+    private val _stepCount = MutableStateFlow(0)
+    val stepCount = _stepCount.asStateFlow()
     val state = mutableStateOf(ProgressDataUIState())
+    private val db = FirebaseFirestore.getInstance()
+
+    init {
+        viewModelScope.launch {
+            getProgressData()
+            getStepCountFromFirestore()
+        }
+    }
+
+
+    fun incrementStepCount() {
+        _stepCount.value += 1
+        saveStepCountToFirestore(_stepCount.value)
+    }
+
+    private fun saveStepCountToFirestore(stepCount: Int) {
+        viewModelScope.launch {
+            val uid = getCurrentUserUid()
+            if (uid != null) {
+                val stepData = hashMapOf("steps" to stepCount)
+                try {
+                    db.collection("profileData").document(uid).update(stepData as Map<String, Any>).await()
+                    Log.d("success", "Step count updated successfully.")
+                } catch (e: FirebaseFirestoreException) {
+                    Log.d("error", "saveStepCountToFirestore: $e")
+                }
+            }
+        }
+    }
 
     fun saveNotes(note1: String, note2: String) {
         viewModelScope.launch {
@@ -99,4 +132,18 @@ class ProgressDataViewModel : ViewModel() {
         }
         return data
     }
+
+    private suspend fun getStepCountFromFirestore() {
+        try {
+            val uid = getCurrentUserUid().toString()
+            val document = db.collection("profileData").document(uid).get().await()
+            if (document.exists()) {
+                val stepCount = document.getLong("steps")?.toInt() ?: 0
+                _stepCount.value = stepCount
+            }
+        } catch (e: FirebaseFirestoreException) {
+            Log.d("error", "getStepCountFromFirestore: $e")
+        }
+    }
+
 }

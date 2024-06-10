@@ -6,4 +6,5 @@ data class ProgressDataUIState (
     val afterWeight: String = "",
     val note1: String = "",
     val note2: String = "",
+    val steps: Int = 0
 )

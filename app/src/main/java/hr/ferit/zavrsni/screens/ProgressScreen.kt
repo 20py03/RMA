@@ -1,5 +1,10 @@
 package hr.ferit.zavrsni.screens
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -15,6 +20,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,6 +67,39 @@ fun ProgressScreen(navController: NavController,
     var note1 by rememberSaveable { mutableStateOf(state.note1) }
     var note2 by rememberSaveable { mutableStateOf(state.note2) }
 
+    DisposableEffect(Unit) {
+        val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        val sensorListener = object : SensorEventListener {
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+            override fun onSensorChanged(event: SensorEvent?) {
+                if (event != null && event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                    val x = event.values[0]
+                    val y = event.values[1]
+                    val z = event.values[2]
+
+                    val totalAcceleration = Math.sqrt((x * x + y * y + z * z).toDouble()) - SensorManager.GRAVITY_EARTH
+
+                    val threshold = 3.5f
+
+                    if (totalAcceleration > threshold) {
+                        progressDataViewModel.incrementStepCount()
+                    }
+                }
+            }
+        }
+
+        sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+
+        onDispose {
+            sensorManager.unregisterListener(sensorListener)
+        }
+    }
+
+    val steps by progressDataViewModel.stepCount.collectAsState()
+
     LaunchedEffect(Unit) {
         progressDataViewModel.getProgressData()
     }
@@ -73,12 +112,15 @@ fun ProgressScreen(navController: NavController,
         note2 = state.note2
     }
 
+    Spacer(modifier = Modifier.height(20.dp))
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = White)
             .padding(16.dp)
     ) {
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -165,6 +207,15 @@ fun ProgressScreen(navController: NavController,
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
+            EmotionLabel("Step count: $steps")
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Absolute.Left
+        ) {
             EmotionLabel("How are you feeling today?")
         }
 
@@ -178,7 +229,7 @@ fun ProgressScreen(navController: NavController,
                 value = note1,
                 onValueChange = { note1 = it },
                 modifier = Modifier
-                    .height(175.dp)
+                    .height(150.dp)
                     .fillMaxWidth()
                     .padding(bottom = 10.dp)
                     .border(2.dp, Blue, shape = RoundedCornerShape(8.dp)),
@@ -215,7 +266,7 @@ fun ProgressScreen(navController: NavController,
                 value = note2,
                 onValueChange = { note2 = it },
                 modifier = Modifier
-                    .height(175.dp)
+                    .height(150.dp)
                     .fillMaxWidth()
                     .padding(bottom = 10.dp)
                     .border(2.dp, Blue, shape = RoundedCornerShape(8.dp)),
