@@ -222,8 +222,9 @@ fun ConfirmPwdTextFieldComponent(labelValue: String, painterResource: Painter, o
         maxLines = 1,
         value = password.value,
         onValueChange = {
-            password.value = it
-            onTextSelected(it)
+            val sanitizedInput = it.replace(" ", "")
+            password.value = sanitizedInput
+            onTextSelected(sanitizedInput)
         },
         leadingIcon = {
             Icon(

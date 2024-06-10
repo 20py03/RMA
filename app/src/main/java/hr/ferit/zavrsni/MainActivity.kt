@@ -75,7 +75,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showNotification() {
-
         WaterFoodNotification.showNotification(this)
     }
 }

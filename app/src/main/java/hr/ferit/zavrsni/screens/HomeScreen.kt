@@ -41,9 +41,6 @@ fun HomeScreen(
     sharedViewModel: SharedViewModel
 ) {
 
-    //val waterFoodNotification = WaterFoodNotification()
-    //val context = LocalContext.current
-
     val energyData = profileDataViewModel.energyDataViewModel.state.value
     val goalCalories: Int = energyData.goalCalories.toIntOrNull() ?: 0
     val breakfastCalories: Int = mealDataViewModel.state.value.breakfast.breakfastCalories
@@ -57,26 +54,7 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
         mealDataViewModel.getMealData()
         profileDataViewModel.getProfileData()
-
-        /*
-        val waterNotDrunk = mealDataViewModel.state.value.waterGlasses.any { !it }
-        val tooManyCalories = eatenCal > goalCalories
-        val tooFewCalories = remainingCal > 800
-
-        if (waterNotDrunk) {
-            waterFoodNotification.showNotification(context,"Reminder", "You haven't drunk all your water today.")
-        }
-
-        if (tooManyCalories) {
-            waterFoodNotification.showNotification(context,"Calorie Alert", "You have exceeded your calorie goal.")
-        }
-
-        if (tooFewCalories) {
-            waterFoodNotification.showNotification(context,"Calorie Alert", "You have consumed too few calories.")
-        }
-         */
     }
-
 
     Surface (
         modifier = Modifier

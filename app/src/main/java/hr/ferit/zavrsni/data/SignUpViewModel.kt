@@ -24,7 +24,7 @@ class SignUpViewModel : ViewModel(){
 
     fun onEvent(event: SignUpUIEvent, navController: NavController){
 
-        validateData()
+        //validateData()
         when(event){
 
             is SignUpUIEvent.NameChanged -> {
@@ -49,19 +49,23 @@ class SignUpViewModel : ViewModel(){
             }
 
             is SignUpUIEvent.ConfirmPasswordChanged -> {
+                val sanitizedConfirmPassword = event.confirmPassword.replace(" ", "")
                 registrationUIState.value = registrationUIState.value.copy(
-                    confirmPassword = event.confirmPassword
+                    confirmPassword = sanitizedConfirmPassword
                 )
                 printState()
             }
 
             is SignUpUIEvent.RegisterButtonClicked -> {
-                signUp(navController)
+                validateData()
+                if (allValidationsPassed.value) {
+                    signUp(navController)
+                }
             }
 
             else -> {}
         }
-
+        validateData()
     }
 
     private fun signUp(navController: NavController) {
