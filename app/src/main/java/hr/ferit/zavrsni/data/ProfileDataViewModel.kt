@@ -39,9 +39,7 @@ class ProfileDataViewModel : ViewModel() {
             }
         }
     }
-
-
-
+    
     fun saveEnergyData() {
         viewModelScope.launch {
             val uid = getCurrentUser()?.uid
