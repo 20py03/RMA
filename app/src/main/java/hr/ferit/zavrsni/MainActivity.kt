@@ -6,26 +6,33 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import hr.ferit.zavrsni.data.EnergyDataUIState
+import hr.ferit.zavrsni.data.MealDataUIState
+import hr.ferit.zavrsni.data.MealDataViewModel
+import hr.ferit.zavrsni.data.ProfileDataUIState
+import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.ui.theme.ZavrsniTheme
+import kotlinx.coroutines.tasks.await
 
 class MainActivity : ComponentActivity() {
-
-
     object WaterFoodNotification {
         private const val CHANNEL_ID = "water_and_calories_channel"
-        private const val NOTIFICATION_ID = 1
 
-        fun showNotification(context: Context) {
+        fun showNotification(context: Context, title: String, content: String, notificationId: Int) {
             val builder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.gym_dumbbell_icon)
-                .setContentTitle("Time to hydrate and eat!")
-                .setContentText("Don't forget to drink water and have a meal.")
+                .setContentTitle(title)
+                .setContentText(content)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
             with(NotificationManagerCompat.from(context)) {
@@ -34,16 +41,9 @@ class MainActivity : ComponentActivity() {
                         Manifest.permission.POST_NOTIFICATIONS
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
                     return
                 }
-                notify(NOTIFICATION_ID, builder.build())
+                notify(notificationId, builder.build())
             }
         }
     }
@@ -67,15 +67,36 @@ class MainActivity : ComponentActivity() {
                     1001
                 )
             } else {
-                showNotification()
+                checkAndShowNotifications()
             }
         } else {
-            showNotification()
+            checkAndShowNotifications()
         }
     }
 
-    private fun showNotification() {
-        WaterFoodNotification.showNotification(this)
+    private fun checkAndShowNotifications() {
+
+        val db = FirebaseFirestore.getInstance()
+        val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        db.collection("profileData").document(uid).get()
+            .addOnSuccessListener {
+                val data = it.toObject(MealDataUIState::class.java)!!
+                val waterIntake = data.waterGlasses.count { it }
+                val goalWaterIntake = 8
+                val totalCalories = data.breakfast.breakfastCalories +
+                        data.lunch.lunchCalories +
+                        data.dinner.dinnerCalories +
+                        data.snack.snackCalories
+                val goalCalories = it.toObject(EnergyDataUIState::class.java)!!.goalCalories.toIntOrNull() ?: 0
+                if (waterIntake < goalWaterIntake) {
+                    WaterFoodNotification.showNotification(this, "Hydration Alert", "You haven't drunk enough water today!", 1)
+                }
+                if (totalCalories > goalCalories) {
+                    WaterFoodNotification.showNotification(this, "Calorie Alert", "You've exceeded your calorie intake goal!", 2)
+                } else if (totalCalories < goalCalories) {
+                    WaterFoodNotification.showNotification(this, "Calorie Alert", "You haven't met your calorie intake goal!", 3)
+                }
+            }
     }
 }
 

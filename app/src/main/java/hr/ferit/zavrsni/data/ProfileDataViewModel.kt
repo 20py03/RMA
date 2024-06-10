@@ -17,6 +17,10 @@ class ProfileDataViewModel : ViewModel() {
     val state = mutableStateOf(ProfileDataUIState())
     val energyDataViewModel = EnergyDataViewModel()
 
+    init {
+        getProfileData()
+    }
+
     fun getProfileData() {
         viewModelScope.launch {
             val user = getCurrentUser()
@@ -57,13 +61,13 @@ class ProfileDataViewModel : ViewModel() {
             if (document.exists()) {
                 data = document.toObject(ProfileDataUIState::class.java) ?: ProfileDataUIState()
             }
-        } catch (e: FirebaseFirestoreException) {
-            Log.d("error", "getDataFromFirestore: $e")
+        } catch (e: Exception) {
+            Log.w("error", "getDataFromFirestore: ${e.message}")
         }
         return data
     }
 
-    private suspend fun getCurrentUser(): FirebaseUser? {
+    private fun getCurrentUser(): FirebaseUser? {
         return FirebaseAuth.getInstance().currentUser
     }
 

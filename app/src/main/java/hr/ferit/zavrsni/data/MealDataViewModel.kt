@@ -24,6 +24,10 @@ import kotlinx.coroutines.tasks.await
 class MealDataViewModel : ViewModel() {
     val state = mutableStateOf(MealDataUIState())
 
+    init {
+        getMealData()
+    }
+
     private fun getCurrentUserUid(): String? {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
