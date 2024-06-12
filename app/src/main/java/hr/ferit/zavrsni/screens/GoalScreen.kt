@@ -99,6 +99,7 @@ fun GoalScreen(navController: NavController, loginViewModel : LoginViewModel = v
                         ).show()
                     }
             },
+            enabled = selectedGoal.isNotEmpty(),
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
                 .padding(top = 60.dp)

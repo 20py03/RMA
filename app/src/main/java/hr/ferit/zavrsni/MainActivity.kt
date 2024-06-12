@@ -76,6 +76,9 @@ class MainActivity : ComponentActivity() {
 
     private fun checkAndShowNotifications() {
 
+        val currentUser = FirebaseAuth.getInstance().currentUser
+            ?: return  // User not logged in, do not show notifications
+
         val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
         db.collection("profileData").document(uid).get()

@@ -58,7 +58,7 @@ fun HeightScreen(navController: NavController, loginViewModel : LoginViewModel =
                 .background(color = Blue)
         )
 
-        var selectedHeight by remember { mutableStateOf(150) }
+        var selectedHeight by remember { mutableStateOf(0) }
 
         val heights = (150..200).toList()
 
@@ -112,6 +112,7 @@ fun HeightScreen(navController: NavController, loginViewModel : LoginViewModel =
                     ).show()
                 }
             },
+            enabled = selectedHeight != 0,
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
                 .padding(top = 130.dp)

@@ -138,6 +138,7 @@ fun GenderScreen(navController: NavController, loginViewModel:LoginViewModel= vi
                     ).show()
                 }
         },
+            enabled = selectedGender.isNotEmpty(),
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
                 .padding(top = 16.dp)

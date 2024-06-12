@@ -99,6 +99,7 @@ fun ActivityScreen(navController: NavController, loginViewModel : LoginViewModel
                     ).show()
                 }
             },
+            enabled = selectedActivity.isNotEmpty(),
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
                 .padding(top = 60.dp)

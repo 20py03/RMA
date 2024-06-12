@@ -57,7 +57,7 @@ fun WeightScreen(navController: NavController, loginViewModel:LoginViewModel= vi
                 .background(color = Blue)
         )
 
-        var selectedWeight by remember { mutableStateOf(50) }
+        var selectedWeight by remember { mutableStateOf(0) }
 
         val weights = (50..110).toList()
 
@@ -111,6 +111,7 @@ fun WeightScreen(navController: NavController, loginViewModel:LoginViewModel= vi
                         ).show()
                     }
             },
+            enabled = selectedWeight != 0,
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
                 .padding(top = 130.dp)

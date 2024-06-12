@@ -44,8 +44,7 @@ import java.util.Calendar
 @Composable
 fun YearScreen(navController: NavController, loginViewModel:LoginViewModel= viewModel()) {
 
-    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-    var selectedYear by remember { mutableStateOf(currentYear) }
+    var selectedYear by remember { mutableStateOf(0) }
     val context = LocalContext.current
 
     Column(
@@ -124,6 +123,7 @@ fun YearScreen(navController: NavController, loginViewModel:LoginViewModel= view
                     ).show()
                 }
             },
+            enabled = selectedYear != 0,
             colors = ButtonDefaults.buttonColors(containerColor = Blue),
             modifier = Modifier
                 .padding(top = 130.dp)
