@@ -75,30 +75,45 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun checkAndShowNotifications() {
-
         val currentUser = FirebaseAuth.getInstance().currentUser
-            ?: return  // User not logged in, do not show notifications
+        if (currentUser == null) {
+            Log.d("MainActivity", "User not logged in, skipping notifications.")
+            return
+        }
 
         val db = FirebaseFirestore.getInstance()
-        val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        val uid = currentUser.uid
         db.collection("profileData").document(uid).get()
-            .addOnSuccessListener {
-                val data = it.toObject(MealDataUIState::class.java)!!
-                val waterIntake = data.waterGlasses.count { it }
-                val goalWaterIntake = 8
-                val totalCalories = data.breakfast.breakfastCalories +
-                        data.lunch.lunchCalories +
-                        data.dinner.dinnerCalories +
-                        data.snack.snackCalories
-                val goalCalories = it.toObject(EnergyDataUIState::class.java)!!.goalCalories.toIntOrNull() ?: 0
-                if (waterIntake < goalWaterIntake) {
-                    WaterFoodNotification.showNotification(this, "Hydration Alert", "You haven't drunk enough water today!", 1)
+            .addOnSuccessListener { document ->
+                try {
+                    val data = document.toObject(MealDataUIState::class.java)
+                    if (data == null) {
+                        Log.e("MainActivity", "MealDataUIState is null")
+                        return@addOnSuccessListener
+                    }
+
+                    val waterIntake = data.waterGlasses.count { it }
+                    val goalWaterIntake = 8
+                    val totalCalories = data.breakfast.breakfastCalories +
+                            data.lunch.lunchCalories +
+                            data.dinner.dinnerCalories +
+                            data.snack.snackCalories
+                    val goalCalories = document.toObject(EnergyDataUIState::class.java)?.goalCalories?.toIntOrNull() ?: 0
+
+                    if (waterIntake < goalWaterIntake) {
+                        WaterFoodNotification.showNotification(this, "Hydration Alert", "You haven't drunk enough water today!", 1)
+                    }
+                    if (totalCalories < goalCalories) {
+                        WaterFoodNotification.showNotification(this, "Calorie Alert", "You've exceeded your calorie intake goal!", 2)
+                    } else if (totalCalories > goalCalories) {
+                        WaterFoodNotification.showNotification(this, "Calorie Alert", "You haven't met your calorie intake goal!", 3)
+                    }
+                } catch (e: Exception) {
+                    Log.e("MainActivity", "Error processing Firestore document", e)
                 }
-                if (totalCalories < goalCalories) {
-                    WaterFoodNotification.showNotification(this, "Calorie Alert", "You've exceeded your calorie intake goal!", 2)
-                } else if (totalCalories > goalCalories) {
-                    WaterFoodNotification.showNotification(this, "Calorie Alert", "You haven't met your calorie intake goal!", 3)
-                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("MainActivity", "Error getting documents: ", exception)
             }
     }
 }

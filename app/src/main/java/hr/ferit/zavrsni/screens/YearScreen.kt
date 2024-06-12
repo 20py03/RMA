@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -36,6 +38,9 @@ import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import hr.ferit.zavrsni.AppNavigation
+import hr.ferit.zavrsni.R
+import hr.ferit.zavrsni.components.ButtonComponent
+import hr.ferit.zavrsni.components.HeadingTextComponent
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
@@ -50,22 +55,19 @@ fun YearScreen(navController: NavController, loginViewModel:LoginViewModel= view
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = White),
-        verticalArrangement = Arrangement.Top,
+            .background(color = White)
+            .padding(28.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "How old are you?",
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center,
-            color = Blue,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 70.dp, bottom = 150.dp)
-        )
+        Spacer(modifier = Modifier.height(50.dp))
+
+        HeadingTextComponent(value = "How old are you?")
+
+        Spacer(modifier = Modifier.height(80.dp))
 
         Box(
             modifier = Modifier
-                .padding(vertical = 16.dp)
                 .fillMaxWidth()
                 .height(10.dp)
                 .background(color = Blue)
@@ -80,7 +82,7 @@ fun YearScreen(navController: NavController, loginViewModel:LoginViewModel= view
             contentAlignment = Alignment.Center
         ) {
             LazyRow(
-                modifier = Modifier.padding(horizontal = 25.dp)
+                modifier = Modifier.padding(horizontal = 10.dp)
             ) {
                 items(years.take(100).count()) { index ->
                     val year = years[index]
@@ -103,13 +105,15 @@ fun YearScreen(navController: NavController, loginViewModel:LoginViewModel= view
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp)
                 .height(10.dp)
                 .background(color = Blue)
         )
 
-        Button(
-            onClick = {
+        Spacer(modifier = Modifier.height(80.dp))
+
+        ButtonComponent(
+            value = stringResource(id = R.string.next),
+            onButtonClicked = {
                 if (loginViewModel.currentUser != null) {
                     val uid = loginViewModel.currentUser?.uid
                     if(uid!=null){
@@ -123,21 +127,8 @@ fun YearScreen(navController: NavController, loginViewModel:LoginViewModel= view
                     ).show()
                 }
             },
-            enabled = selectedYear != 0,
-            colors = ButtonDefaults.buttonColors(containerColor = Blue),
-            modifier = Modifier
-                .padding(top = 130.dp)
-                .height(56.dp)
-                .fillMaxWidth(0.7f)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            Text(
-                text = "Next",
-                color = White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
+            isEnabled = selectedYear != 0
+        )
     }
 }
 

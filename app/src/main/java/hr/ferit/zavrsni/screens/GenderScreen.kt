@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,9 @@ import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
+import hr.ferit.zavrsni.components.ButtonComponent
+import hr.ferit.zavrsni.components.HeadingTextComponent
+import hr.ferit.zavrsni.data.LoginUIEvent
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.White
@@ -54,18 +58,15 @@ fun GenderScreen(navController: NavController, loginViewModel:LoginViewModel= vi
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = White),
+            .background(color = White)
+            .padding(28.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Tell us about yourself!",
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center,
-            color = Blue,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+
+        HeadingTextComponent(value = "Tell us about yourself!")
+
+        Spacer(modifier = Modifier.height(50.dp))
 
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -122,9 +123,12 @@ fun GenderScreen(navController: NavController, loginViewModel:LoginViewModel= vi
                 )
             }
         }
+        
+        Spacer(modifier = Modifier.height(50.dp))
 
-        Button(
-            onClick = {
+        ButtonComponent(
+            value = stringResource(id = R.string.next),
+            onButtonClicked = {
                 if (loginViewModel.currentUser != null) {
                     val uid = loginViewModel.currentUser?.uid
                     if(uid!=null){
@@ -137,22 +141,9 @@ fun GenderScreen(navController: NavController, loginViewModel:LoginViewModel= vi
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-        },
-            enabled = selectedGender.isNotEmpty(),
-            colors = ButtonDefaults.buttonColors(containerColor = Blue),
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .height(56.dp)
-                .fillMaxWidth(0.7f)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            Text(
-                text = "Next",
-                color = White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
+            },
+            isEnabled = selectedGender.isNotEmpty()
+        )
     }
 }
 

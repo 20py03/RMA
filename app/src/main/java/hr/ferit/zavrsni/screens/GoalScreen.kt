@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,9 @@ import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import hr.ferit.zavrsni.AppNavigation
+import hr.ferit.zavrsni.R
+import hr.ferit.zavrsni.components.ButtonComponent
+import hr.ferit.zavrsni.components.HeadingTextComponent
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
@@ -53,14 +57,9 @@ fun GoalScreen(navController: NavController, loginViewModel : LoginViewModel = v
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "What is your goal?",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Blue,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 25.dp)
-        )
+        HeadingTextComponent(value = "What is your goal?")
+
+        Spacer(modifier = Modifier.height(50.dp))
 
         goals.forEach { goal ->
             Box(
@@ -84,36 +83,26 @@ fun GoalScreen(navController: NavController, loginViewModel : LoginViewModel = v
             }
         }
 
-        Button(
-                onClick = {
-                    if (loginViewModel.currentUser != null) {
-                        val uid = loginViewModel.currentUser?.uid
-                        if(uid!=null){
-                            saveGoalToFirestore(selectedGoal, uid, navController)
-                        }
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Please log in to continue",
-                            Toast.LENGTH_SHORT
-                        ).show()
+        Spacer(modifier = Modifier.height(50.dp))
+
+        ButtonComponent(
+            value = stringResource(id = R.string.next),
+            onButtonClicked = {
+                if (loginViewModel.currentUser != null) {
+                    val uid = loginViewModel.currentUser?.uid
+                    if(uid!=null){
+                        saveGoalToFirestore(selectedGoal, uid, navController)
                     }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Please log in to continue",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             },
-            enabled = selectedGoal.isNotEmpty(),
-            colors = ButtonDefaults.buttonColors(containerColor = Blue),
-            modifier = Modifier
-                .padding(top = 60.dp)
-                .height(56.dp)
-                .fillMaxWidth(0.7f)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            Text(
-                text = "Next",
-                color = White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
+            isEnabled = selectedGoal.isNotEmpty()
+        )
     }
 }
 
