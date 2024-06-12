@@ -28,7 +28,6 @@ import hr.ferit.zavrsni.components.HeadingTextComponent
 import hr.ferit.zavrsni.components.LoginPwdTextFieldComponent
 import hr.ferit.zavrsni.components.MyTextFieldComponent
 import hr.ferit.zavrsni.components.NormalTextComponent
-import hr.ferit.zavrsni.components.PwdTextFieldComponent
 import hr.ferit.zavrsni.data.LoginUIEvent
 import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.ui.theme.White

@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.data.validation.Validator
 

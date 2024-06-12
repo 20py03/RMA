@@ -14,11 +14,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,27 +34,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.firebase.firestore.FirebaseFirestore
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.components.AddFoodDialog
 import hr.ferit.zavrsni.components.ClicableTextComponent
 import hr.ferit.zavrsni.components.DividerComponent
 import hr.ferit.zavrsni.components.Footer
-import hr.ferit.zavrsni.data.Breakfast
-import hr.ferit.zavrsni.data.Dinner
 import hr.ferit.zavrsni.data.Food
 import hr.ferit.zavrsni.data.FoodViewModel
-import hr.ferit.zavrsni.data.Lunch
-import hr.ferit.zavrsni.data.MealDataUIState
 import hr.ferit.zavrsni.data.MealDataViewModel
-import hr.ferit.zavrsni.data.ProfileDataUIState
-import hr.ferit.zavrsni.data.ProfileDataViewModel
-import hr.ferit.zavrsni.data.Snack
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.White
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 @Composable
 fun CalorieCounterScreen(navController: NavController,

@@ -1,23 +1,13 @@
 package hr.ferit.zavrsni.data
 
-import android.Manifest
-import android.app.NotificationManager
-import android.content.Context
-import android.content.pm.PackageManager
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
-import hr.ferit.zavrsni.MainActivity
-import hr.ferit.zavrsni.R
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -128,7 +118,7 @@ class MealDataViewModel : ViewModel() {
         }
     }
 
-    suspend fun saveMeal(mealType: Int, food: Food, grams: Int) {
+    fun saveMeal(mealType: Int, food: Food, grams: Int) {
         val uid = getCurrentUserUid() ?: return
         val firestore = FirebaseFirestore.getInstance()
         val docRef = firestore.collection("profileData").document(uid)
@@ -200,16 +190,4 @@ class MealDataViewModel : ViewModel() {
             }
         }
     }
-
-    /* NEISKORISTENO
-    fun addFoodToMeal(mealType: Int, food: Food, calories: Int) {
-        _profileData.value = _profileData.value.copy(
-            breakfast = if (mealType == 0) Breakfast(_profileData.value.breakfast.breakfastFoods.plus(food)) else _profileData.value.breakfast,
-            lunch = if (mealType == 1) Lunch(_profileData.value.lunch.lunchFoods.plus(food)) else _profileData.value.lunch,
-            dinner = if (mealType == 2) Dinner(_profileData.value.dinner.dinnerFoods.plus(food)) else _profileData.value.dinner,
-            snack = if (mealType == 3) Snack(_profileData.value.snack.snackFoods.plus(food)) else _profileData.value.snack
-        )
-    }
-    */
-
 }
