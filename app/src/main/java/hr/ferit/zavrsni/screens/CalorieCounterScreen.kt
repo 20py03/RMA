@@ -58,10 +58,12 @@ fun CalorieCounterScreen(navController: NavController,
     var showDialog by remember { mutableStateOf(false) }
     var selectedFood by remember { mutableStateOf<Food?>(null) }
     val allFoodItems by foodViewModel.allFoodItems.collectAsState()
+    val profileData by mealDataViewModel.profileData.collectAsState()
 
     LaunchedEffect(Unit) {
         mealDataViewModel.getMealData()
     }
+
 
     Column(
         modifier = Modifier
@@ -109,11 +111,12 @@ fun CalorieCounterScreen(navController: NavController,
 
         Spacer(modifier = Modifier.height(20.dp))
 
+
         when (mealType) {
             0 -> {
                 Text("Breakfast Foods:")
                 LazyColumn {
-                    items(mealDataViewModel.profileData.value.breakfast.breakfastFoods) { food ->
+                    items(profileData.breakfast.breakfastFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -155,7 +158,7 @@ fun CalorieCounterScreen(navController: NavController,
             2 -> {
                 Text("Dinner Foods:")
                 LazyColumn {
-                    items(mealDataViewModel.profileData.value.dinner.dinnerFoods) { food ->
+                    items(profileData.dinner.dinnerFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -175,7 +178,7 @@ fun CalorieCounterScreen(navController: NavController,
             3 -> {
                 Text("Snack Foods:")
                 LazyColumn {
-                    items(mealDataViewModel.profileData.value.snack.snackFoods) { food ->
+                    items(profileData.snack.snackFoods) { food ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -200,19 +203,19 @@ fun CalorieCounterScreen(navController: NavController,
         when (mealType) {
 
             0 -> {
-                Text("Total Calories: ${mealDataViewModel.profileData.value.breakfast.breakfastCalories}")
+                Text("Total Calories: ${profileData.breakfast.breakfastCalories}")
             }
 
             1 -> {
-                Text("Total Calories: ${mealDataViewModel.profileData.value.lunch.lunchCalories}")
+                Text("Total Calories: ${profileData.lunch.lunchCalories}")
             }
 
             2 -> {
-                Text("Total Calories: ${mealDataViewModel.profileData.value.dinner.dinnerCalories}")
+                Text("Total Calories: ${profileData.dinner.dinnerCalories}")
             }
 
             3 -> {
-                Text("Total Calories: ${mealDataViewModel.profileData.value.snack.snackCalories}")
+                Text("Total Calories: ${profileData.snack.snackCalories}")
             }
             else -> Text("Total Calories: $totalCalories")
         }
@@ -224,9 +227,7 @@ fun CalorieCounterScreen(navController: NavController,
                 onAdd = { grams ->
                     selectedFoods = selectedFoods + Pair(selectedFood!!, grams)
                     
-                    mealDataViewModel.viewModelScope.launch {
-                        mealDataViewModel.saveMeal(mealType, selectedFood!!, grams)
-                    }
+                    mealDataViewModel.saveMeal(mealType, selectedFood!!, grams)
                     showDialog = false
                 }
             )

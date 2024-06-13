@@ -42,7 +42,7 @@ fun HomeScreen(
 ) {
 
     val energyData = profileDataViewModel.energyDataViewModel.state.value
-    val goalCalories: Int = energyData.goalCalories.toIntOrNull() ?: 0
+    val goalCalories: Int = energyData.energyData.goalCalories.toIntOrNull() ?: 0
     val breakfastCalories: Int = mealDataViewModel.state.value.breakfast.breakfastCalories
     val lunchCalories: Int = mealDataViewModel.state.value.lunch.lunchCalories
     val dinnerCalories: Int = mealDataViewModel.state.value.dinner.dinnerCalories
@@ -93,7 +93,7 @@ fun HomeScreen(
                         )
 
                         Text(
-                            text = "${energyData.goalCalories}\nkcal",
+                            text = "${energyData.energyData.goalCalories}\nkcal",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
@@ -116,21 +116,21 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "Carbs\n ${energyData.carbohydrates}g",
+                            text = "Carbs\n ${energyData.energyData.carbohydrates}g",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp,
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "Protein\n ${energyData.protein}g",
+                            text = "Protein\n ${energyData.energyData.protein}g",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp,
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "Fat\n ${energyData.fat}g",
+                            text = "Fat\n ${energyData.energyData.fat}g",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp,

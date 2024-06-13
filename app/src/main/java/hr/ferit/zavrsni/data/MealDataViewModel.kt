@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -22,13 +24,8 @@ class MealDataViewModel : ViewModel() {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
 
-    private val _profileData = mutableStateOf(MealDataUIState(
-        breakfast = Breakfast(),
-        lunch = Lunch(),
-        dinner = Dinner(),
-        snack = Snack()
-    ))
-    val profileData: State<MealDataUIState> = _profileData
+    private val _profileData = MutableStateFlow(MealDataUIState())
+    val profileData: StateFlow<MealDataUIState> = _profileData
 
     fun getMealData() {
         viewModelScope.launch {
@@ -47,50 +44,64 @@ class MealDataViewModel : ViewModel() {
         try {
             db.collection("profileData").document(uid).update(updates).await()
             Log.d("success", "Profile data updated successfully.")
-            getMealData()
         } catch (e: FirebaseFirestoreException) {
             Log.d("error", "updateProfileDataInFirestore: $e")
         }
+        getMealData()
     }
 
     fun removeFoodFromMeal(mealType: Int, food: Food) {
         viewModelScope.launch {
             val uid = getCurrentUserUid()
             if (uid != null) {
-                val updatedData = when (mealType) {
+                when (mealType) {
                     0 -> {
                         val newFoods = _profileData.value.breakfast.breakfastFoods.filter { it != food }
                         val updatedCalories = _profileData.value.breakfast.breakfastCalories - (food.calories * food.grams) / 100
-                        _profileData.value.breakfast = Breakfast(newFoods, updatedCalories)
-                        _profileData.value
+                        _profileData.value = _profileData.value.copy(
+                            breakfast = _profileData.value.breakfast.copy(
+                                breakfastFoods = newFoods,
+                                breakfastCalories = updatedCalories
+                            )
+                        )
                     }
                     1 -> {
                         val newFoods = _profileData.value.lunch.lunchFoods.filter { it != food }
                         val updatedCalories = _profileData.value.lunch.lunchCalories - (food.calories * food.grams) / 100
-                        _profileData.value.lunch = Lunch(newFoods, updatedCalories)
-                        _profileData.value
+                        _profileData.value = _profileData.value.copy(
+                            lunch = _profileData.value.lunch.copy(
+                                lunchFoods = newFoods,
+                                lunchCalories = updatedCalories
+                            )
+                        )
                     }
                     2 -> {
                         val newFoods = _profileData.value.dinner.dinnerFoods.filter { it != food }
                         val updatedCalories = _profileData.value.dinner.dinnerCalories - (food.calories * food.grams) / 100
-                        _profileData.value.dinner = Dinner(newFoods, updatedCalories)
-                        _profileData.value
+                        _profileData.value = _profileData.value.copy(
+                            dinner = _profileData.value.dinner.copy(
+                                dinnerFoods = newFoods,
+                                dinnerCalories = updatedCalories
+                            )
+                        )
                     }
                     3 -> {
                         val newFoods = _profileData.value.snack.snackFoods.filter { it != food }
                         val updatedCalories = _profileData.value.snack.snackCalories - (food.calories * food.grams) / 100
-                        _profileData.value.snack = Snack(newFoods, updatedCalories)
-                        _profileData.value
+                        _profileData.value = _profileData.value.copy(
+                            snack = _profileData.value.snack.copy(
+                                snackFoods = newFoods,
+                                snackCalories = updatedCalories,
+                            )
+                        )
                     }
-                    else -> _profileData.value
                 }
-                _profileData.value = updatedData
 
                 val updates = when (mealType) {
-                    0 -> mapOf("breakfast" to updatedData.breakfast)
-                    1 -> mapOf("lunch" to updatedData.lunch)
-                    2 -> mapOf("dinner" to updatedData.dinner)
-                    3 -> mapOf("snack" to updatedData.snack)
+                    0 -> mapOf("breakfast" to _profileData.value.breakfast)
+                    1 -> mapOf("lunch" to _profileData.value.lunch)
+                    2 -> mapOf("dinner" to _profileData.value.dinner)
+                    3 -> mapOf("snack" to _profileData.value.snack)
                     else -> emptyMap()
                 }
                 updateFoodDataInFirestore(uid, updates)
@@ -160,6 +171,7 @@ class MealDataViewModel : ViewModel() {
         } catch (e: Exception) {
             Log.e("SaveMeal", "Error saving meal: ${e.message}", e)
         }
+        getMealData()
     }
 
     fun toggleWaterGlass(index: Int) {

@@ -60,11 +60,11 @@ fun ProfileScreen(
         ProfileInfo("Weight: ${getData.weight}")
         ProfileInfo("Goal: ${getData.goal}")
         ProfileInfo("Activity: ${getData.activity}")
-        ProfileInfo("TDEE: ${energyData.tdee} kcal")
-        ProfileInfo("Calories intake: ${energyData.goalCalories} kcal")
-        ProfileInfo("Proteins: ${energyData.protein} g")
-        ProfileInfo("Carbs: ${energyData.carbohydrates} g")
-        ProfileInfo("Fats: ${energyData.fat} g")
+        ProfileInfo("TDEE: ${energyData.energyData.tdee} kcal")
+        ProfileInfo("Calories intake: ${energyData.energyData.goalCalories} kcal")
+        ProfileInfo("Proteins: ${energyData.energyData.protein} g")
+        ProfileInfo("Carbs: ${energyData.energyData.carbohydrates} g")
+        ProfileInfo("Fats: ${energyData.energyData.fat} g")
 
         Spacer(modifier = Modifier.height(15.dp))
 

@@ -93,19 +93,20 @@ class MainActivity : ComponentActivity() {
                     }
 
                     val waterIntake = data.waterGlasses.count { it }
-                    val goalWaterIntake = 8
+                    val goalWaterIntake = 7
                     val totalCalories = data.breakfast.breakfastCalories +
                             data.lunch.lunchCalories +
                             data.dinner.dinnerCalories +
                             data.snack.snackCalories
-                    val goalCalories = document.toObject(EnergyDataUIState::class.java)?.goalCalories?.toIntOrNull() ?: 0
+                    val goalCalories = document.toObject(EnergyDataUIState::class.java)!!.energyData.goalCalories.toIntOrNull() ?: 0
 
-                    if (waterIntake < goalWaterIntake) {
+
+                    if (waterIntake != goalWaterIntake) {
                         WaterFoodNotification.showNotification(this, "Hydration Alert", "You haven't drunk enough water today!", 1)
                     }
-                    if (totalCalories < goalCalories) {
+                    if (totalCalories > goalCalories) {
                         WaterFoodNotification.showNotification(this, "Calorie Alert", "You've exceeded your calorie intake goal!", 2)
-                    } else if (totalCalories > goalCalories) {
+                    } else if (totalCalories < goalCalories) {
                         WaterFoodNotification.showNotification(this, "Calorie Alert", "You haven't met your calorie intake goal!", 3)
                     }
                 } catch (e: Exception) {

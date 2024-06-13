@@ -34,6 +34,7 @@ class ProfileDataViewModel : ViewModel() {
                 )
                 data.name = user.displayName!!
                 state.value = data
+                saveEnergyData()
             }
         }
     }
@@ -71,7 +72,7 @@ class ProfileDataViewModel : ViewModel() {
         val db = FirebaseFirestore.getInstance()
 
         try {
-            db.collection("profileData").document(uid).set(energyData).await()
+            db.collection("profileData").document(uid).update("energyData",energyData.energyData).await()
             Log.d("success", "Energy data saved successfully.")
         } catch (e: FirebaseFirestoreException) {
             Log.d("error", "saveEnergyDataToFirestore: $e")

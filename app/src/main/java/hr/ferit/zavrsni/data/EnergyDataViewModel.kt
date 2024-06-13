@@ -24,11 +24,13 @@ class EnergyDataViewModel : ViewModel() {
             val carbohydrates = calculateCarbohydrates(goalCalories, protein, fat)
 
             state.value = EnergyDataUIState(
-                tdee = formatValue(tdee),
-                goalCalories = formatValue(goalCalories),
-                protein = formatValue(protein),
-                fat = formatValue(fat),
-                carbohydrates = formatValue(carbohydrates)
+                EnergyData(
+                    tdee = formatValue(tdee),
+                    goalCalories = formatValue(goalCalories),
+                    protein = formatValue(protein),
+                    fat = formatValue(fat),
+                    carbohydrates = formatValue(carbohydrates)
+                )
             )
         }
     }
