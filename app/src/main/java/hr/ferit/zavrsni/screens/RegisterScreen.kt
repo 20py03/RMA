@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,12 +32,13 @@ import hr.ferit.zavrsni.components.HeadingTextComponent
 import hr.ferit.zavrsni.components.MyTextFieldComponent
 import hr.ferit.zavrsni.components.NormalTextComponent
 import hr.ferit.zavrsni.components.PwdTextFieldComponent
+import hr.ferit.zavrsni.data.RegistrationUIState
 import hr.ferit.zavrsni.data.SignUpViewModel
 import hr.ferit.zavrsni.data.SignUpUIEvent
 import hr.ferit.zavrsni.ui.theme.White
 
 @Composable
-fun RegisterScreen(navController: NavHostController, loginViewModel: SignUpViewModel = viewModel ()) {
+fun RegisterScreen(navController: NavHostController, registerViewModel: SignUpViewModel = viewModel ()) {
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -53,49 +57,52 @@ fun RegisterScreen(navController: NavHostController, loginViewModel: SignUpViewM
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                Text(text = if(!registerViewModel.registrationUIState.value.errorText.isNullOrEmpty()) registerViewModel.registrationUIState.value.errorText else "",
+                    color = Color.Red)
+
                 MyTextFieldComponent(
                     labelValue = stringResource(id = R.string.name),
                     painterResource(id = R.drawable.profile_1341_svgrepo_com),
                     onTextSelected = {
-                        loginViewModel.onEvent(SignUpUIEvent.NameChanged(it), navController)
+                        registerViewModel.onEvent(SignUpUIEvent.NameChanged(it), navController)
                     },
-                    errorStatus = loginViewModel.registrationUIState.value.nameError
+                    errorStatus = registerViewModel.registrationUIState.value.nameError
                 )
 
                 MyTextFieldComponent(
                     labelValue = stringResource(id = R.string.e_mail),
                     painterResource = painterResource(id = R.drawable.mail_svgrepo_com),
                     onTextSelected = {
-                        loginViewModel.onEvent(SignUpUIEvent.EmailChanged(it), navController)
+                        registerViewModel.onEvent(SignUpUIEvent.EmailChanged(it), navController)
                     },
-                    errorStatus = loginViewModel.registrationUIState.value.emailError
+                    errorStatus = registerViewModel.registrationUIState.value.emailError
                 )
 
                 PwdTextFieldComponent(
                     labelValue = stringResource(id = R.string.pwd),
                     painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
                     onTextSelected = {
-                        loginViewModel.onEvent(SignUpUIEvent.PasswordChanged(it), navController)
+                        registerViewModel.onEvent(SignUpUIEvent.PasswordChanged(it), navController)
                     },
-                    errorStatus = loginViewModel.registrationUIState.value.passwordError
+                    errorStatus = registerViewModel.registrationUIState.value.passwordError
                 )
 
                 ConfirmPwdTextFieldComponent(
                     labelValue = stringResource(id = R.string.confirm_pwd),
                     painterResource = painterResource(id = R.drawable.lock_alt_svgrepo_com),
                     onTextSelected = {
-                        loginViewModel.onEvent(SignUpUIEvent.ConfirmPasswordChanged(it), navController)
+                        registerViewModel.onEvent(SignUpUIEvent.ConfirmPasswordChanged(it), navController)
                     },
-                    errorStatus = loginViewModel.registrationUIState.value.confirmPasswordError
+                    errorStatus = registerViewModel.registrationUIState.value.confirmPasswordError
                 )
 
                 Spacer(modifier = Modifier.height(80.dp))
 
                 ButtonComponent(value = stringResource(id = R.string.register),
                     onButtonClicked = {
-                        loginViewModel.onEvent(SignUpUIEvent.RegisterButtonClicked, navController)
+                        registerViewModel.onEvent(SignUpUIEvent.RegisterButtonClicked, navController)
                     },
-                    isEnabled = loginViewModel.allValidationsPassed.value
+                    isEnabled = registerViewModel.allValidationsPassed.value
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -109,16 +116,11 @@ fun RegisterScreen(navController: NavHostController, loginViewModel: SignUpViewM
             }
         }
 
-        if(loginViewModel.singUpInProgress.value) {
+        if(registerViewModel.singUpInProgress.value) {
             CircularProgressIndicator()
         }
 
     }
 }
 
-@Preview
-@Composable
-fun DefaultPreviewOfRegisterScreen(){
-    RegisterScreen(navController = rememberNavController())
-}
 

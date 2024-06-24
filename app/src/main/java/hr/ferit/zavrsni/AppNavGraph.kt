@@ -10,6 +10,7 @@ import hr.ferit.zavrsni.data.LoginViewModel
 import hr.ferit.zavrsni.data.SharedViewModel
 import hr.ferit.zavrsni.screens.ActivityScreen
 import hr.ferit.zavrsni.screens.CalorieCounterScreen
+import hr.ferit.zavrsni.screens.EditProfileScreen
 import hr.ferit.zavrsni.screens.FoodEntryScreen
 import hr.ferit.zavrsni.screens.GenderScreen
 import hr.ferit.zavrsni.screens.GoalScreen
@@ -80,6 +81,9 @@ fun AppNavGraph(navController: NavHostController = rememberNavController(),
         }
         composable(route = AppNavigation.CalorieCounterScreen.route){
             CalorieCounterScreen(navController = navController, mealType = sharedViewModel.mealType.value)
+        }
+        composable(route = AppNavigation.EditProfileScreen.route){
+            EditProfileScreen(navController = navController)
         }
     }
 }

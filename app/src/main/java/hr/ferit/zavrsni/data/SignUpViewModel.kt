@@ -94,6 +94,13 @@ class SignUpViewModel : ViewModel(){
             emailError = emailResult.status,
             passwordError = pwdResult.status,
             confirmPasswordError = confirmPwdResult.status,
+            errorText = when {
+                !emailResult.errorMessage.isNullOrEmpty() -> emailResult.errorMessage.toString()
+                !pwdResult.errorMessage.isNullOrEmpty() -> pwdResult.errorMessage.toString()
+                !confirmPwdResult.errorMessage.isNullOrEmpty() -> confirmPwdResult.errorMessage.toString()
+                !nameResult.errorMessage.isNullOrEmpty() -> nameResult.errorMessage.toString()
+                else -> ""
+            }
         )
 
         if(nameResult.status && emailResult.status && pwdResult.status && confirmPwdResult.status){

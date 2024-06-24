@@ -19,6 +19,7 @@ class LoginViewModel: ViewModel() {
 
     var loginInProgress  = mutableStateOf(false)
 
+
     var currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
 

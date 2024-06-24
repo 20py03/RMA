@@ -9,5 +9,6 @@ data class RegistrationUIState (
     val nameError: Boolean = false,
     val emailError: Boolean = false,
     val passwordError: Boolean = false,
-    val confirmPasswordError: Boolean = false
+    val confirmPasswordError: Boolean = false,
+    val errorText: String = ""
 )

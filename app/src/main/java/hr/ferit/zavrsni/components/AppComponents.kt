@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -32,14 +33,18 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,6 +63,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
@@ -65,14 +71,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import hr.ferit.zavrsni.AppNavigation
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.data.Food
+import hr.ferit.zavrsni.data.RecipeViewModel
 import hr.ferit.zavrsni.data.Recipes.Recipe
+import hr.ferit.zavrsni.data.validation.Validator
 import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.LightGray
 import hr.ferit.zavrsni.ui.theme.White
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -112,7 +123,8 @@ fun HeadingTextComponent(value:String){
 @Composable
 fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
                          onTextSelected: (String) -> Unit,
-                         errorStatus: Boolean = false
+                         errorStatus: Boolean = false,
+                         errorMessage: String = ""
 ) {
     val textValue = remember { mutableStateOf("") }
 
@@ -293,7 +305,7 @@ fun LoginPwdTextFieldComponent(labelValue: String, painterResource: Painter, onT
                 Icon(imageVector = iconImage, contentDescription ="" )
             }
         },
-        visualTransformation = if(passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+        visualTransformation = if(passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
     )
 }
 
@@ -323,8 +335,6 @@ fun ButtonComponent(value:String, onButtonClicked: () -> Unit, isEnabled:Boolean
         ){
             Text(text = value, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = DarkGray)
         }
-
-
     }
 }
 
@@ -453,7 +463,7 @@ fun EmotionLabel(text : String){
 }
 
 @Composable
-fun ClicableTextComponent(tryinToAddProduct:Boolean = false, onTextSelected : (String) -> Unit){
+fun ClicableTextComponent(onTextSelected : (String) -> Unit){
     val initialtext = "Add your product "
     val addText = "here"
 
@@ -517,12 +527,27 @@ fun ProfileInfo(text: String) {
 }
 
 @Composable
-fun RecipeList(recipes: List<Recipe>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth()
+fun RecipeList(recipes: List<Recipe>, recipeViewModel: RecipeViewModel) {
+    var refreshing by remember { mutableStateOf(false) }
+
+    LaunchedEffect(refreshing) {
+        if (refreshing) {
+            recipeViewModel.fetchRecipes("feca3b7189e0457ca2ceba2b6a089ee6")
+            delay(500)
+            refreshing = false
+        }
+    }
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = refreshing),
+        onRefresh = { refreshing = true },
     ) {
-        items(recipes) { recipe->
-            RecipeItem(recipe)
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            items(recipes) { recipe ->
+                RecipeItem(recipe)
+            }
         }
     }
 }
@@ -618,4 +643,19 @@ fun AddFoodDialog(food: Food, onDismiss: () -> Unit, onAdd: (Int) -> Unit) {
             }
         }
     )
+}
+
+
+@Composable
+fun ProfileTextField(label: String, state: MutableState<TextFieldValue>) {
+    Column {
+        Text(text = label, color = Blue, modifier = Modifier.padding(8.dp))
+        BasicTextField(
+            value = state.value,
+            onValueChange = { state.value = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+    }
 }

@@ -4,16 +4,19 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import hr.ferit.zavrsni.AppNavigation
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class ProfileDataViewModel : ViewModel() {
     val state = mutableStateOf(ProfileDataUIState())
     val energyDataViewModel = EnergyDataViewModel()
+    var profileUIState = state
 
     init {
         getProfileData()
@@ -38,7 +41,57 @@ class ProfileDataViewModel : ViewModel() {
             }
         }
     }
-    
+    fun onEvent(event:ProfileUIEvent, navController: NavController){
+        when(event) {
+
+            is ProfileUIEvent.AgeChanged -> {
+                profileUIState.value = profileUIState.value.copy(
+                    age = event.age
+                )
+            }
+
+            is ProfileUIEvent.HeightChanged -> {
+                profileUIState.value = profileUIState.value.copy(
+                    height = event.height
+                )
+            }
+
+            is ProfileUIEvent.WeightChanged -> {
+                profileUIState.value = profileUIState.value.copy(
+                    weight = event.weight
+                )
+            }
+
+            is ProfileUIEvent.ActivityChanged -> {
+                profileUIState.value = profileUIState.value.copy(
+                    activity = event.activity
+                )
+            }
+
+            is ProfileUIEvent.GoalChanged -> {
+                profileUIState.value = profileUIState.value.copy(
+                    goal = event.goal
+                )
+            }
+
+            is ProfileUIEvent.EditButtonClicked -> {
+                editProfile(navController)
+            }
+
+        }
+    }
+
+    fun editProfile(navController: NavController)
+    {
+        val db = FirebaseFirestore.getInstance()
+
+        viewModelScope.launch {
+            val profileDataMap = profileUIState.value.toMap()
+            db.collection("profileData").document(getCurrentUser()?.uid.toString()).update(profileDataMap).await()
+        }
+        navController.navigate(route = AppNavigation.ProfileScreen.route)
+
+    }
     fun saveEnergyData() {
         viewModelScope.launch {
             val uid = getCurrentUser()?.uid

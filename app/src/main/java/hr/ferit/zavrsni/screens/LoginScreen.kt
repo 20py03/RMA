@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,7 +61,7 @@ fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel
                     onTextSelected = {
                         loginViewModel.onEvent(LoginUIEvent.EmailChanged(it), navController)
                     },
-                    errorStatus = loginViewModel.loginUIState.value.emailError
+                    errorStatus = loginViewModel.loginUIState.value.emailError,
                 )
 
                 LoginPwdTextFieldComponent(
@@ -68,7 +70,7 @@ fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel
                     onTextSelected = {
                         loginViewModel.onEvent(LoginUIEvent.PasswordChanged(it), navController)
                     },
-                    errorStatus = loginViewModel.loginUIState.value.passwordError
+                    errorStatus = loginViewModel.loginUIState.value.passwordError,
                 )
 
                 Spacer(modifier = Modifier.height(50.dp))
@@ -100,10 +102,4 @@ fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel
             CircularProgressIndicator()
         }
     }
-}
-
-@Preview
-@Composable
-fun LoginScreenPreview(){
-    LoginScreen(navController = rememberNavController())
 }

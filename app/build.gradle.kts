@@ -73,6 +73,7 @@ dependencies {
 
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.13-rc")
 
     implementation ("androidx.compose.material:material-icons-extended-android:1.5.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")

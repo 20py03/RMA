@@ -34,7 +34,7 @@ fun RecipeScreen(navController: NavController) {
             .padding(16.dp)
     ) {
 
-        RecipeList(recipesState.value)
+        RecipeList(recipesState.value, recipeViewModel)
     }
 
     Box(

@@ -7,6 +7,6 @@ data class LoginUIState (
 
 
     val emailError: Boolean = false,
-    val passwordError: Boolean = false
+    val passwordError: Boolean = false,
 
 )

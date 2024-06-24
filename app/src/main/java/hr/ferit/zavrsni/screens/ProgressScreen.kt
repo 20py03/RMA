@@ -42,6 +42,7 @@ import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.White
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import hr.ferit.zavrsni.data.ProfileDataViewModel
 import hr.ferit.zavrsni.data.ProgressDataViewModel
 
 @Composable
