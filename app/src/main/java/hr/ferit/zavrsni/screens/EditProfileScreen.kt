@@ -1,10 +1,14 @@
 package hr.ferit.zavrsni.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
@@ -33,7 +37,9 @@ import androidx.navigation.NavController
 import hr.ferit.zavrsni.R
 import hr.ferit.zavrsni.components.ButtonComponent
 import hr.ferit.zavrsni.components.Footer
+import hr.ferit.zavrsni.components.HeadingTextComponent
 import hr.ferit.zavrsni.components.MyTextFieldComponent
+import hr.ferit.zavrsni.components.ProfileImage
 import hr.ferit.zavrsni.data.LoginUIEvent
 import hr.ferit.zavrsni.data.ProfileDataUIState
 import hr.ferit.zavrsni.data.ProfileDataViewModel
@@ -61,6 +67,15 @@ fun EditProfileScreen(
             .background(color = White)
             .padding(20.dp)
     ){
+        Spacer(modifier = Modifier.height(40.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            HeadingTextComponent("Edit your profile data!")
+        }
+        Spacer(modifier = Modifier.height(20.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             label = { Text(text = "Age") },
@@ -131,10 +146,12 @@ fun EditProfileScreen(
             "Flexibility",
             "Improve health"
         )
-        ActivityLevelDropdown(goals,profileDataViewModel, navController,
+        Spacer(modifier = Modifier.height(10.dp))
+        ActivityLevelDropdown(goals, "Goal", profileDataViewModel, navController,
             OnClick = {
                 profileDataViewModel.onEvent(ProfileUIEvent.GoalChanged(it), navController)
             })
+        Spacer(modifier = Modifier.height(10.dp))
         val activityLevels = listOf(
             "Sedentary",
             "Lightly Active",
@@ -142,9 +159,10 @@ fun EditProfileScreen(
             "Very Active",
             "Athlete"
         )
-        ActivityLevelDropdown(activityLevels,profileDataViewModel, navController, OnClick = {
+        ActivityLevelDropdown(activityLevels, "Activity level", profileDataViewModel, navController, OnClick = {
             profileDataViewModel.onEvent(ProfileUIEvent.ActivityChanged(it), navController)
         })
+        Spacer(modifier = Modifier.height(20.dp))
         ButtonComponent(
             value = "Save",
             onButtonClicked = {
@@ -166,7 +184,7 @@ fun EditProfileScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActivityLevelDropdown(dropdownLevels: List<String>, profileDataViewModel: ProfileDataViewModel, navController: NavController, OnClick: (String) -> Unit) {
+fun ActivityLevelDropdown(dropdownLevels: List<String>, text: String, profileDataViewModel: ProfileDataViewModel, navController: NavController, OnClick: (String) -> Unit) {
 
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(dropdownLevels[0]) }
@@ -179,11 +197,23 @@ fun ActivityLevelDropdown(dropdownLevels: List<String>, profileDataViewModel: Pr
             value = selectedText,
             onValueChange = { },
             readOnly = true,
-            label = { Text("Activity Level") },
+            label = { Text(text) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
-            modifier = Modifier.menuAnchor()
+            colors = TextFieldDefaults.colors(
+                focusedLabelColor = Blue,
+                cursorColor = DarkGray,
+                focusedTextColor = Blue,
+                unfocusedTextColor = Blue,
+                focusedContainerColor = White,
+                unfocusedContainerColor = LightGray,
+                errorContainerColor = White,
+                errorTextColor = DarkGray
+            ),
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth()
         )
 
         ExposedDropdownMenu(
