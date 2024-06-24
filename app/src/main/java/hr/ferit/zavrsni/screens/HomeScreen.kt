@@ -32,6 +32,8 @@ import hr.ferit.zavrsni.ui.theme.Blue
 import hr.ferit.zavrsni.ui.theme.DarkBlue
 import hr.ferit.zavrsni.ui.theme.DarkGray
 import hr.ferit.zavrsni.ui.theme.White
+import androidx.compose.material3.LinearProgressIndicator
+import hr.ferit.zavrsni.ui.theme.LightGray
 
 @Composable
 fun HomeScreen(
@@ -50,6 +52,7 @@ fun HomeScreen(
 
     val eatenCal: Int = breakfastCalories + lunchCalories + dinnerCalories + snackCalories
     val remainingCal: Int = goalCalories - eatenCal
+    val progress = if (goalCalories > 0) eatenCal.toFloat() / goalCalories else 0f
 
     LaunchedEffect(Unit) {
         mealDataViewModel.getMealData()
@@ -109,6 +112,15 @@ fun HomeScreen(
                         )
                     }
 
+                    LinearProgressIndicator(
+                        progress = progress,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        color = DarkGray,
+                        trackColor = White
+                    )
+
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -137,6 +149,7 @@ fun HomeScreen(
                             textAlign = TextAlign.Center
                         )
                     }
+
                     
                     Row(
                         modifier = Modifier.fillMaxWidth(),

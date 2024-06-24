@@ -76,6 +76,9 @@ dependencies {
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.13-rc")
 
     implementation ("androidx.compose.material:material-icons-extended-android:1.5.1")
+
+    implementation("com.google.android.material:material:1.5.0-alpha03")
+
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("com.google.firebase:firebase-firestore:24.9.1")
     implementation("androidx.activity:activity-ktx:1.8.0")
